@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    
+  >
+
+    <EditText
+        android:id="@+id/editpin"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="86dp"
+        android:ems="10"
+        android:hint="     -  -  -  -  -  - "
+        android:textColor="@android:color/black"
+        android:textColorHint="#3A3733" >
+
+ 
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:text="Enter 6-digit code"
+        android:textSize="25dp" 
+        android:textColor="#3B3D3C"
+        />
+     <Button
+        android:id="@+id/bverify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/editpin"
+        android:layout_below="@+id/editpin"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="50dp"
+        android:text="Verify"
+        android:background="#706E6E" />
+
+    <Button
+        android:id="@+id/bResend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/bverify"
+        android:layout_alignBottom="@+id/bverify"
+        android:layout_toRightOf="@+id/bverify"
+        android:text="Resend"
+        android:background="#706E6E"/>
+
+</RelativeLayout>

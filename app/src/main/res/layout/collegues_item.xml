@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/empimage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_launcher" />
+    <TextView
+        android:id="@+id/colleguesname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/empimage"
+        android:layout_toRightOf="@+id/empimage"
+        android:text="TextView"
+        android:textColor="#090A0A"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textemail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/colleguesname"
+        android:layout_below="@+id/colleguesname"
+        android:text="TextView"
+        android:textColor="#090A0A" />
+
+</RelativeLayout>

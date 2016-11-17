@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/imageViewevent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_launcher"
+         />
+
+    <TextView
+        android:id="@+id/textViewdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textViewNameevent"
+        android:layout_alignBottom="@+id/textViewNameevent"
+        android:layout_alignParentRight="true"
+        android:text="TextView"
+        android:textColor="#090A0A" />
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewNameevent"
+        android:layout_below="@+id/textViewNameevent"
+        android:text="TextView" 
+        android:textColor="#090A0A"/>
+
+    <TextView
+        android:id="@+id/textViewNameevent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageViewevent"
+        android:layout_toRightOf="@+id/imageViewevent"
+        android:text="TextView"
+        android:textColor="#090A0A"
+        android:textStyle="bold" />
+
+</RelativeLayout>
