@@ -1,23 +1,36 @@
 package com.cviac.datamodel.cviacapp;
 
-import java.util.Date;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 
-public class ChatMessage {
+import java.util.List;
+
+
+@Table(name = "ChatMessages")
+public class ChatMessage extends Model {
+
+	@Column(name = "msg")
 	private String msg;
+
+	@Column(name = "isIn")
 	private boolean isIn;
-	private Date ctime;
+
+	@Column(name = "ctime")
+	private String ctime;
+
+	@Column(name = "sender")
 	private String from;
-	
-	
 
 	public ChatMessage() {
-
+		super();
 	}
 
-	public Date getCtime() {
+	public String getCtime() {
 		return ctime;
 	}
-	public void setCtime(Date ctime) {
+	public void setCtime(String ctime) {
 		this.ctime = ctime;
 	}
 	public String getMsg() {
@@ -39,4 +52,14 @@ public class ChatMessage {
 	public boolean isIn() {
 		return isIn;
 	}
+
+	public static List<ChatMessage> getAll(String from) {
+		return new Select()
+				.from(ChatMessage.class)
+				//.where("from = ?", from)
+				//.orderBy("Name ASC")
+				.execute();
+	}
+
+
 }

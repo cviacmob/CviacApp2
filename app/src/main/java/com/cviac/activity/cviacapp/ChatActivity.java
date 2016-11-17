@@ -46,7 +46,11 @@ public class ChatActivity extends Activity {
 		setContentView(R.layout.activity_chat);
 
 		ListView lv = (ListView) findViewById(R.id.listViewChat);
-		chats = new ArrayList<ChatMessage>();
+		//chats = new ArrayList<ChatMessage>();
+
+		chats = ChatMessage.getAll("Renuga0");
+
+
 		chatAdapter = new ChatMessageAdapter(chats, this);
 		lv.setDivider(null);
 		lv.setAdapter(chatAdapter);
@@ -67,10 +71,13 @@ public class ChatActivity extends Activity {
 				String msg = msgview.getText().toString();
 				if (msg.length() != 0) {
 					ChatMessage mgsopj = new ChatMessage();
+
 					mgsopj.setMsg(msg);
 					mgsopj.setIn(false);
-					mgsopj.setCtime(new Date());
+					mgsopj.setFrom("Renuga0");
+					mgsopj.setCtime(new Date().toString());
 					chats.add(mgsopj);
+					mgsopj.save();
 					msgview.getText().clear();
 					chatAdapter.notifyDataSetChanged();
 				}
