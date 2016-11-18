@@ -59,6 +59,7 @@ public class Chats extends Fragment {
 				// Toast.makeText(lv.getContext(), "clicked:" + emp.getName(),
 				// Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(getActivity().getApplicationContext(), ChatActivity.class);
+				i.putExtra("conversewith", emp);
 				startActivity(i);
 			}
 		});
@@ -70,6 +71,7 @@ public class Chats extends Fragment {
 		List<Conversation> emps = new ArrayList<Conversation>();
 		Conversation emp = new Conversation();
 		emp.setName("Renuga0");
+		emp.setEmpid("123");
 		emp.setLastmsg("welcome");
 		emp.setDatetime(new Date());
 		emps.add(emp);
@@ -77,6 +79,7 @@ public class Chats extends Fragment {
 		emp = new Conversation();
 
 		emp.setName("Renuga");
+		emp.setEmpid("1234");
 		emp.setLastmsg("welcome");
 		emp.setDatetime(new Date());
 
@@ -84,6 +87,7 @@ public class Chats extends Fragment {
 
 		emp = new Conversation();
 		emp.setName("Renuga2");
+		emp.setEmpid("1235");
 		emp.setLastmsg("welcome");
 		emp.setDatetime(new Date());
 
@@ -91,6 +95,7 @@ public class Chats extends Fragment {
 
 		emp = new Conversation();
 		emp.setName("Renuga3");
+		emp.setEmpid("1236");
 		emp.setLastmsg("welcome");
 		emp.setDatetime(new Date());
 
@@ -98,6 +103,7 @@ public class Chats extends Fragment {
 
 		emp = new Conversation();
 		emp.setName("Renuga4");
+		emp.setEmpid("1237");
 		emp.setLastmsg("welcome");
 		emp.setDatetime(new Date());
 

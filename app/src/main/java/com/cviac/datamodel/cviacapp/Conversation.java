@@ -1,8 +1,9 @@
 package com.cviac.datamodel.cviacapp;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Conversation {
+public class Conversation implements Serializable{
 	String imageurl;
 	String name;
 	String lastmsg;

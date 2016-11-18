@@ -56,7 +56,7 @@ public class ChatMessage extends Model {
 	public static List<ChatMessage> getAll(String from) {
 		return new Select()
 				.from(ChatMessage.class)
-				//.where("from = ?", from)
+				.where("sender = ?", from)
 				//.orderBy("Name ASC")
 				.execute();
 	}

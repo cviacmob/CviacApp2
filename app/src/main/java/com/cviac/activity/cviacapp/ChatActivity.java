@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.adapter.cviacapp.ChatMessageAdapter;
 import com.cviac.datamodel.cviacapp.ChatMessage;
+import com.cviac.datamodel.cviacapp.Conversation;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -40,6 +42,8 @@ public class ChatActivity extends Activity {
 	 */
 	private GoogleApiClient client;
 
+	private Conversation emp;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,7 +52,9 @@ public class ChatActivity extends Activity {
 		ListView lv = (ListView) findViewById(R.id.listViewChat);
 		//chats = new ArrayList<ChatMessage>();
 
-		chats = ChatMessage.getAll("Renuga0");
+		Intent i = getIntent();
+		emp = (Conversation) i.getSerializableExtra("conversewith");
+		chats = ChatMessage.getAll(emp.getEmpid());
 
 
 		chatAdapter = new ChatMessageAdapter(chats, this);
@@ -74,12 +80,13 @@ public class ChatActivity extends Activity {
 
 					mgsopj.setMsg(msg);
 					mgsopj.setIn(false);
-					mgsopj.setFrom("Renuga0");
+					mgsopj.setFrom(emp.getEmpid());
 					mgsopj.setCtime(new Date().toString());
 					chats.add(mgsopj);
 					mgsopj.save();
 					msgview.getText().clear();
 					chatAdapter.notifyDataSetChanged();
+					//chatAdapter.notifyDataSetInvalidated();
 				}
 
 			}

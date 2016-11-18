@@ -47,12 +47,17 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 		View vw = convertView;
         ViewHolder holder;
 		ChatMessage chat = getItem(position);
-		if(convertView==null){
+		if(convertView==null) {
+			LayoutInflater inf = LayoutInflater.from(getContext());
+			vw = inf.inflate(R.layout.fragment_chat, parent, false);
+			holder = new ViewHolder();
+			holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+			vw.setTag(holder);
+		}
+		else {
+			holder =  (ViewHolder) vw.getTag();
+		}
 
-		LayoutInflater inf = LayoutInflater.from(getContext());
-		vw = inf.inflate(R.layout.fragment_chat, parent, false);
-		holder = new ViewHolder();
-	holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
 		if (chat.isIn()) {
 			holder.msgview.setBackgroundResource(R.drawable.bubble1);
 		}
@@ -60,11 +65,6 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 			holder.msgview.setBackgroundResource(R.drawable.bubble2);
 		}
 		holder.msgview.setText(chat.getMsg().toString());
-		
-		}else{
-			holder=(ViewHolder)vw.getTag();
-		}
 		return vw;
-
 	}
 }
