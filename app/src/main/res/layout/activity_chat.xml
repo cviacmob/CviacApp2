@@ -4,46 +4,55 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cviac.cviacapp.activity.ChatActivity"
+    tools:context="com.cviac.activity.cviacapp.ChatActivity"
     tools:ignore="MergeRootFrame"
     android:background="#E6F6F7" >
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/listViewChat"
+            android:layout_width="match_parent"
+            android:layout_height="470dp"
+            android:layout_above="@+id/editTextsend"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
+        </ListView>
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/send"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/sendbutton"
+            android:text="send"
+            >
+
+        </ImageButton>
 
         <EditText
             android:id="@+id/editTextsend"
-            android:layout_width="320dp"
+            android:layout_width="330dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:background="@drawable/bubble2"
             android:ems="10"
             android:gravity="bottom"
-            android:textColor="#090A0A">
+            android:textColor="#090A0A"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:inputType="textMultiLine" >
 
             <requestFocus />
         </EditText>
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_send"
-            android:id="@+id/sendbutton"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/editTextsend" />
-
-
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/listViewChat"
-        android:layout_width="match_parent"
-        android:layout_height="526dp" >
-    </ListView>
+
 
 </FrameLayout>
 

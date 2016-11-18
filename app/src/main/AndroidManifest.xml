@@ -31,7 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ChatActivity"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:icon="@drawable/ic_launcher"></activity>
 
 
         <meta-data android:name="AA_DB_NAME" android:value="cviac.db" />
