@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical" >
 
-    <WebView
-        android:id="@+id/textContent"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentTop="true" />
 
-
-       <EditText
-            android:id="@+id/editTextphnum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/textContent"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="81dp"
-            android:ems="10"
-            android:hint="Phone number"
-            android:textColor="@android:color/black"
-            android:textColorHint="#3A3733" >
-        </EditText>
-
-       <Button
+    <Button
            android:id="@+id/buttonext"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
@@ -43,4 +28,37 @@
            android:text="Carrier SMS charges may apply" 
              android:textColor="#3B3D3C"/>
 
+    <WebView
+        android:id="@+id/textContent"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_x="100dp"
+            android:layout_y="210dp">
+
+            <EditText
+                android:id="@+id/editTextphnum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/textContent"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="150dp"
+                android:ems="10"
+                android:hint="Phone number"
+                android:textColor="@android:color/black"
+                android:textColorHint="#3A3733" >
+            </EditText>
+        </android.support.design.widget.TextInputLayout>
+    </WebView>
+
 </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

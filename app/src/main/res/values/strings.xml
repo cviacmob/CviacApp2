@@ -4,4 +4,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="action_group">Profile</string>
+    <string name="hint_mobile">Enter Mobile Number</string>
+    <string name="err_msg_name">Invalid Mobile Number</string>
 </resources>
