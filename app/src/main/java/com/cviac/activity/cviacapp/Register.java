@@ -3,6 +3,7 @@ package com.cviac.activity.cviacapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ EditText e;
 		WebView view = (WebView) findViewById(R.id.textContent);
 		Button b=(Button)findViewById(R.id.buttonext);
 		e=(EditText)findViewById(R.id.editTextphnum);
+
 		String text;
 		text = "<html><body><p align=\"justify\">";
 		text+="<h3>";
@@ -35,7 +37,7 @@ EditText e;
 		text+="</h8>";
 		text+= "</p></body></html>";
 		view.loadData(text, "text/html", "utf-8");
-		
+
 		
 			b.setOnClickListener(new OnClickListener() {
 				

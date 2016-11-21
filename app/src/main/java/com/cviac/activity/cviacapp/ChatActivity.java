@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +70,14 @@ public class ChatActivity extends Activity {
 		final EditText msgview = (EditText) findViewById(R.id.editTextsend);
 		final ImageButton b = (ImageButton) findViewById(R.id.sendbutton);
 
+		msgview.setSingleLine(false);
+		msgview.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+		msgview.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+		msgview.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+		msgview.setVerticalScrollBarEnabled(true);
+		msgview.setMovementMethod(ScrollingMovementMethod.getInstance());
+		msgview.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+
 		b.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -76,18 +87,22 @@ public class ChatActivity extends Activity {
 				imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
 				String msg = msgview.getText().toString();
-				if (msg.length() != 0) {
-					ChatMessage mgsopj = new ChatMessage();
 
-					mgsopj.setMsg(msg);
-					mgsopj.setIn(false);
-					mgsopj.setFrom(emp.getEmpid());
-					mgsopj.setCtime(new Date().toString());
-					chats.add(mgsopj);
-					mgsopj.save();
-					msgview.getText().clear();
-					chatAdapter.notifyDataSetChanged();
-					//chatAdapter.notifyDataSetInvalidated();
+				if (msg.length() != 0) {
+
+						ChatMessage mgsopj = new ChatMessage();
+
+						mgsopj.setMsg(msg);
+						mgsopj.setIn(false);
+						mgsopj.setFrom(emp.getEmpid());
+						mgsopj.setCtime(new Date().toString());
+						chats.add(mgsopj);
+						mgsopj.save();
+
+						msgview.getText().clear();
+						chatAdapter.notifyDataSetChanged();
+						//chatAdapter.notifyDataSetInvalidated();
+
 				}
 
 			}
@@ -108,6 +123,7 @@ public class ChatActivity extends Activity {
 		// See https://g.co/AppIndexing/AndroidStudio for more information.
 		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 	}
+
 
 	/**
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.

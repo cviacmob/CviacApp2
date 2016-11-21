@@ -1,5 +1,6 @@
 package com.cviac.activity.cviacapp;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -71,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
+
         return true;
     }
 
@@ -83,6 +85,12 @@ public class HomeActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if(id==R.id.action_profile)
+        {
+            Intent i=new Intent(HomeActivity.this,myprofileactivity.class);
+            startActivity(i);
             return true;
         }
 

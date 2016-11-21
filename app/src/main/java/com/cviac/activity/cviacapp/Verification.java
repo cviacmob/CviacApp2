@@ -1,6 +1,7 @@
 package com.cviac.activity.cviacapp;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -8,6 +9,8 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.content.SharedPreferences;
+
+import static android.R.id.input;
 
 
 public class Verification extends Activity {
@@ -20,6 +23,7 @@ public class Verification extends Activity {
 		setContentView(R.layout.verification);
 		
 	e1 =(EditText)findViewById(R.id.editpin);
+		e1.setRawInputType(Configuration.KEYBOARD_12KEY);
 		//e1.setSelection(e1.getText().length() / 2);
 	buttonverify=(Button)findViewById(R.id.bverify);
 		 buttonresend=(Button)findViewById(R.id.bResend);
