@@ -5,5 +5,6 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="action_group">Profile</string>
     <string name="hint_mobile">Enter Mobile Number</string>
+    <string name="hint_6_digit_code">Enter 6 digit code</string>
     <string name="err_msg_name">Invalid Mobile Number</string>
 </resources>

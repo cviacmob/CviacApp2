@@ -2,6 +2,7 @@ package com.cviac.activity.cviacapp;
 
 
 import android.app.Application;
+import android.content.ContextWrapper;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
@@ -19,6 +20,7 @@ public class CVIACApplication extends Application {
         Configuration.Builder configurationBuilder = new Configuration.Builder(this);
         configurationBuilder.addModelClasses(ChatMessage.class);
         ActiveAndroid.initialize(configurationBuilder.create());
+
     }
 }
 

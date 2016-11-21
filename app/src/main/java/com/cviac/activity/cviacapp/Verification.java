@@ -9,10 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.content.SharedPreferences;
 
+
 public class Verification extends Activity {
 	EditText e1;
  String verifycode="123456";
- Button buttonverify;
+ Button buttonverify,buttonresend;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -21,7 +22,7 @@ public class Verification extends Activity {
 	e1 =(EditText)findViewById(R.id.editpin);
 		//e1.setSelection(e1.getText().length() / 2);
 	buttonverify=(Button)findViewById(R.id.bverify);
-		Button buttonresend=(Button)findViewById(R.id.bResend);
+		 buttonresend=(Button)findViewById(R.id.bResend);
 		
 		 //final String e2=e1.getText().toString();
 		buttonverify.setOnClickListener(new OnClickListener()
