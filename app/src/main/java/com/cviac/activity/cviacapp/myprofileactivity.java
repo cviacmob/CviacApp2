@@ -4,50 +4,69 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.net.Uri;
+
+
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+
+
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.Serializable;
-import java.text.DateFormat;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class myprofileactivity extends AppCompatActivity {
-    TextView tvprofile,tvstatus;
-    final Context context = this;
-    final static private int NEW_PICTURE = 1;
-    private String mCameraFileName;
 
-   // private EditText result;
+public class myprofileactivity extends AppCompatActivity {
+
+    TextView tvprofile, tvstatus;
+    final Context context = this;
+ImageView imageViewRound;
+
+    private int REQUEST_CAMERA = 2, SELECT_FILE = 1;
+    private ImageButton btnSelect;
+    private ImageView ivImage;
+    private String userChoosenTask;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
+    // private EditText result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
+       // imageViewRound =(ImageView)findViewById(R.id.imageViewprofile) ;
+        btnSelect = (ImageButton) findViewById(R.id.imageButtonselect);
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
+        ivImage = (ImageView) findViewById(R.id.imageViewprofile);
         /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);*/
 
@@ -59,7 +78,7 @@ public class myprofileactivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });*/
-       tvprofile= (TextView) findViewById(R.id.textViewprofile);
+        tvprofile = (TextView) findViewById(R.id.textViewempcode);
 
         tvprofile.setOnClickListener(new View.OnClickListener() {
 
@@ -84,7 +103,7 @@ public class myprofileactivity extends AppCompatActivity {
                         .setCancelable(false)
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
+                                    public void onClick(DialogInterface dialog, int id) {
                                         // get user input and set it to result
                                         // edit text
                                         tvprofile.setText(userInput.getText().toString());
@@ -92,7 +111,7 @@ public class myprofileactivity extends AppCompatActivity {
                                 })
                         .setNegativeButton("Cancel",
                                 new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
+                                    public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
                                     }
                                 });
@@ -107,7 +126,7 @@ public class myprofileactivity extends AppCompatActivity {
 
         });
         final TextView[] tvstatusset = new TextView[1];
-        tvstatus= (TextView) findViewById(R.id.textViewstatus);
+        tvstatus = (TextView) findViewById(R.id.textViewemail);
         tvstatus.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -157,63 +176,118 @@ public class myprofileactivity extends AppCompatActivity {
             }
 
         });
-camerapic();
+
+
+    }
+
+    private void selectImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(myprofileactivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+
+                if (items[item].equals("Take Photo")) {
+                    userChoosenTask ="Take Photo";
+
+                        cameraIntent();
+
+                } else if (items[item].equals("Choose from Library")) {
+                    userChoosenTask ="Choose from Library";
+
+                        galleryIntent();
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
             }
+        });
+        builder.show();
+    }
 
-public void camerapic() {
-    ImageButton Edit = (ImageButton) findViewById(R.id.imageButtonselect);
-
-    Edit.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            // Picture from camera
-            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            // This is not the right way to do this, but for some reason, having
-            // it store it in
-            // MediaStore.Images.Media.EXTERNAL_CONTENT_URI isn't working right.
-
-            Date date = new Date();
-            DateFormat df = new SimpleDateFormat("-mm-ss");
-
-            String newPicFile = "Bild" + df.format(date) + ".jpg";
-            String outPath = "/sdcard/" + newPicFile;
-            File outFile = new File(outPath);
-
-            mCameraFileName = outFile.toString();
-            Uri outuri = Uri.fromFile(outFile);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, outuri);
-
-
-            startActivityForResult(intent, NEW_PICTURE);
-
-        }
-    });
-}
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    private void galleryIntent()
     {
-        if (requestCode == NEW_PICTURE)
-        {
-            // return from file upload
-            if (resultCode == Activity.RESULT_OK)
-            {
-                Uri uri = null;
-                if (data != null)
-                {
-                    uri = data.getData();
-                }
-                if (uri == null && mCameraFileName != null)
-                {
-                    uri = Uri.fromFile(new File(mCameraFileName));
-                }
-                File file = new File(mCameraFileName);
-                if (!file.exists()) {
-                    file.mkdir();
-                }
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+    }
+
+    private void cameraIntent()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                onSelectFromGalleryResult(data);
+            else if (requestCode == REQUEST_CAMERA)
+                onCaptureImageResult(data);
+        }
+    }
+
+    private void onCaptureImageResult(Intent data) {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        getOutputMediaFile();
+        /*File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
 
 
+
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        ivImage.setImageBitmap(thumbnail);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void onSelectFromGalleryResult(Intent data) {
+
+        Bitmap bm=null;
+        if (data != null) {
+            try {
+                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }}
+        }
+
+        ivImage.setImageBitmap(bm);
+    }
+    private static File getOutputMediaFile(){
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "CameraDemo");
+
+        if (!mediaStorageDir.exists()){
+            if (!mediaStorageDir.mkdirs()){
+                return null;
+            }
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        return new File(mediaStorageDir.getPath() + File.separator +
+                "IMG_"+ timeStamp + ".jpg");
+    }
 }
 
 

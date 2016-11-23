@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +20,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.cviac.activity.cviacapp.R;
 import com.cviac.adapter.cviacapp.ChatMessageAdapter;
@@ -52,6 +56,7 @@ public class ChatActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
+		actionmethod();
 
 		ListView lv = (ListView) findViewById(R.id.listViewChat);
 		//chats = new ArrayList<ChatMessage>();
@@ -131,7 +136,8 @@ public class ChatActivity extends Activity {
 	 */
 	public Action getIndexApiAction() {
 		Thing object = new Thing.Builder()
-				.setName("Chat Page") // TODO: Define a title for the content shown.
+				.setName("cviac")
+				// TODO: Define a title for the content shown.
 				// TODO: Make sure this auto-generated URL is correct.
 				.setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
 				.build();
@@ -175,6 +181,41 @@ public class ChatActivity extends Activity {
 			rootView = inflater.inflate(R.layout.fragment_chat, container, false);
 
 			return rootView;
+		}
+	}
+	//action bar set
+	public void actionmethod()
+	{
+
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			// Disable the default and enable the custom
+			actionBar.setDisplayShowHomeEnabled(false);
+			actionBar.setDisplayShowTitleEnabled(false);
+			actionBar.setDisplayShowCustomEnabled(true);
+
+
+			View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+			ImageView customimage=(ImageView)customView.findViewById(R.id.imageViewcustom);
+
+
+			// Get the textview of the title
+			TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
+
+
+			// Change the font family (optional)
+			customTitle.setTypeface(Typeface.MONOSPACE);
+			// Set the on click listener for the title
+			customTitle.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					//Log.w("MainActivity", "ActionBar's title clicked.");
+					Intent i=new Intent(ChatActivity.this,myprofileactivity.class);
+					startActivity(i);
+				}
+			});
+			// Apply the custom view
+			actionBar.setCustomView(customView);
 		}
 	}
 

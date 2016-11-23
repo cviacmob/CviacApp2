@@ -46,6 +46,7 @@ public class Collegues extends Fragment {
 		
 		return collegues;
 	}
+
 	
 	
 	private List<Collegue> getCollegues()
