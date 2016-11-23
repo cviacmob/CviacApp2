@@ -3,8 +3,11 @@ package com.cviac.datamodel.cviacapp;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.activeandroid.util.SQLiteUtils;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -18,21 +21,36 @@ public class ChatMessage extends Model {
 	private boolean isIn;
 
 	@Column(name = "ctime")
-	private String ctime;
+	private Date ctime;
 
 	@Column(name = "sender")
 	private String from;
+
+	@Column(name = "sendername")
+	private String name;
+
+
 
 	public ChatMessage() {
 		super();
 	}
 
-	public String getCtime() {
+	public Date getCtime() {
 		return ctime;
 	}
-	public void setCtime(String ctime) {
+
+	public void setCtime(Date ctime) {
 		this.ctime = ctime;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getMsg() {
 		return msg;
 	}
@@ -60,6 +78,21 @@ public class ChatMessage extends Model {
 				//.orderBy("Name ASC")
 				.execute();
 	}
+
+	public static List<ChatMessage> getConversations() {
+		List<ChatMessage> conversations = SQLiteUtils.rawQuery(ChatMessage.class, "select * from (select * from ChatMessages ORDER BY ctime asc) AS x GROUP BY sender ORDER BY ctime DESC",
+				new String[]{});
+		return conversations;
+	}
+
+//	public static List<ChatMessage> getMessagesFromConversation(int userId, int teamId, String conversationId, boolean isGroupConversation) {
+//		List<ChatMessage> messages = new Select().from(ChatMessage.class).where("userId=? AND teamId=? AND conversation_id=? AND is_group_conversation=?", userId, teamId, conversationId, isGroupConversation).orderBy("created_time DESC").execute();
+//		return messages;
+//	}
+//
+//	public static void deleteMessages(int teamId) {
+//		new Delete().from(ChatMessage.class).where("teamId=?", teamId).execute();
+//	}
 
 
 }

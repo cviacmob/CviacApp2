@@ -56,7 +56,7 @@ public class ChatActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-		actionmethod();
+
 
 		ListView lv = (ListView) findViewById(R.id.listViewChat);
 		//chats = new ArrayList<ChatMessage>();
@@ -64,8 +64,8 @@ public class ChatActivity extends Activity {
 		Intent i = getIntent();
 		emp = (Conversation) i.getSerializableExtra("conversewith");
 		chats = ChatMessage.getAll(emp.getEmpid());
-
-
+		//setTitle(emp.getName());
+		actionmethod();
 		chatAdapter = new ChatMessageAdapter(chats, this);
 		lv.setDivider(null);
 		lv.setAdapter(chatAdapter);
@@ -100,7 +100,8 @@ public class ChatActivity extends Activity {
 						mgsopj.setMsg(msg);
 						mgsopj.setIn(false);
 						mgsopj.setFrom(emp.getEmpid());
-						mgsopj.setCtime(new Date().toString());
+						mgsopj.setCtime(new Date());
+						mgsopj.setName(emp.getName());
 						chats.add(mgsopj);
 						mgsopj.save();
 
@@ -202,7 +203,7 @@ public class ChatActivity extends Activity {
 			// Get the textview of the title
 			TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
 
-
+			customTitle.setText(emp.getName());
 			// Change the font family (optional)
 			customTitle.setTypeface(Typeface.MONOSPACE);
 			// Set the on click listener for the title

@@ -58,15 +58,6 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textViewdegin"
-        android:layout_alignLeft="@+id/textViewdeptr"
-        android:layout_alignStart="@+id/textViewdeptr"
-        android:id="@+id/textViewdesignr" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginLeft="62dp"
         android:layout_marginStart="62dp"
         android:id="@+id/textViewempcoder"
@@ -134,14 +125,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView34"
-        android:layout_alignBottom="@+id/textViewstatus"
-        android:layout_alignLeft="@+id/textViewdesignr"
-        android:layout_alignStart="@+id/textViewdesignr" />
 
     <TextView
         android:text="TextView"
@@ -184,16 +167,6 @@
         android:layout_alignStart="@+id/mageridr" />
 
     <TextView
-        android:text="Status        "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewstatus"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewdegin"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
         android:text="Emp_Name             "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -226,6 +199,15 @@
         android:layout_toLeftOf="@+id/imageButtonselect"
         android:layout_toStartOf="@+id/imageButtonselect"
         android:layout_above="@+id/textViewempcode" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewdegin"
+        android:layout_alignLeft="@+id/textViewdeptr"
+        android:layout_alignStart="@+id/textViewdeptr"
+        android:id="@+id/textViewdesig" />
 
 
 </RelativeLayout>

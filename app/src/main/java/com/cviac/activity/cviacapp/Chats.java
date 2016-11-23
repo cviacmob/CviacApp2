@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.cviac.adapter.cviacapp.ColleguesAdapter;
 import com.cviac.adapter.cviacapp.ConversationAdapter;
+import com.cviac.datamodel.cviacapp.ChatMessage;
 import com.cviac.datamodel.cviacapp.Collegue;
 import com.cviac.datamodel.cviacapp.Conversation;
 
@@ -68,8 +69,23 @@ public class Chats extends Fragment {
 	}
 
 	private List<Conversation> getConversation() {
+
+		List<ChatMessage> Chatmesages=ChatMessage.getConversations();
 		List<Conversation> emps = new ArrayList<Conversation>();
-		Conversation emp = new Conversation();
+		for(int i=0;i<Chatmesages.size();i++)
+		{
+			ChatMessage msg=Chatmesages.get(i);
+			Conversation cnv=new Conversation();
+			cnv.setName(msg.getName());
+			cnv.setEmpid(msg.getFrom());
+			cnv.setDatetime(msg.getCtime());
+			emps.add(cnv);
+		}
+
+
+
+
+		/*Conversation emp = new Conversation();
 		emp.setName("Renuga0");
 		emp.setEmpid("123");
 		emp.setLastmsg("welcome");
@@ -108,7 +124,7 @@ public class Chats extends Fragment {
 		emp.setDatetime(new Date());
 
 		emps.add(emp);
-
+*/
 		return emps;
 
 	}

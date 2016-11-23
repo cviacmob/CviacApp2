@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.cviac.adapter.cviacapp.ColleguesAdapter;
 import com.cviac.datamodel.cviacapp.Collegue;
+import com.cviac.datamodel.cviacapp.Conversation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -38,8 +40,14 @@ public class Collegues extends Fragment {
 						long pos2) {
 					
 					Collegue emp = emps.get(pos1);
+					Conversation cov=new Conversation();
+					cov.setEmpid(emp.getEmpID());
+					cov.setName(emp.getName());
+					Intent i = new Intent(getActivity().getApplicationContext(), ChatActivity.class);
+					i.putExtra("conversewith", cov);
+					startActivity(i);
 				
-					Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
+					//Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
 					
 				}});
 		
@@ -60,32 +68,32 @@ public class Collegues extends Fragment {
 		emps.add(emp);
 		
 		emp = new Collegue();
-		emp.setName("Renuga");
-		emp.setEmpID("CV0089");
+		emp.setName("Bala");
+		emp.setEmpID("CV0010");
 		
-		emp.setEmailID("renuga@cviac.com");
+		emp.setEmailID("bala@cviac.com");
 		
 		emps.add(emp);
 		
 		emp = new Collegue();
-		emp.setName("Renuga2");
+		emp.setName("Sairam");
 		emp.setEmpID("CV0090");
 		
-		emp.setEmailID("renuga2@cviac.com");
+		emp.setEmailID("sairam@cviac.com");
 		emps.add(emp);
 		
 		
 		emp = new Collegue();
-		emp.setName("Renuga3");
+		emp.setName("Shanmugam");
 		emp.setEmpID("CV0091");
-		emp.setEmailID("renuga3@cviac.com");
+		emp.setEmailID("shanmugam@cviac.com");
 		
 		emps.add(emp);
 		
 		emp = new Collegue();
-		emp.setName("Renuga4");
+		emp.setName("Gunaseelan");
 		emp.setEmpID("CV0092");
-		emp.setEmailID("renuga4@cviac.com");
+		emp.setEmailID("gunaseelan@cviac.com");
 		emps.add(emp);
 		
 		return emps;

@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-
+import com.cviac.datamodel.cviacapp.Employee;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.ByteArrayOutputStream;
@@ -38,7 +38,7 @@ import java.util.Date;
 
 public class myprofileactivity extends AppCompatActivity {
 
-    TextView tvprofile, tvstatus;
+    TextView tvempid, tvempname,tvemail,tvmobile,tvgender,tvdob,tvmanager,tvdepartment,tvdesignation;
     final Context context = this;
 ImageView imageViewRound;
 
@@ -67,115 +67,26 @@ ImageView imageViewRound;
             }
         });
         ivImage = (ImageView) findViewById(R.id.imageViewprofile);
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
-
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-        tvprofile = (TextView) findViewById(R.id.textViewempcode);
-
-        tvprofile.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //DO you work here
-                LayoutInflater li = LayoutInflater.from(context);
-                View promptsView = li.inflate(R.layout.myname, null);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(promptsView);
-
-                final EditText userInput = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogUserInput);
-
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        tvprofile.setText(userInput.getText().toString());
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-
-            }
-
-        });
-        final TextView[] tvstatusset = new TextView[1];
-        tvstatus = (TextView) findViewById(R.id.textViewemail);
-        tvstatus.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                //DO you work here
-                LayoutInflater li = LayoutInflater.from(context);
-                View promptsView = li.inflate(R.layout.mystatus, null);
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        context);
-
-                // set prompts.xml to alertdialog builder
-                alertDialogBuilder.setView(promptsView);
-
-                final EditText userInput = (EditText) promptsView
-                        .findViewById(R.id.editTextDialogUserInputstatus);
-
-
-                // set dialog message
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // get user input and set it to result
-                                        // edit text
-                                        tvstatus.setText(userInput.getText().toString());
-
-                                    }
-                                })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
-
-
-            }
-
-        });
+        employee();
+      Employee emp=new Employee();
+        tvempid = (TextView) findViewById(R.id.textViewempcoder);
+        tvempid.setText(emp.getEmpID());
+        tvempname=(TextView)findViewById(R.id.textViewempcoder) ;
+        tvempname.setText(emp.getName());
+        tvemail=(TextView)findViewById(R.id.textViewemailr) ;
+        tvemail.setText(emp.getEmailID());
+        tvmobile=(TextView)findViewById(R.id.textViewmobiler) ;
+        tvmobile.setText(emp.getMobile());
+        tvdob=(TextView)findViewById(R.id.textViewdobr) ;
+        tvdob.setText((CharSequence) emp.getDob());
+        tvgender=(TextView)findViewById(R.id.textViewgenterr) ;
+        tvgender.setText(emp.getGender());
+        tvmanager=(TextView)findViewById(R.id.mageridr) ;
+        tvmanager.setText(emp.getManagername());
+        tvdepartment=(TextView)findViewById(R.id.textViewdeptr) ;
+        tvdepartment.setText(emp.getDepartment());
+        tvdesignation=(TextView)findViewById(R.id.textViewdesig) ;
+        tvdesignation.setText(emp.getDesignation());
 
 
     }
@@ -242,9 +153,6 @@ ImageView imageViewRound;
         getOutputMediaFile();
         /*File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
-
-
-
         FileOutputStream fo;
         try {
             destination.createNewFile();
@@ -287,6 +195,17 @@ ImageView imageViewRound;
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         return new File(mediaStorageDir.getPath() + File.separator +
                 "IMG_"+ timeStamp + ".jpg");
+    }
+    private void employee() {
+        Employee employee = new Employee();
+        employee.setName("bala");
+        employee.setEmpID("cc01");
+        employee.setEmailID("bala.gp@gmai.com");
+        employee.setGender("male");
+        employee.setManagername("Ramesh");
+        employee.setDegination("software engineer");
+        employee.setdepartment("mobility");
+        employee.setMobile("123456789");
     }
 }
 
