@@ -53,7 +53,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
             holder.typeview = (TextView) vw.findViewById(R.id.textViewdate);
             holder.disview = (TextView) vw.findViewById(R.id.textViewDescription);
             holder.imgview = (ImageView) vw.findViewById(R.id.imageViewevent);
-            Picasso.with(mContext).load(R.drawable.ic_launcher).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
+            Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
             holder.nameView.setText(even.getName());
             holder.typeview.setText(even.getType());
             holder.disview.setText(even.getDiscription());

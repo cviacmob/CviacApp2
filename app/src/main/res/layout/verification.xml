@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Verify"
-            android:background="#706E6E"
+            android:background="#6281EF"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="178dp"
             android:layout_x="400dp"
             android:layout_y="400dp"
@@ -59,7 +60,7 @@
                 android:id="@+id/editpin"
                 android:layout_weight="200"
                 android:textColor="@android:color/black"
-                android:textColorHint="#3A3733"
+                android:textColorHint="#6281EF"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -68,7 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Resend"
-            android:background="#706E6E"
+            android:textColor="#FFFFFF"
+            android:background="#6281EF"
             android:layout_alignBaseline="@+id/bverify"
             android:layout_alignBottom="@+id/bverify"
             android:layout_toRightOf="@+id/bverify"

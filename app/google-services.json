@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1096514319505",
+    "firebase_url": "https://cviacapp.firebaseio.com",
+    "project_id": "cviacapp",
+    "storage_bucket": "cviacapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096514319505:android:02e87d6224d56345",
+        "android_client_info": {
+          "package_name": "com.cviac.activity.cviacapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096514319505-jd7hvtmcm89il01ht15fd8ctgpuspg31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGgHtcECjQIsMkmOnbYP8C49cs49zM1Jc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

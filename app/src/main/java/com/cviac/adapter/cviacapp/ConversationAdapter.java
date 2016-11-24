@@ -55,7 +55,7 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
             holder.datetime=(TextView)vw.findViewById(R.id.textViewdatetime);
             
             holder.imgview=(ImageView)vw.findViewById(R.id.imageViewurl);
-    		Picasso.with(mContext).load(R.drawable.ic_launcher).resize(130, 130).transform(new CircleTransform())
+    		Picasso.with(mContext).load(R.drawable.bala).resize(130, 130).transform(new CircleTransform())
 			.into(holder.imgview);
 
     		holder.nameView.setText(chat.getName());

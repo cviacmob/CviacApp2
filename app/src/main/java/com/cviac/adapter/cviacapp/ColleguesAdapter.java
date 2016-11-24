@@ -50,9 +50,10 @@ public class ColleguesAdapter extends ArrayAdapter<Collegue> {
 		holder.empimage = (ImageView) vw.findViewById(R.id.empimage);
 		// String
 		// imageurl="http://www.gantrypark.com/Portals/12/Users/066/14/53314/adam-parker-large.jpg";
-		Picasso.with(mContext).load(R.drawable.ic_launcher).resize(130, 130).transform(new CircleTransform())
+		Picasso.with(mContext).load(R.drawable.bala).resize(130, 130).transform(new CircleTransform())
 				.into(holder.empimage);
-
+			//Picasso.with(mContext).load(R.drawable.bala)
+					//.transform(new CircleTransform()).into(holder.empimage);
 		holder.nameView.setText(emp.getName());
 		holder.mobile.setText(emp.getEmailID());
 		}else

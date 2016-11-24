@@ -55,18 +55,6 @@
         android:id="@+id/mageridr" />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="62dp"
-        android:layout_marginStart="62dp"
-        android:id="@+id/textViewempcoder"
-        android:layout_alignBaseline="@+id/textViewempcode"
-        android:layout_alignBottom="@+id/textViewempcode"
-        android:layout_toRightOf="@+id/imageButtonselect"
-        android:layout_toEndOf="@+id/imageButtonselect" />
-
-    <TextView
         android:text="DOB            "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -136,16 +124,6 @@
         android:layout_alignLeft="@+id/textViewemailr"
         android:layout_alignStart="@+id/textViewemailr" />
 
-    <ImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@android:drawable/ic_menu_edit"
-        android:layout_marginTop="71dp"
-        android:id="@+id/imageButtonselect"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textViewempcode"
-        android:layout_toEndOf="@+id/textViewempcode" />
-
     <TextView
         android:text="Email           "
         android:layout_width="wrap_content"
@@ -186,20 +164,6 @@
         android:layout_alignRight="@+id/textViewmobile"
         android:layout_alignEnd="@+id/textViewmobile" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewprofile"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:src="@drawable/ic_launcher"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/textViewgender"
-        android:layout_alignStart="@+id/textViewgender"
-        android:layout_toLeftOf="@+id/imageButtonselect"
-        android:layout_toStartOf="@+id/imageButtonselect"
-        android:layout_above="@+id/textViewempcode" />
-
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
@@ -208,6 +172,33 @@
         android:layout_alignLeft="@+id/textViewdeptr"
         android:layout_alignStart="@+id/textViewdeptr"
         android:id="@+id/textViewdesig" />
+
+    <ImageView
+        android:id="@+id/imageViewprofile"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButtonselect"
+        android:layout_alignBottom="@+id/imageViewprofile"
+        android:layout_toRightOf="@+id/imageViewprofile"
+        android:layout_toEndOf="@+id/imageViewprofile" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewempcoder"
+        android:textColor="#2A51D8"
+        android:layout_alignBaseline="@+id/textViewempcode"
+        android:layout_alignBottom="@+id/textViewempcode"
+        android:layout_toRightOf="@+id/imageViewprofile"
+        android:layout_toEndOf="@+id/imageViewprofile" />
 
 
 </RelativeLayout>

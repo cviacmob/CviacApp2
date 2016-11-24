@@ -63,8 +63,12 @@ public class Collegues extends Fragment {
 		Collegue emp = new Collegue();
 		emp.setName("Renuga");
 		emp.setEmpID("CV0089");
-		
-		emp.setEmailID("renuga@cviac.com");
+		emp.setEmailID("bala.gp@gmail.com");
+		emp.setMobile("9791234568");
+		emp.setGender("male");
+		emp.setManagername("ramesh");
+		emp.setDepartment("mobility");
+		emp.setDesignation("se");
 		emps.add(emp);
 		
 		emp = new Collegue();
@@ -72,6 +76,11 @@ public class Collegues extends Fragment {
 		emp.setEmpID("CV0010");
 		
 		emp.setEmailID("bala@cviac.com");
+		emp.setMobile("9791234568");
+		emp.setGender("male");
+		emp.setManagername("ramesh");
+		emp.setDepartment("mobility");
+		emp.setDesignation("se");
 		
 		emps.add(emp);
 		
@@ -80,6 +89,11 @@ public class Collegues extends Fragment {
 		emp.setEmpID("CV0090");
 		
 		emp.setEmailID("sairam@cviac.com");
+		emp.setMobile("9791234568");
+		emp.setGender("male");
+		emp.setManagername("ramesh");
+		emp.setDepartment("mobility");
+		emp.setDesignation("se");
 		emps.add(emp);
 		
 		
@@ -87,6 +101,11 @@ public class Collegues extends Fragment {
 		emp.setName("Shanmugam");
 		emp.setEmpID("CV0091");
 		emp.setEmailID("shanmugam@cviac.com");
+		emp.setMobile("9791234568");
+		emp.setGender("male");
+		emp.setManagername("ramesh");
+		emp.setDepartment("mobility");
+		emp.setDesignation("se");
 		
 		emps.add(emp);
 		
@@ -94,6 +113,11 @@ public class Collegues extends Fragment {
 		emp.setName("Gunaseelan");
 		emp.setEmpID("CV0092");
 		emp.setEmailID("gunaseelan@cviac.com");
+		emp.setMobile("9791234568");
+		emp.setGender("male");
+		emp.setManagername("ramesh");
+		emp.setDepartment("mobility");
+		emp.setDesignation("se");
 		emps.add(emp);
 		
 		return emps;

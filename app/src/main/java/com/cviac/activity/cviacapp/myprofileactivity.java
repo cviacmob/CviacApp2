@@ -24,8 +24,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.cviac.adapter.cviacapp.CircleTransform;
+import com.cviac.datamodel.cviacapp.ChatMessage;
+import com.cviac.datamodel.cviacapp.Collegue;
+import com.cviac.datamodel.cviacapp.Conversation;
 import com.cviac.datamodel.cviacapp.Employee;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,8 +48,8 @@ public class myprofileactivity extends AppCompatActivity {
 ImageView imageViewRound;
 
     private int REQUEST_CAMERA = 2, SELECT_FILE = 1;
-    private ImageButton btnSelect;
-    private ImageView ivImage;
+
+    private ImageView ivImage,btnSelect;
     private String userChoosenTask;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -58,7 +63,12 @@ ImageView imageViewRound;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
        // imageViewRound =(ImageView)findViewById(R.id.imageViewprofile) ;
-        btnSelect = (ImageButton) findViewById(R.id.imageButtonselect);
+        ivImage = (ImageView) findViewById(R.id.imageViewprofile);
+        Picasso.with(context).load(R.drawable.bala).resize(150, 150).transform(new CircleTransform())
+                .into(ivImage);
+        btnSelect = (ImageView) findViewById(R.id.imageButtonselect);
+        Picasso.with(context).load(R.drawable.camera).resize(50, 50).transform(new CircleTransform())
+                .into(btnSelect);
         btnSelect.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -66,12 +76,13 @@ ImageView imageViewRound;
                 selectImage();
             }
         });
-        ivImage = (ImageView) findViewById(R.id.imageViewprofile);
+
+
         employee();
       Employee emp=new Employee();
         tvempid = (TextView) findViewById(R.id.textViewempcoder);
         tvempid.setText(emp.getEmpID());
-        tvempname=(TextView)findViewById(R.id.textViewempcoder) ;
+        tvempname=(TextView)findViewById(R.id.textViewempnamer) ;
         tvempname.setText(emp.getName());
         tvemail=(TextView)findViewById(R.id.textViewemailr) ;
         tvemail.setText(emp.getEmailID());
