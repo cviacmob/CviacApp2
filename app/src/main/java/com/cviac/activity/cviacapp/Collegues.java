@@ -1,5 +1,6 @@
 package com.cviac.activity.cviacapp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,8 @@ public class Collegues extends Fragment {
 					Conversation cov=new Conversation();
 					cov.setEmpid(emp.getEmpID());
 					cov.setName(emp.getName());
+
+
 					Intent i = new Intent(getActivity().getApplicationContext(), ChatActivity.class);
 					i.putExtra("conversewith", cov);
 					startActivity(i);
