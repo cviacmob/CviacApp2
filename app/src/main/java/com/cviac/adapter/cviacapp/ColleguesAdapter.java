@@ -3,8 +3,7 @@ package com.cviac.adapter.cviacapp;
 import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
-import com.cviac.adapter.cviacapp.ConversationAdapter.ViewHolder;
-import com.cviac.datamodel.cviacapp.Collegue;
+import com.cviac.datamodel.cviacapp.Employee;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -15,15 +14,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ColleguesAdapter extends ArrayAdapter<Collegue> {
+public class ColleguesAdapter extends ArrayAdapter<Employee> {
 
-	private List<Collegue> emps;
+	private List<Employee> emps;
 
 	private int lastPostion = -1;
 
 	Context mContext;
 
-	public ColleguesAdapter(List<Collegue> objects, Context context) {
+	public ColleguesAdapter(List<Employee> objects, Context context) {
 		super(context, R.layout.collegues_item, objects);
 		emps = objects;
 		mContext = context;
@@ -39,7 +38,7 @@ public class ColleguesAdapter extends ArrayAdapter<Collegue> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vw = convertView;
         ViewHolder holder;
-		Collegue emp = getItem(position);
+		Employee emp = getItem(position);
 		if(convertView==null){
 			
 		LayoutInflater inf = LayoutInflater.from(getContext());
@@ -52,8 +51,6 @@ public class ColleguesAdapter extends ArrayAdapter<Collegue> {
 		// imageurl="http://www.gantrypark.com/Portals/12/Users/066/14/53314/adam-parker-large.jpg";
 		Picasso.with(mContext).load(R.drawable.bala).resize(130, 130).transform(new CircleTransform())
 				.into(holder.empimage);
-			//Picasso.with(mContext).load(R.drawable.bala)
-					//.transform(new CircleTransform()).into(holder.empimage);
 		holder.nameView.setText(emp.getName());
 		holder.mobile.setText(emp.getEmailID());
 		}else

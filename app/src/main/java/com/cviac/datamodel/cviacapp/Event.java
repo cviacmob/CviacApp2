@@ -1,32 +1,51 @@
 package com.cviac.datamodel.cviacapp;
 
-public class Event {
-    String names;
-    String types;
-    String discription;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-    public String getName() {
-        return names;
+import java.util.Date;
+
+@Table(name = "events")
+public class Event extends Model {
+
+    @Column(name = "title")
+   private String title;
+    @Column(name = "discription")
+    private String discription;
+    @Column(name = "date")
+    private Date date;
+    @Column(name = "event_id")
+    private String event_id;
+
+    public String getEvent_id() {
+        return event_id;
     }
 
-    public String getType() {
-        return types;
+    public void setEvent_id(String event_id) {
+        this.event_id = event_id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getformatedDate() {
+        return "2016/10/28";
+    }
     public String getDiscription() {
         return discription;
-    }
-
-    public void setName(String name) {
-        this.names = name;
-    }
-
-    public void setType(String type) {
-        this.types = type;
     }
 
     public void setDiscription(String discription) {
         this.discription = discription;
     }
-
 }

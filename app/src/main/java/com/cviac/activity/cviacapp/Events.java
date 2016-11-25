@@ -3,9 +3,7 @@ package com.cviac.activity.cviacapp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cviac.adapter.cviacapp.ColleguesAdapter;
 import com.cviac.adapter.cviacapp.EventsAdapter;
-import com.cviac.datamodel.cviacapp.Collegue;
 import com.cviac.datamodel.cviacapp.Event;
 
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -41,7 +38,7 @@ public class Events extends Fragment {
 						
 						Event emp = emps.get(pos1);
 					
-						Toast.makeText(lv1.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
+						Toast.makeText(lv1.getContext(), "clicked:"+ emp.getTitle(), Toast.LENGTH_SHORT).show();
 						
 					}});
 			
@@ -52,43 +49,40 @@ public class Events extends Fragment {
 		{
 			List<Event> emps = new ArrayList<Event>();
 			Event emp = new Event();
-			emp.setName("Renuga");
-			emp.setType("b'day");
-			emp.setDiscription("happy bday");
+			emp.setTitle("Birthday");
+			emp.setDiscription("Wish you happy birthday");
 			emps.add(emp);
 			
 			emp = new Event();
-			emp.setName("Renuga1");
-			emp.setType("b'day");
-			emp.setDiscription("happy bday");
+			emp.setTitle("Birthday");
+			emp.setDiscription("Wish you happy birthday");
+
 			
-			
-			
-			emps.add(emp);
-			
-			emp = new Event();
-			emp.setName("office");
-			
-			emp.setType("meeting");
-			emp.setDiscription("3 Oclk");
-			
-			emps.add(emp);
-			
-			
-			emp = new Event();
-			emp.setName("Renuga3");
-			
-			emp.setType("b'day");
-			emp.setDiscription("happy bday");
 			
 			
 			emps.add(emp);
 			
 			emp = new Event();
-			emp.setName("Renuga5");
-			emp.setType("b'day");
-			emp.setDiscription("happy bday");
+			emp.setTitle("Birthday");
+			emp.setDiscription("Wish you happy birthday");
+
+
+			emps.add(emp);
 			
+			
+			emp = new Event();
+			emp.setTitle("Birthday");
+			emp.setDiscription("Wish you happy birthday");
+
+
+
+			emps.add(emp);
+			
+			emp = new Event();
+			emp.setTitle("Birthday");
+			emp.setDiscription("Wish you happy birthday");
+
+
 			emps.add(emp);
 			
 			return emps;

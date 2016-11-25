@@ -1,3 +1,4 @@
+/*
 package com.cviac.activity.cviacapp;
 
 import android.content.Context;
@@ -79,3 +80,4 @@ public class StatusActivity extends AppCompatActivity implements Serializable {
 
     }
 }
+*/

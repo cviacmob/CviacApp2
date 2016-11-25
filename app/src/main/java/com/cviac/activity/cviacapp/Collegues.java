@@ -1,11 +1,10 @@
 package com.cviac.activity.cviacapp;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.cviac.adapter.cviacapp.ColleguesAdapter;
-import com.cviac.datamodel.cviacapp.Collegue;
+import com.cviac.datamodel.cviacapp.Employee;
 import com.cviac.datamodel.cviacapp.Conversation;
 
 import android.content.Intent;
@@ -17,12 +16,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class Collegues extends Fragment {
 	private ListView lv;
-	List<Collegue> emps;
+	List<Employee> emps;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,37 +30,45 @@ public class Collegues extends Fragment {
 		lv.setDivider(null);
 		emps=getCollegues();
 		   lv.setAdapter(new ColleguesAdapter(emps,getActivity().getApplicationContext()));
-	        
+
+
 	        lv.setOnItemClickListener(new OnItemClickListener () {
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1, int pos1,
 						long pos2) {
 					
-					Collegue emp = emps.get(pos1);
+					Employee emp = emps.get(pos1);
 					Conversation cov=new Conversation();
 					cov.setEmpid(emp.getEmpID());
 					cov.setName(emp.getName());
-
-
 					Intent i = new Intent(getActivity().getApplicationContext(), ChatActivity.class);
 					i.putExtra("conversewith", cov);
+
 					startActivity(i);
 				
 					//Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
-					
+
+
 				}});
 		
 		
 		return collegues;
 	}
 
+
 	
 	
-	private List<Collegue> getCollegues()
+	private List<Employee> getCollegues()
 	{
-		List<Collegue> emps = new ArrayList<Collegue>();
-		Collegue emp = new Collegue();
+		List<Employee> emplist = Employee.getemployees();
+		if (emplist != null && emplist.size() != 0) {
+			return emplist;
+		}
+
+
+		emps = new ArrayList<Employee>();
+		Employee emp = new Employee();
 		emp.setName("Renuga");
 		emp.setEmpID("CV0089");
 		emp.setEmailID("bala.gp@gmail.com");
@@ -73,8 +78,9 @@ public class Collegues extends Fragment {
 		emp.setDepartment("mobility");
 		emp.setDesignation("se");
 		emps.add(emp);
+		emp.save();
 		
-		emp = new Collegue();
+		emp = new Employee();
 		emp.setName("Bala");
 		emp.setEmpID("CV0010");
 		
@@ -84,10 +90,10 @@ public class Collegues extends Fragment {
 		emp.setManagername("ramesh");
 		emp.setDepartment("mobility");
 		emp.setDesignation("se");
-		
+		emp.save();
 		emps.add(emp);
 		
-		emp = new Collegue();
+		emp = new Employee();
 		emp.setName("Sairam");
 		emp.setEmpID("CV0090");
 		
@@ -97,10 +103,11 @@ public class Collegues extends Fragment {
 		emp.setManagername("ramesh");
 		emp.setDepartment("mobility");
 		emp.setDesignation("se");
+		emp.save();
 		emps.add(emp);
 		
 		
-		emp = new Collegue();
+		emp = new Employee();
 		emp.setName("Shanmugam");
 		emp.setEmpID("CV0091");
 		emp.setEmailID("shanmugam@cviac.com");
@@ -109,10 +116,10 @@ public class Collegues extends Fragment {
 		emp.setManagername("ramesh");
 		emp.setDepartment("mobility");
 		emp.setDesignation("se");
-		
+		emp.save();
 		emps.add(emp);
 		
-		emp = new Collegue();
+		emp = new Employee();
 		emp.setName("Gunaseelan");
 		emp.setEmpID("CV0092");
 		emp.setEmailID("gunaseelan@cviac.com");
@@ -122,6 +129,7 @@ public class Collegues extends Fragment {
 		emp.setDepartment("mobility");
 		emp.setDesignation("se");
 		emps.add(emp);
+		emp.save();
 		
 		return emps;
 		

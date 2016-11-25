@@ -2,8 +2,6 @@ package com.cviac.activity.cviacapp;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -89,7 +87,8 @@ public class HomeActivity extends AppCompatActivity {
         }
         if(id==R.id.action_profile)
         {
-            Intent i=new Intent(HomeActivity.this,myprofileactivity.class);
+            Intent i=new Intent(HomeActivity.this,MyProfileActivity.class);
+            i.putExtra("empcode","CV0089");
             startActivity(i);
             return true;
         }

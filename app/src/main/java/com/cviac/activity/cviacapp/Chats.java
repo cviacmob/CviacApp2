@@ -1,13 +1,10 @@
 package com.cviac.activity.cviacapp;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.cviac.adapter.cviacapp.ColleguesAdapter;
 import com.cviac.adapter.cviacapp.ConversationAdapter;
 import com.cviac.datamodel.cviacapp.ChatMessage;
-import com.cviac.datamodel.cviacapp.Collegue;
 import com.cviac.datamodel.cviacapp.Conversation;
 
 import android.content.Intent;
@@ -18,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;

@@ -12,21 +12,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cviac.activity.cviacapp.R;
 import com.cviac.adapter.cviacapp.ChatMessageAdapter;
 import com.cviac.adapter.cviacapp.CircleTransform;
 import com.cviac.datamodel.cviacapp.ChatMessage;
@@ -37,7 +34,6 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -223,7 +219,8 @@ public class ChatActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     //Log.w("MainActivity", "ActionBar's title clicked.");
-                    Intent i = new Intent(ChatActivity.this, myprofileactivity.class);
+                    Intent i = new Intent(ChatActivity.this, MyProfileActivity.class);
+                    i.putExtra("empcode", emp.getEmpid());
                     startActivity(i);
                     finish();
                 }

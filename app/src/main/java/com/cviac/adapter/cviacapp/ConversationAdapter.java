@@ -3,7 +3,6 @@ package com.cviac.adapter.cviacapp;
 import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
-import com.cviac.datamodel.cviacapp.Collegue;
 import com.cviac.datamodel.cviacapp.Conversation;
 import com.squareup.picasso.Picasso;
 

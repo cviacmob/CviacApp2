@@ -12,40 +12,31 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import android.view.LayoutInflater;
 import android.view.View;
 
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import com.cviac.adapter.cviacapp.CircleTransform;
-import com.cviac.datamodel.cviacapp.ChatMessage;
-import com.cviac.datamodel.cviacapp.Collegue;
-import com.cviac.datamodel.cviacapp.Conversation;
 import com.cviac.datamodel.cviacapp.Employee;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class myprofileactivity extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity {
 
     TextView tvempid, tvempname,tvemail,tvmobile,tvgender,tvdob,tvmanager,tvdepartment,tvdesignation;
     final Context context = this;
-ImageView imageViewRound;
+    ImageView imageViewRound;
 
     private int REQUEST_CAMERA = 2, SELECT_FILE = 1;
 
@@ -62,7 +53,7 @@ ImageView imageViewRound;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
-       // imageViewRound =(ImageView)findViewById(R.id.imageViewprofile) ;
+        // imageViewRound =(ImageView)findViewById(R.id.imageViewprofile) ;
         ivImage = (ImageView) findViewById(R.id.imageViewprofile);
         Picasso.with(context).load(R.drawable.bala).resize(150, 150).transform(new CircleTransform())
                 .into(ivImage);
@@ -77,10 +68,10 @@ ImageView imageViewRound;
             }
         });
 
+        Intent i = getIntent();
+        String empcode = i.getStringExtra("empcode");
 
-
-        employee();
-      Employee emp=new Employee();
+        Employee emp = Employee.getemployee(empcode);
         tvempid = (TextView) findViewById(R.id.textViewempcoder);
         tvempid.setText(emp.getEmpID());
         tvempname=(TextView)findViewById(R.id.textViewempnamer) ;
@@ -107,7 +98,7 @@ ImageView imageViewRound;
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
 
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(myprofileactivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MyProfileActivity.this);
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -117,12 +108,12 @@ ImageView imageViewRound;
                 if (items[item].equals("Take Photo")) {
                     userChoosenTask ="Take Photo";
 
-                        cameraIntent();
+                    cameraIntent();
 
                 } else if (items[item].equals("Choose from Library")) {
                     userChoosenTask ="Choose from Library";
 
-                        galleryIntent();
+                    galleryIntent();
 
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -208,19 +199,5 @@ ImageView imageViewRound;
         return new File(mediaStorageDir.getPath() + File.separator +
                 "IMG_"+ timeStamp + ".jpg");
     }
-    private void employee() {
-        Employee employee = new Employee();
-        employee.setName("bala");
-        employee.setEmpID("cc01");
-        employee.setEmailID("bala.gp@gmai.com");
-        employee.setGender("male");
-        employee.setManagername("Ramesh");
-        employee.setDegination("software engineer");
-        employee.setdepartment("mobility");
-        employee.setMobile("123456789");
-    }
+
 }
-
-
-
-
