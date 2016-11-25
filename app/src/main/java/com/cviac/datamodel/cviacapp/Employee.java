@@ -31,6 +31,8 @@ public class Employee extends Model implements Serializable {
     private String department;
     @Column(name = "designation")
     private String designation;
+    @Column(name = "imageurl")
+    private int imageurl;
 
 
     public Employee() {
@@ -92,8 +94,9 @@ public class Employee extends Model implements Serializable {
         return mobile;
     }
 
-    public void setDob(Date dob) {
-        this.dob = dob;
+    public String getformatedDate() {
+        return "2016/10/28";
+
     }
 
     public void setEmailID(String emailID) {
@@ -113,7 +116,13 @@ public class Employee extends Model implements Serializable {
         this.name = name;
     }
 
+    public int getImageurl() {
+        return imageurl;
+    }
 
+    public void setImageurl(int imageurl) {
+        this.imageurl = imageurl;
+    }
 
     public static List<Employee> getemployees() {
         return new Select()

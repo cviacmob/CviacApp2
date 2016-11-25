@@ -53,12 +53,12 @@ public class MyProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
-        // imageViewRound =(ImageView)findViewById(R.id.imageViewprofile) ;
+
         ivImage = (ImageView) findViewById(R.id.imageViewprofile);
-        Picasso.with(context).load(R.drawable.bala).resize(150, 150).transform(new CircleTransform())
+        Picasso.with(context).load(R.drawable.bala).resize(220, 220).transform(new CircleTransform())
                 .into(ivImage);
         btnSelect = (ImageView) findViewById(R.id.imageButtonselect);
-        Picasso.with(context).load(R.drawable.camera).resize(50, 50).transform(new CircleTransform())
+        Picasso.with(context).load(R.drawable.camera).resize(80, 80).transform(new CircleTransform())
                 .into(btnSelect);
         btnSelect.setOnClickListener(new View.OnClickListener() {
 
@@ -67,7 +67,7 @@ public class MyProfileActivity extends AppCompatActivity {
                 selectImage();
             }
         });
-
+        //data from collegue
         Intent i = getIntent();
         String empcode = i.getStringExtra("empcode");
 
@@ -81,7 +81,7 @@ public class MyProfileActivity extends AppCompatActivity {
         tvmobile=(TextView)findViewById(R.id.textViewmobiler) ;
         tvmobile.setText(emp.getMobile());
         tvdob=(TextView)findViewById(R.id.textViewdobr) ;
-        tvdob.setText((CharSequence) emp.getDob());
+        tvdob.setText(emp.getformatedDate());
         tvgender=(TextView)findViewById(R.id.textViewgenterr) ;
         tvgender.setText(emp.getGender());
         tvmanager=(TextView)findViewById(R.id.mageridr) ;

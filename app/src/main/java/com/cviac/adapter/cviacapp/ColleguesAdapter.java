@@ -14,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import static com.cviac.activity.cviacapp.R.id.empimage;
+
 public class ColleguesAdapter extends ArrayAdapter<Employee> {
 
 	private List<Employee> emps;
@@ -46,13 +48,14 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
 		holder = new ViewHolder();
 		holder.nameView = (TextView) vw.findViewById(R.id.colleguesname);
 		holder.mobile = (TextView) vw.findViewById(R.id.textemail);
-		holder.empimage = (ImageView) vw.findViewById(R.id.empimage);
+		holder.empimage = (ImageView) vw.findViewById(empimage);
 		// String
 		// imageurl="http://www.gantrypark.com/Portals/12/Users/066/14/53314/adam-parker-large.jpg";
-		Picasso.with(mContext).load(R.drawable.bala).resize(130, 130).transform(new CircleTransform())
+		Picasso.with(mContext).load(emp.getImageurl()).resize(80, 80).transform(new CircleTransform())
 				.into(holder.empimage);
 		holder.nameView.setText(emp.getName());
 		holder.mobile.setText(emp.getEmailID());
+			holder.empimage.setImageResource(emp.getImageurl());
 		}else
 		{
 	        holder=(ViewHolder)vw.getTag();

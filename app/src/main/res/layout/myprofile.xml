@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="5dp"
+    android:background="#DBE1F4"
     >
 
 
@@ -14,7 +15,9 @@
         android:layout_alignTop="@+id/textViewname"
         android:layout_alignLeft="@+id/textViewempcoder"
         android:layout_alignStart="@+id/textViewempcoder"
-        android:id="@+id/textViewempnamer" />
+        android:id="@+id/textViewempnamer"
+        android:padding="5dp"
+        android:textColor="#2A51D8"/>
 
     <TextView
         android:text="TextView"
@@ -23,7 +26,9 @@
         android:layout_alignTop="@+id/textViewemail"
         android:layout_alignLeft="@+id/textViewempnamer"
         android:layout_alignStart="@+id/textViewempnamer"
-        android:id="@+id/textViewemailr" />
+        android:id="@+id/textViewemailr"
+        android:padding="5dp"
+        android:textColor="#2A51D8"/>
 
     <TextView
         android:text="TextView"
@@ -32,18 +37,9 @@
         android:layout_alignTop="@+id/textViewgender"
         android:layout_alignLeft="@+id/textViewdobr"
         android:layout_alignStart="@+id/textViewdobr"
-        android:id="@+id/textViewgenterr" />
-
-    <TextView
-        android:text="Magager_Id       "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewgender"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="18dp"
-        android:id="@+id/textViewmanager"
-        android:padding="5dp"/>
+        android:id="@+id/textViewgenterr"
+        android:padding="5dp"
+        android:textColor="#2A51D8"/>
 
     <TextView
         android:text="TextView"
@@ -52,16 +48,17 @@
         android:layout_alignTop="@+id/textViewmanager"
         android:layout_alignLeft="@+id/textViewgenterr"
         android:layout_alignStart="@+id/textViewgenterr"
-        android:id="@+id/mageridr" />
+        android:id="@+id/mageridr"
+        android:padding="5dp"
+        android:textColor="#2A51D8"/>
 
     <TextView
         android:text="DOB            "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewdob"
-        android:layout_below="@+id/textViewmobile"
-        android:layout_marginTop="14dp"
-        android:padding="5dp"/>
+        android:padding="5dp"
+        android:layout_below="@+id/textViewmobile" />
 
     <TextView
         android:text="Mobile         "
@@ -98,20 +95,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewdobr"
+        android:textColor="#2A51D8"
+        android:padding="5dp"
         android:layout_alignTop="@+id/textViewdob"
         android:layout_alignLeft="@+id/textViewmobiler"
         android:layout_alignStart="@+id/textViewmobiler" />
-
-    <TextView
-        android:text="Emp_Code              "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewempcode"
-        android:layout_marginTop="23dp"
-        android:padding="5dp"
-        android:layout_below="@+id/imageButtonselect"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
 
     <TextView
@@ -119,6 +107,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewmobiler"
+        android:textColor="#2A51D8"
+        android:padding="5dp"
         android:layout_alignBaseline="@+id/textViewmobile"
         android:layout_alignBottom="@+id/textViewmobile"
         android:layout_alignLeft="@+id/textViewemailr"
@@ -139,6 +129,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewdeptr"
+        android:textColor="#2A51D8"
+        android:padding="5dp"
         android:layout_alignBaseline="@+id/textViewdept"
         android:layout_alignBottom="@+id/textViewdept"
         android:layout_alignLeft="@+id/mageridr"
@@ -168,26 +160,52 @@
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#2A51D8"
+        android:padding="5dp"
         android:layout_alignBottom="@+id/textViewdegin"
         android:layout_alignLeft="@+id/textViewdeptr"
         android:layout_alignStart="@+id/textViewdeptr"
         android:id="@+id/textViewdesig" />
 
+    <TextView
+        android:text="Magager_Id       "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:id="@+id/textViewmanager"
+        android:layout_below="@+id/textViewgender"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Emp_Code              "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewempcode"
+        android:layout_marginTop="58dp"
+        android:padding="5dp"
+        android:layout_below="@+id/imageViewprofile"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <ImageView
         android:id="@+id/imageViewprofile"
-        android:layout_width="96dp"
+        android:layout_width="150dp"
         android:layout_height="96dp"
+        android:padding="5dp"
         android:src="@drawable/ic_launcher"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+        android:layout_toRightOf="@+id/textViewdob"
+        android:layout_toEndOf="@+id/textViewdob" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:id="@+id/imageButtonselect"
         android:layout_alignBottom="@+id/imageViewprofile"
-        android:layout_toRightOf="@+id/imageViewprofile"
-        android:layout_toEndOf="@+id/imageViewprofile" />
+        android:layout_alignRight="@+id/imageViewprofile"
+        android:layout_alignEnd="@+id/imageViewprofile" />
 
     <TextView
         android:text="TextView"
@@ -195,10 +213,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/textViewempcoder"
         android:textColor="#2A51D8"
-        android:layout_alignBaseline="@+id/textViewempcode"
-        android:layout_alignBottom="@+id/textViewempcode"
-        android:layout_toRightOf="@+id/imageViewprofile"
-        android:layout_toEndOf="@+id/imageViewprofile" />
+        android:padding="5dp"
+        android:layout_marginLeft="65dp"
+        android:layout_marginStart="65dp"
+        android:layout_above="@+id/textViewempnamer"
+        android:layout_toRightOf="@+id/textViewname"
+        android:layout_toEndOf="@+id/textViewname" />
 
 
 </RelativeLayout>

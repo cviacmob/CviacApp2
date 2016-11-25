@@ -72,11 +72,12 @@ public class Collegues extends Fragment {
 		emp.setName("Renuga");
 		emp.setEmpID("CV0089");
 		emp.setEmailID("bala.gp@gmail.com");
-		emp.setMobile("9791234568");
-		emp.setGender("male");
-		emp.setManagername("ramesh");
-		emp.setDepartment("mobility");
-		emp.setDesignation("se");
+		emp.setMobile("9791234368");
+		emp.setGender("Male");
+		emp.setManagername("Ramesh");
+		emp.setDepartment("Mobility");
+		emp.setDesignation("Software Engineer");
+		emp.setImageurl(R.drawable.ic_launcher);
 		emps.add(emp);
 		emp.save();
 		
@@ -86,10 +87,11 @@ public class Collegues extends Fragment {
 		
 		emp.setEmailID("bala@cviac.com");
 		emp.setMobile("9791234568");
-		emp.setGender("male");
-		emp.setManagername("ramesh");
-		emp.setDepartment("mobility");
-		emp.setDesignation("se");
+		emp.setGender("Male");
+		emp.setManagername("Ramesh");
+		emp.setDepartment("Mobility");
+		emp.setDesignation("Software Engineer");
+		emp.setImageurl(R.drawable.bala);
 		emp.save();
 		emps.add(emp);
 		
@@ -99,10 +101,11 @@ public class Collegues extends Fragment {
 		
 		emp.setEmailID("sairam@cviac.com");
 		emp.setMobile("9791234568");
-		emp.setGender("male");
-		emp.setManagername("ramesh");
-		emp.setDepartment("mobility");
-		emp.setDesignation("se");
+		emp.setGender("Male");
+		emp.setManagername("Ramesh");
+		emp.setDepartment("Mobility");
+		emp.setDesignation("Software Engineer");
+		emp.setImageurl(R.drawable.bala);
 		emp.save();
 		emps.add(emp);
 		
@@ -112,10 +115,11 @@ public class Collegues extends Fragment {
 		emp.setEmpID("CV0091");
 		emp.setEmailID("shanmugam@cviac.com");
 		emp.setMobile("9791234568");
-		emp.setGender("male");
-		emp.setManagername("ramesh");
-		emp.setDepartment("mobility");
-		emp.setDesignation("se");
+		emp.setGender("Male");
+		emp.setManagername("Ramesh");
+		emp.setDepartment("Mobility");
+		emp.setDesignation("Software Engineer");
+		emp.setImageurl(R.drawable.shan);
 		emp.save();
 		emps.add(emp);
 		
@@ -125,9 +129,10 @@ public class Collegues extends Fragment {
 		emp.setEmailID("gunaseelan@cviac.com");
 		emp.setMobile("9791234568");
 		emp.setGender("male");
-		emp.setManagername("ramesh");
-		emp.setDepartment("mobility");
-		emp.setDesignation("se");
+		emp.setManagername("Ramesh");
+		emp.setDepartment("Mobility");
+		emp.setDesignation("Software Engineer");
+		emp.setImageurl(R.drawable.bala);
 		emps.add(emp);
 		emp.save();
 		

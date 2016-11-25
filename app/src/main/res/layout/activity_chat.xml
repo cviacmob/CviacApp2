@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.cviac.activity.cviacapp.ChatActivity"
     tools:ignore="MergeRootFrame"
-    android:background="#E6F6F7" >
+    android:background="#DBE1F4" >
 
     <RelativeLayout
         android:layout_width="wrap_content"

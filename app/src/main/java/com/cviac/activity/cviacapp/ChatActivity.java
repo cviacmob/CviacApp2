@@ -202,9 +202,9 @@ public class ChatActivity extends Activity {
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
 
-            Picasso.with(mContext).load(R.drawable.bala).resize(80, 80).transform(new CircleTransform())
+            Picasso.with(mContext).load(R.drawable.bala).resize(110, 110).transform(new CircleTransform())
                     .into(customimage);
-            Picasso.with(mContext).load(R.drawable.backarrow).resize(45, 45).transform(new CircleTransform())
+            Picasso.with(mContext).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
                     .into(customimageback);
 
 
