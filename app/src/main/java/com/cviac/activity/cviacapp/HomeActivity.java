@@ -81,13 +81,12 @@ public class HomeActivity extends AppCompatActivity {
 //            }
 //        });
 
-        Intent i = getIntent();
-        mobile = i.getStringExtra("mobile");
+        final String MyPREFERENCES = "MyPrefs";
+        SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        mobile = prefs.getString("mobile","");
         if (mobile != null) {
             Employee emplogged = Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
-                final String MyPREFERENCES = "MyPrefs";
-                SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("empid", emplogged.getEmpID());
                 editor.putString("empname", emplogged.getName());
