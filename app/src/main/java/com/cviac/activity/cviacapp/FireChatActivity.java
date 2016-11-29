@@ -41,7 +41,7 @@ public class FireChatActivity extends AppCompatActivity {
 
     private List<ChatMessage> chats;
     private Conversation emp;
-    private FirebaseListAdapter<ChatMessage> myAdapter;
+    private FirebaseListAdapter<ChatMsg> myAdapter;
 
     private DatabaseReference dbref;
 
@@ -77,12 +77,21 @@ public class FireChatActivity extends AppCompatActivity {
                                     child("conversations").child(converseId);
 
 
-        myAdapter = new FirebaseListAdapter<ChatMessage>(this,ChatMessage.class,R.layout.fragment_chat,dbref) {
+        myAdapter = new FirebaseListAdapter<ChatMsg>(this,ChatMsg.class,R.layout.fragment_chat,dbref) {
             @Override
-            protected void populateView(View vw, ChatMessage s, int i) {
-                TextView msgview = (TextView) vw.findViewById(R.id.textchatmsg);
-                msgview.setBackgroundResource(R.drawable.bubble1);
-                msgview.setText(s.getMsg());
+            protected void populateView(View vw, ChatMsg s, int i) {
+
+                if (myempId.equals(s.getSenderid())) {
+                    TextView msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+                    msgview.setBackgroundResource(R.drawable.bubble2);
+                    msgview.setText(s.getMsg());
+                }
+                else {
+                    TextView msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+                    msgview.setBackgroundResource(R.drawable.bubble1);
+                    msgview.setText(s.getMsg());
+                }
+
             }
         };
         lv.setAdapter(myAdapter);
@@ -122,10 +131,6 @@ public class FireChatActivity extends AppCompatActivity {
                 if (msg.length() != 0) {
                     ChatMsg mgsopj = new ChatMsg();
                     mgsopj.setMsg(msg);
-                    mgsopj.setIn(false);
-                    mgsopj.setFrom(emp.getEmpid());
-                    mgsopj.setCtime(new Date());
-                    mgsopj.setName(emp.getName());
                     new SendMessageTask().execute(mgsopj);
                     msgview.getText().clear();
                 }

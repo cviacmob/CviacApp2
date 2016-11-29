@@ -12,18 +12,61 @@ public class ChatMsg implements Serializable {
 
     private String msg;
 
-    private boolean isIn;
-
     private Date ctime;
 
-    private String from;
+    private String receiverid;
 
-    private String name;
+    private String receivername;
+
+    private String senderid;
+
+    private String sendername;
 
 
 
     public ChatMsg() {
         super();
+    }
+
+    public String getReceiverid() {
+        return receiverid;
+    }
+
+    public void setReceiverid(String receiverid) {
+        this.receiverid = receiverid;
+    }
+
+    public String getReceivername() {
+        return receivername;
+    }
+
+    public void setReceivername(String receivername) {
+        this.receivername = receivername;
+    }
+
+    public String getSenderid() {
+        return senderid;
+    }
+
+    public void setSenderid(String senderid) {
+        this.senderid = senderid;
+    }
+
+    public String getSendername() {
+        return sendername;
+    }
+
+    public void setSendername(String sendername) {
+        this.sendername = sendername;
+    }
+
+    public String getMsg() {
+
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
     public Date getCtime() {
@@ -32,33 +75,5 @@ public class ChatMsg implements Serializable {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-    public void setIn(boolean isIn) {
-        this.isIn = isIn;
-    }
-    public String getFrom() {
-        return from;
-    }
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public boolean isIn() {
-        return isIn;
     }
 }
