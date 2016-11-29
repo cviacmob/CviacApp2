@@ -2,13 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '24.0.3'
     defaultConfig {
         applicationId "com.cviac.activity.cviacapp"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,18 +27,18 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
-    compile 'com.google.android.gms:play-services-appindexing:9.8.0'
+    compile 'com.google.android.gms:play-services-appindexing:9.6.0'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:support-v13:24.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.google.android.gms:play-services:9.8.0'
+    compile 'com.google.android.gms:play-services:9.6.0'
     compile 'com.google.firebase:firebase-core:9.6.0'
     compile 'com.google.firebase:firebase-messaging:9.6.0'
     compile 'com.google.firebase:firebase-database:9.6.0'
     compile 'com.firebaseui:firebase-ui-database:0.4.0'
-
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.code.gson:gson:2.6.2'
     testCompile 'junit:junit:4.12'
 }

@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,12 +39,13 @@ import java.util.List;
 import java.util.Map;
 
 public class FireChatActivity extends AppCompatActivity {
-
+    Context context;
     private List<ChatMessage> chats;
     private Conversation emp;
     private FirebaseListAdapter<ChatMsg> myAdapter;
 
     private DatabaseReference dbref;
+    RelativeLayout relativelayout;
 
     private String myempId;
     private String myempname;
@@ -62,6 +64,7 @@ public class FireChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         ListView lv = (ListView) findViewById(R.id.listViewChat);
+        lv.setDivider(null);
         //chats = new ArrayList<ChatMessage>();
 
         final String MyPREFERENCES = "MyPrefs";
@@ -82,8 +85,25 @@ public class FireChatActivity extends AppCompatActivity {
             protected void populateView(View vw, ChatMsg s, int i) {
 
                 if (myempId.equals(s.getSenderid())) {
-                    TextView msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+                    relativelayout = new RelativeLayout(getBaseContext());
+                    TextView msgview = new TextView(getBaseContext());
+                    msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    msgview.setLayoutParams(layoutParams);
                     msgview.setBackgroundResource(R.drawable.bubble2);
+
+
+
+
+                 /*   msgview.setLayoutParams(lp);
+                    layouth.addView(msgview);*/
+
+
+
                     msgview.setText(s.getMsg());
                 }
                 else {
