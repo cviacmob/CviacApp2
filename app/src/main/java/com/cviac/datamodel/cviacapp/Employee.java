@@ -142,6 +142,15 @@ public class Employee extends Model implements Serializable {
 
     }
 
+    public static Employee getemployeeByMobile(String  mobile) {
+        return new Select()
+                .from(Employee.class)
+                .where("mobile = ?", mobile)
+                //.orderBy("Name ASC")
+                .executeSingle();
+
+    }
+
 
 
 }

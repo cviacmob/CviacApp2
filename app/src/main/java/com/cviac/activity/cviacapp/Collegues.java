@@ -42,7 +42,7 @@ public class Collegues extends Fragment {
 					Conversation cov=new Conversation();
 					cov.setEmpid(emp.getEmpID());
 					cov.setName(emp.getName());
-					Intent i = new Intent(getActivity().getApplicationContext(), ChatActivity.class);
+					Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
 					i.putExtra("conversewith", cov);
 
 					startActivity(i);
@@ -57,87 +57,13 @@ public class Collegues extends Fragment {
 	}
 
 
+
 	
 	
 	private List<Employee> getCollegues()
 	{
 		List<Employee> emplist = Employee.getemployees();
-		if (emplist != null && emplist.size() != 0) {
-			return emplist;
-		}
-
-
-		emps = new ArrayList<Employee>();
-		Employee emp = new Employee();
-		emp.setName("Renuga");
-		emp.setEmpID("CV0089");
-		emp.setEmailID("bala.gp@gmail.com");
-		emp.setMobile("9791234368");
-		emp.setGender("Male");
-		emp.setManagername("Ramesh");
-		emp.setDepartment("Mobility");
-		emp.setDesignation("Software Engineer");
-		emp.setImageurl(R.drawable.ic_launcher);
-		emps.add(emp);
-		emp.save();
-		
-		emp = new Employee();
-		emp.setName("Bala");
-		emp.setEmpID("CV0010");
-		
-		emp.setEmailID("bala@cviac.com");
-		emp.setMobile("9791234568");
-		emp.setGender("Male");
-		emp.setManagername("Ramesh");
-		emp.setDepartment("Mobility");
-		emp.setDesignation("Software Engineer");
-		emp.setImageurl(R.drawable.bala);
-		emp.save();
-		emps.add(emp);
-		
-		emp = new Employee();
-		emp.setName("Sairam");
-		emp.setEmpID("CV0090");
-		
-		emp.setEmailID("sairam@cviac.com");
-		emp.setMobile("9791234568");
-		emp.setGender("Male");
-		emp.setManagername("Ramesh");
-		emp.setDepartment("Mobility");
-		emp.setDesignation("Software Engineer");
-		emp.setImageurl(R.drawable.bala);
-		emp.save();
-		emps.add(emp);
-		
-		
-		emp = new Employee();
-		emp.setName("Shanmugam");
-		emp.setEmpID("CV0091");
-		emp.setEmailID("shanmugam@cviac.com");
-		emp.setMobile("9791234568");
-		emp.setGender("Male");
-		emp.setManagername("Ramesh");
-		emp.setDepartment("Mobility");
-		emp.setDesignation("Software Engineer");
-		emp.setImageurl(R.drawable.shan);
-		emp.save();
-		emps.add(emp);
-		
-		emp = new Employee();
-		emp.setName("Gunaseelan");
-		emp.setEmpID("CV0092");
-		emp.setEmailID("gunaseelan@cviac.com");
-		emp.setMobile("9791234568");
-		emp.setGender("male");
-		emp.setManagername("Ramesh");
-		emp.setDepartment("Mobility");
-		emp.setDesignation("Software Engineer");
-		emp.setImageurl(R.drawable.bala);
-		emps.add(emp);
-		emp.save();
-		
-		return emps;
-		
+		return emplist;
 	}
 	
 	

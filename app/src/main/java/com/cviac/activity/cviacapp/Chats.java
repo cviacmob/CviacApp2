@@ -54,7 +54,7 @@ public class Chats extends Fragment {
 
 				// Toast.makeText(lv.getContext(), "clicked:" + emp.getName(),
 				// Toast.LENGTH_SHORT).show();
-				Intent i = new Intent(getActivity().getApplicationContext(), ChatActivity.class);
+				Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
 				i.putExtra("conversewith",emp);
 				startActivity(i);
 
