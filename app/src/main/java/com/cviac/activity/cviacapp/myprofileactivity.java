@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 
 import android.support.v7.app.AppCompatActivity;
 
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.ImageView;
@@ -53,7 +54,7 @@ public class MyProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ivImage = (ImageView) findViewById(R.id.imageViewprofile);
         Picasso.with(context).load(R.drawable.bala).resize(220, 220).transform(new CircleTransform())
                 .into(ivImage);
@@ -199,5 +200,11 @@ public class MyProfileActivity extends AppCompatActivity {
         return new File(mediaStorageDir.getPath() + File.separator +
                 "IMG_"+ timeStamp + ".jpg");
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return true;
+    }
+
 
 }

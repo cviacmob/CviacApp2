@@ -1,6 +1,7 @@
 package com.cviac.activity.cviacapp;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -38,17 +40,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FireChatActivity extends AppCompatActivity {
-    Context context;
+public class FireChatActivity extends Activity {
+
     private List<ChatMessage> chats;
     private Conversation emp;
     private FirebaseListAdapter<ChatMsg> myAdapter;
-
+    ActionBar actionBar;
+    static ActionBar mActionBar;
     private DatabaseReference dbref;
     RelativeLayout relativelayout;
-
+    ImageView customimageback, customimage;
     private String myempId;
     private String myempname;
+    Context mContext;
 
 
     private String getNormalizedConverseId(String myid, String receverid) {
@@ -62,6 +66,7 @@ public class FireChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
 
         ListView lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
@@ -79,6 +84,7 @@ public class FireChatActivity extends AppCompatActivity {
         dbref = FirebaseDatabase.getInstance().getReference().
                                     child("conversations").child(converseId);
 
+        actionmethod();
 
         myAdapter = new FirebaseListAdapter<ChatMsg>(this,ChatMsg.class,R.layout.fragment_chat,dbref) {
             @Override
@@ -107,7 +113,15 @@ public class FireChatActivity extends AppCompatActivity {
                     msgview.setText(s.getMsg());
                 }
                 else {
-                    TextView msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+                    relativelayout = new RelativeLayout(getBaseContext());
+                    TextView msgview = new TextView(getBaseContext());
+                    msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    msgview.setLayoutParams(layoutParams);
                     msgview.setBackgroundResource(R.drawable.bubble1);
                     msgview.setText(s.getMsg());
                 }
@@ -116,7 +130,7 @@ public class FireChatActivity extends AppCompatActivity {
         };
         lv.setAdapter(myAdapter);
 
-        actionmethod();
+
 
         final EditText msgview = (EditText) findViewById(R.id.editTextsend);
         final ImageButton sendbutton = (ImageButton) findViewById(R.id.sendbutton);
@@ -161,56 +175,7 @@ public class FireChatActivity extends AppCompatActivity {
 
 
 
-    public void actionmethod() {
 
-        ImageView customimageback, customimage;
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            // Disable the default and enable the custom
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3B5CD1")));
-
-            View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
-            customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
-            customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
-
-            Picasso.with(this).load(R.drawable.bala).resize(110, 110).transform(new CircleTransform())
-                    .into(customimage);
-            Picasso.with(this).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
-                    .into(customimageback);
-
-
-            // Get the textview of the title
-            TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
-
-            customTitle.setText(emp.getName());
-            // Change the font family (optional)
-            customTitle.setTypeface(Typeface.MONOSPACE);
-            // Set the on click listener for the title
-            customTitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Log.w("MainActivity", "ActionBar's title clicked.");
-                    Intent i = new Intent(FireChatActivity.this, MyProfileActivity.class);
-                    i.putExtra("empcode", emp.getEmpid());
-                    startActivity(i);
-                    finish();
-                }
-            });
-            customimageback.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(FireChatActivity.this, HomeActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            });
-            // Apply the custom view
-            actionBar.setCustomView(customView);
-        }
-    }
 
     private class SendMessageTask extends AsyncTask<ChatMsg, Integer, Long> {
 
@@ -244,6 +209,58 @@ public class FireChatActivity extends AppCompatActivity {
                     });
             return null;
         }
+    }
+
+    public void actionmethod() {
+
+        actionBar = getActionBar();
+        if (actionBar != null) {
+            // Disable the default and enable the custom
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3B5CD1")));
+
+            View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+            customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
+            customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
+
+            Picasso.with(mContext).load(R.drawable.bala).resize(110, 110).transform(new CircleTransform())
+                    .into(customimage);
+           Picasso.with(mContext).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
+                    .into(customimageback);
+
+
+            // Get the textview of the title
+            TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
+
+            customTitle.setText(emp.getName());
+            // Change the font family (optional)
+            customTitle.setTypeface(Typeface.MONOSPACE);
+            // Set the on click listener for the title
+            customTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Log.w("MainActivity", "ActionBar's title clicked.");
+                    Intent i = new Intent(FireChatActivity.this, MyProfileActivity.class);
+                    i.putExtra("empcode", emp.getEmpid());
+                    startActivity(i);
+                    finish();
+                }
+            });
+            customimageback.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(FireChatActivity.this, HomeActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            });
+
+            // Apply the custom view
+            actionBar.setCustomView(customView);
+        }
+
     }
 
 

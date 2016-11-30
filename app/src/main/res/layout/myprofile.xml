@@ -214,11 +214,9 @@
         android:id="@+id/textViewempcoder"
         android:textColor="#2A51D8"
         android:padding="5dp"
-        android:layout_marginLeft="65dp"
-        android:layout_marginStart="65dp"
         android:layout_above="@+id/textViewempnamer"
-        android:layout_toRightOf="@+id/textViewname"
-        android:layout_toEndOf="@+id/textViewname" />
+        android:layout_alignRight="@+id/imageViewprofile"
+        android:layout_alignEnd="@+id/imageViewprofile" />
 
 
 </RelativeLayout>
