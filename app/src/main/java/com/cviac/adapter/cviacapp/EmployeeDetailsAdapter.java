@@ -1,3 +1,4 @@
+/*
 package com.cviac.adapter.cviacapp;
 
 import android.app.Activity;
@@ -17,9 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+*/
 /**
  * Created by User on 11/22/2016.
- */
+ *//*
+
 
 public class EmployeeDetailsAdapter extends ArrayAdapter<Employee> {
     Context context;
@@ -97,3 +100,4 @@ public class EmployeeDetailsAdapter extends ArrayAdapter<Employee> {
         return convertView;
     }
 }
+*/

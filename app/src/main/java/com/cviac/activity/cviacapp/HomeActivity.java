@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +57,8 @@ public class HomeActivity extends AppCompatActivity {
         setTitle(getString(R.string.app_name));
         getCollegues();
 
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -88,8 +88,8 @@ public class HomeActivity extends AppCompatActivity {
             Employee emplogged = Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
                 SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("empid", emplogged.getEmpID());
-                editor.putString("empname", emplogged.getName());
+                editor.putString("empid", emplogged.getEmp_code());
+                editor.putString("empname", emplogged.getEmp_name());
                 editor.commit();
             }
         }
@@ -126,7 +126,7 @@ public class HomeActivity extends AppCompatActivity {
             Employee emplogged = Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
                 Intent i = new Intent(HomeActivity.this, MyProfileActivity.class);
-                i.putExtra("empcode", emplogged.getEmpID());
+                i.putExtra("empcode", emplogged.getEmail());
                 startActivity(i);
             }
 
@@ -265,7 +265,7 @@ public class HomeActivity extends AppCompatActivity {
             return emplist;
         }
 
-        List<Employee> emps = new ArrayList<Employee>();
+       /* List<Employee> emps = new ArrayList<Employee>();
         Employee emp = new Employee();
         emp.setName("Bala");
         emp.setEmpID("CV0089");
@@ -359,8 +359,8 @@ public class HomeActivity extends AppCompatActivity {
         emp.setImageurl(R.drawable.ic_launcher);
         emps.add(emp);
         emp.save();
-
-        return emps;
+*/
+        return emplist;
 
     }
 

@@ -7,6 +7,7 @@ import com.cviac.datamodel.cviacapp.Employee;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,11 +52,12 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
 		holder.empimage = (ImageView) vw.findViewById(empimage);
 		// String
 		// imageurl="http://www.gantrypark.com/Portals/12/Users/066/14/53314/adam-parker-large.jpg";
-		Picasso.with(mContext).load(emp.getImageurl()).resize(80, 80).transform(new CircleTransform())
-				.into(holder.empimage);
-		holder.nameView.setText(emp.getName());
-		holder.mobile.setText(emp.getEmailID());
-			holder.empimage.setImageResource(emp.getImageurl());
+
+		holder.nameView.setText(emp.getEmp_name());
+		holder.mobile.setText(emp.getEmail());
+			String url=emp.getImage_url();
+			Picasso.with(mContext).load(url).resize(80, 80).transform(new CircleTransform())
+					.into(holder.empimage);
 		}else
 		{
 	        holder=(ViewHolder)vw.getTag();

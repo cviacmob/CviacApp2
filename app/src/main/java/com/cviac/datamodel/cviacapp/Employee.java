@@ -13,64 +13,88 @@ import java.util.List;
 @Table(name = "employee")
 public class Employee extends Model implements Serializable {
 
-    @Column(name = "empid")
-    private String empID;
-    @Column(name = "name")
-    private String name;
+    @Column(name = "push_id")
+    private String push_id;
+    @Column(name = "emp_code")
+    private String emp_code;
+    @Column(name = "emp_name")
+    private String emp_name;
     @Column(name = "mobile")
     private String mobile;
-    @Column(name = "emailid")
-    private String emailID;
+    @Column(name = "email")
+    private String email;
     @Column(name = "dob")
     private Date dob;
     @Column(name = "manager")
-    private String managername;
+    private String manager;
     @Column(name = "gender")
     private String gender;
     @Column(name = "department")
     private String department;
     @Column(name = "designation")
     private String designation;
-    @Column(name = "imageurl")
-    private int imageurl;
+    @Column(name = "status")
+    private int status;
+    @Column(name = "image_url")
+    private String image_url;
 
 
     public Employee() {
         // TODO Auto-generated constructor stub
+    } public String getPush_id() {
+        return push_id;
     }
 
-
-    public String getEmailID() {
-        return emailID;
+    public void setPush_id(String push_id) {
+        this.push_id = push_id;
     }
 
-    public String getEmpID() {
-        return empID;
+    public String getEmp_code() {
+        return emp_code;
     }
 
-
-    public String getName() {
-        return name;
+    public void setEmp_code(String emp_code) {
+        this.emp_code = emp_code;
     }
 
-    public String getManagername() {
-        return managername;
+    public String getEmp_name() {
+        return emp_name;
     }
 
-    public String getDesignation() {
-        return designation;
+    public void setEmp_name(String emp_name) {
+        this.emp_name = emp_name;
     }
 
-    public void setDesignation(String designation) {
-        this.designation = designation;
+    public String getMobile() {
+        return mobile;
     }
 
-    public String getDepartment() {
-        return department;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
     }
 
     public String getGender() {
@@ -81,53 +105,51 @@ public class Employee extends Model implements Serializable {
         this.gender = gender;
     }
 
-    public void setManagername(String managername) {
-        this.managername = managername;
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getImage_url() {
+        return image_url;
+    }
+
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
     }
 
 
-    public Date getDob() {
-        return dob;
-    }
 
-    public String getMobile() {
-        return mobile;
-    }
 
-    public String getformatedDate() {
+   /* public String getformatedDate() {
         return "2016/10/28";
 
-    }
+    }*/
 
-    public void setEmailID(String emailID) {
-        this.emailID = emailID;
-    }
-
-    public void setEmpID(String empID) {
-        this.empID = empID;
-    }
-
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getImageurl() {
-        return imageurl;
-    }
-
-    public void setImageurl(int imageurl) {
-        this.imageurl = imageurl;
-    }
 
     public static List<Employee> getemployees() {
         return new Select()
                 .from(Employee.class)
-              //  .where("sender = ?", from)
+                //  .where("sender = ?", from)
                 //.orderBy("Name ASC")
                 .execute();
 
@@ -136,13 +158,13 @@ public class Employee extends Model implements Serializable {
     public static Employee getemployee(String id) {
         return new Select()
                 .from(Employee.class)
-                  .where("empid = ?", id)
+                .where("emp_code = ?", id)
                 //.orderBy("Name ASC")
                 .executeSingle();
 
     }
 
-    public static Employee getemployeeByMobile(String  mobile) {
+    public static Employee getemployeeByMobile(String mobile) {
         return new Select()
                 .from(Employee.class)
                 .where("mobile = ?", mobile)
@@ -150,7 +172,6 @@ public class Employee extends Model implements Serializable {
                 .executeSingle();
 
     }
-
 
 
 }

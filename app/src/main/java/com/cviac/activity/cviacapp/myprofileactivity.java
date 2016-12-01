@@ -74,23 +74,26 @@ public class MyProfileActivity extends AppCompatActivity {
 
         Employee emp = Employee.getemployee(empcode);
         tvempid = (TextView) findViewById(R.id.textViewempcoder);
-        tvempid.setText(emp.getEmpID());
+        tvempid.setText(emp.getEmp_code());
         tvempname=(TextView)findViewById(R.id.textViewempnamer) ;
-        tvempname.setText(emp.getName());
+        tvempname.setText(emp.getEmp_name());
         tvemail=(TextView)findViewById(R.id.textViewemailr) ;
-        tvemail.setText(emp.getEmailID());
+        tvemail.setText(emp.getEmail());
         tvmobile=(TextView)findViewById(R.id.textViewmobiler) ;
         tvmobile.setText(emp.getMobile());
         tvdob=(TextView)findViewById(R.id.textViewdobr) ;
-        tvdob.setText(emp.getformatedDate());
+        tvdob.setText(emp.getDob().toString());
         tvgender=(TextView)findViewById(R.id.textViewgenterr) ;
         tvgender.setText(emp.getGender());
         tvmanager=(TextView)findViewById(R.id.mageridr) ;
-        tvmanager.setText(emp.getManagername());
+        tvmanager.setText(emp.getManager());
         tvdepartment=(TextView)findViewById(R.id.textViewdeptr) ;
         tvdepartment.setText(emp.getDepartment());
         tvdesignation=(TextView)findViewById(R.id.textViewdesig) ;
         tvdesignation.setText(emp.getDesignation());
+        //tvdesignation=(TextView)findViewById(R.id.textViewdesig) ;
+        //tvdesignation.setText(emp.getS());
+
 
 
     }
