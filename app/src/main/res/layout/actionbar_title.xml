@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/actionbarTitle"
-        android:layout_width="100dp"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         android:textColor="#F0F7F6"
         android:textAlignment="center"

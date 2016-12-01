@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">CVIAC</string>
-    <string name="content_text">CviacApp Messanger will send an SMS message to verify
-        your phone number Enter yout phone number"</string>
+    <string name="content_text">CviacApp Messanger will send an SMS \n message to verify your phone number \n\t\t\t\t Enter your phone number"</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="action_group">Profile</string>
-    <string name="hint_mobile">Enter Mobile Number</string>
+    <string name="hint_mobile">\t\t\t Enter Mobile Number</string>
     <string name="hint_6_digit_code">Enter 6 digit code</string>
     <string name="err_msg_name">Invalid Mobile Number</string>
     <string name="title_activity_myprofileactivity">profile</string>

@@ -2,95 +2,94 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:orientation="vertical"
-        android:background="#FFFFFF">
+        android:background="#FFFFFF"
+        android:orientation="vertical">
 
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_x="500dp"
-            android:layout_y="510dp"
-            android:layout_centerVertical="true"
+            android:layout_alignEnd="@+id/textView1"
             android:layout_alignRight="@+id/textView1"
-            android:layout_alignEnd="@+id/textView1">
+            android:layout_centerVertical="true"
+            android:layout_x="500dp"
+            android:layout_y="510dp">
 
 
             <EditText
+                android:id="@+id/editTextphnum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="@string/hint_mobile"
-                android:ems="10"
-                android:id="@+id/editTextphnum"
-                android:textColor="@android:color/black"
-                android:textColorHint="#6281EF"
-                android:layout_weight="200"
-                android:layout_marginRight="14dp"
+                android:layout_marginBottom="72dp"
                 android:layout_marginEnd="14dp"
-                android:layout_marginBottom="72dp" />
+                android:layout_marginRight="14dp"
+                android:layout_weight="200"
+                android:ems="10"
+                android:hint="@string/hint_mobile"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/black"
+                android:textColorHint="#6281EF" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:text="@string/content_text"
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:textColor="#3B3D3C"
-            android:padding="1dp"
-            android:layout_marginTop="58dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginLeft="50dp"
-            android:layout_below="@+id/textView1"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView1"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="58dp"
+            android:padding="1dp"
+            android:text="@string/content_text"
+            android:textColor="#3B3D3C" />
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Verify phone number"
-            android:textSize="25dp"
-            android:padding="5dp"
-            android:textColor="#3B3D3C"
-            android:layout_weight="1"
-            android:layout_alignParentTop="true"
             android:layout_alignLeft="@+id/textView2"
-            android:layout_alignStart="@+id/textView2" />
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/textView2"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="Verify phone number"
+            android:textColor="#3B3D3C"
+            android:textSize="25dp" />
 
         <TextView
-               android:id="@+id/textmayappy"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-            android:text="Carrier SMS charges may apply"
-                 android:textColor="#3B3D3C"
+            android:id="@+id/textmayappy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/input_layout_name"
+            android:layout_alignStart="@+id/input_layout_name"
+            android:layout_below="@+id/buttonext"
             android:layout_marginLeft="17dp"
             android:layout_marginStart="17dp"
-            android:layout_below="@+id/buttonext"
-            android:layout_alignLeft="@+id/input_layout_name"
-            android:layout_alignStart="@+id/input_layout_name" />
+            android:text="Carrier SMS charges may apply"
+            android:textColor="#3B3D3C" />
 
         <Button
-               android:id="@+id/buttonext"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-            android:text="Next"
-               android:background="#6281EF"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="107dp"
-            android:layout_alignTop="@+id/input_layout_name"
+            android:id="@+id/buttonext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/textmayappy"
             android:layout_alignStart="@+id/textmayappy"
+            android:layout_alignTop="@+id/input_layout_name"
             android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp" />
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="107dp"
+            android:background="#6281EF"
+            android:text="Next"
+            android:textSize="18dp"
+            android:textColor="#FFFFFF" />
 
     </RelativeLayout>
 

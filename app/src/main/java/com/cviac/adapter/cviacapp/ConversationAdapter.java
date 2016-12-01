@@ -53,7 +53,7 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
             holder.msgview=(TextView)vw.findViewById(R.id.textViewLastmsg);
             holder.datetime=(TextView)vw.findViewById(R.id.textViewdatetime);
             
-            holder.imgview=(ImageView)vw.findViewById(R.id.imageViewurl);
+          //  holder.imgview=(ImageView)vw.findViewById(R.id.imageViewurl);
     		Picasso.with(mContext).load(R.drawable.bala).resize(130, 130).transform(new CircleTransform())
 			.into(holder.imgview);
 

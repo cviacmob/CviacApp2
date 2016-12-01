@@ -52,7 +52,7 @@ public class EventsAdapter extends ArrayAdapter<Event> {
             holder.nameView = (TextView) vw.findViewById(R.id.textViewNameevent);
             holder.typeview = (TextView) vw.findViewById(R.id.textViewdate);
             holder.disview = (TextView) vw.findViewById(R.id.textViewDescription);
-            holder.imgview = (ImageView) vw.findViewById(R.id.imageViewevent);
+            //holder.imgview = (ImageView) vw.findViewById(R.id.imageViewevent);
             Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
             holder.nameView.setText(even.getTitle());
             holder.typeview.setText(even.getformatedDate());
