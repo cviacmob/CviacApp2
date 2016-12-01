@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FireChatActivity extends Activity {
+public class  FireChatActivity extends Activity {
 
     private List<ChatMessage> chats;
     private Conversation emp;
