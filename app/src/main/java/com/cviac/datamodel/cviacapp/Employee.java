@@ -155,10 +155,10 @@ public class Employee extends Model implements Serializable {
 
     }
 
-    public static Employee getemployee(String id) {
+    public static Employee getemployees(String code) {
         return new Select()
                 .from(Employee.class)
-                .where("emp_code = ?", id)
+                .where("emp_code = ?", code)
                 //.orderBy("Name ASC")
                 .executeSingle();
 

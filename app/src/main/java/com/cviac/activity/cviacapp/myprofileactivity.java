@@ -72,7 +72,7 @@ public class MyProfileActivity extends AppCompatActivity {
         Intent i = getIntent();
         String empcode = i.getStringExtra("empcode");
 
-        Employee emp = Employee.getemployee(empcode);
+        Employee emp = Employee.getemployees(empcode);
         tvempid = (TextView) findViewById(R.id.textViewempcoder);
         tvempid.setText(emp.getEmp_code());
         tvempname=(TextView)findViewById(R.id.textViewempnamer) ;

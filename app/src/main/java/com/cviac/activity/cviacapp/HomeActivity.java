@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cviac.cviacappapi.cviacapp.CVIACApi;
 import com.cviac.datamodel.cviacapp.Employee;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +31,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -264,6 +271,7 @@ public class HomeActivity extends AppCompatActivity {
         if (emplist != null && emplist.size() != 0) {
             return emplist;
         }
+
 
        /* List<Employee> emps = new ArrayList<Employee>();
         Employee emp = new Employee();
