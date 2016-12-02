@@ -2,6 +2,7 @@ package com.cviac.activity.cviacapp;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import retrofit.Retrofit;
 public class Register extends Activity {
     EditText e1;
     String regmobile;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,17 @@ public class Register extends Activity {
             @Override
             public void onClick(View v) {
                 regmobile = e1.getText().toString();
+                progressDialog = new ProgressDialog(Register.this,
+                        R.style.AppTheme);
+
+                progressDialog.setIndeterminate(true);
+               // progressDialog.setIndeterminateDrawable(R.drawable.custom_progress_dialog);
+                //android:indeterminateDrawable="@drawable/custom_progress_dialog"
+                progressDialog.setMessage("Registering...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://apps.cviac.com")
                         .addConverterFactory(GsonConverterFactory.create())
@@ -64,8 +77,15 @@ public class Register extends Activity {
                         RegisterResponse rsp = response.body();
                         String code = rsp.getCode();
                         if (code.equalsIgnoreCase("0")) {
+                            if (progressDialog != null) {
+                                progressDialog.dismiss();
+                            }
 
                             if (e1.getText().toString().length() >= 10 && e1.getText().toString().length() <= 13) {
+
+                                if (progressDialog != null) {
+                                    progressDialog.dismiss();
+                                }
                                 Intent i = new Intent(Register.this, Verification.class);
                                 i.putExtra("mobile", regmobile);
                                 startActivity(i);

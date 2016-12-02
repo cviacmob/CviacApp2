@@ -133,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
             Employee emplogged = Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
                 Intent i = new Intent(HomeActivity.this, MyProfileActivity.class);
-                i.putExtra("empcode", emplogged.getEmail());
+                i.putExtra("empcode", emplogged.getEmp_code());
                 startActivity(i);
             }
 

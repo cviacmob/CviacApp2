@@ -86,7 +86,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="107dp"
-            android:background="#6281EF"
+            android:background="@drawable/roundshapebtn"
             android:text="Next"
             android:textSize="18dp"
             android:textColor="#FFFFFF" />

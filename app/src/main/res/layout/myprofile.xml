@@ -214,9 +214,10 @@
         android:id="@+id/textViewempcoder"
         android:textColor="#2A51D8"
         android:padding="5dp"
-        android:layout_above="@+id/textViewempnamer"
-        android:layout_alignRight="@+id/imageViewprofile"
-        android:layout_alignEnd="@+id/imageViewprofile" />
+        android:layout_alignBaseline="@+id/textViewempcode"
+        android:layout_alignBottom="@+id/textViewempcode"
+        android:layout_toRightOf="@+id/textViewmanager"
+        android:layout_toEndOf="@+id/textViewmanager" />
 
 
 </RelativeLayout>

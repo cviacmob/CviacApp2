@@ -39,7 +39,7 @@ public class Collegues extends Fragment {
         emps = getCollegues();
         adapter=new ColleguesAdapter(emps, getActivity().getApplicationContext());
         lv.setAdapter(adapter);
-        Retrofit retrofit = new Retrofit.Builder()
+        /*Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://apps.cviac.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -48,11 +48,7 @@ public class Collegues extends Fragment {
         call.enqueue(new Callback<List<Employee>>() {
             @Override
             public void onResponse(Response<List<Employee>> response, Retrofit retrofit) {
-            /*	Gson gson = new Gson();
-				Employee[] users = gson.fromJson(response ,Employee[].class);
-				System.out.println(Arrays.toString(users));
-//or since we know that there will be only one object in array
-				System.out.println(users[0]);*/
+
                 List<Employee> esp = response.body();
                 emps.addAll(esp);
                 adapter.notifyDataSetChanged();
@@ -63,7 +59,7 @@ public class Collegues extends Fragment {
             public void onFailure(Throwable throwable) {
                 emps = null;
             }
-        });
+        });*/
         lv.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
