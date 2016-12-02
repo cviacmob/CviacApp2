@@ -11,14 +11,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.content.SharedPreferences;
 
+import com.cviac.cviacappapi.cviacapp.CVIACApi;
+import com.cviac.cviacappapi.cviacapp.RegInfo;
+import com.cviac.cviacappapi.cviacapp.RegisterResponse;
+import com.cviac.cviacappapi.cviacapp.VerifyResponse;
 import com.cviac.datamodel.cviacapp.Employee;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 import static android.R.id.input;
 
 
 public class Verification extends Activity {
     EditText e1;
-    String verifycode = "123456";
+    String verifycode;
     Button buttonverify, buttonresend;
     String mobile;
 
@@ -40,21 +50,52 @@ public class Verification extends Activity {
         buttonverify.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                verifycode = e1.getText().toString();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://apps.cviac.com")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                CVIACApi api = retrofit.create(CVIACApi.class);
+                RegInfo regInfo = new RegInfo();
+                regInfo.setOtp(verifycode);
+                final Call<VerifyResponse> call = api.verifyPin(regInfo);
+                call.enqueue(new Callback<VerifyResponse>() {
+
+                    @Override
+                    public void onResponse(Response<VerifyResponse> response, Retrofit retrofit) {
+                        VerifyResponse otp = response.body();
+                        String code = otp.getCode();
+                        if (code.equalsIgnoreCase("0")) {
+
+
+                            if (e1.getText().toString().equals(verifycode)) {
+                                final String MyPREFERENCES = "MyPrefs";
+                                SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putString("isRegistered", "true");
+                                editor.putString("mobile", mobile);
+                                editor.commit();
+                                Intent i = new Intent(Verification.this, HomeActivity.class);
+                                i.putExtra("mobile", mobile);
+                                startActivity(i);
+                                finish();
+                            } else {
+                                e1.setError("Invalid code");
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+
+
                 // TODO Auto-generated method stub
-                if (e1.getText().toString().equals(verifycode)) {
-                    final String MyPREFERENCES = "MyPrefs";
-                    SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("isRegistered", "true");
-                    editor.putString("mobile",mobile);
-                    editor.commit();
-                    Intent i = new Intent(Verification.this, HomeActivity.class);
-                    i.putExtra("mobile",mobile);
-                    startActivity(i);
-                    finish();
-                } else {
-                    e1.setError("Invalid code");
-                }
+
             }
         });
     }

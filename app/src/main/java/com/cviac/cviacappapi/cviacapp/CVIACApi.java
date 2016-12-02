@@ -17,10 +17,10 @@ import retrofit.http.POST;
 public interface CVIACApi {
 
     @POST("/CVIACAPI/cviacdbop.php/otpreg")
-    Call<RegisterResponse> registerMobile(@Body String mobile);
+    Call<RegisterResponse> registerMobile(@Body RegInfo regInfo);
 
     @POST("/CVIACAPI/cviacdbop.php/verifyotp")
-    Call<VerifyResponse> verifyPin(@Body String mobile, @Body String otp);
+    Call<VerifyResponse> verifyPin(@Body RegInfo regInfo);
 
     @GET("/CVIACAPI/cviacdbop.php")
     Call<List<Employee>> getEmployees();

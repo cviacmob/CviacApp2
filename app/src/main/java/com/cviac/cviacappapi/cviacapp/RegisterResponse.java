@@ -6,6 +6,14 @@ package com.cviac.cviacappapi.cviacapp;
 public class RegisterResponse {
     private String code;
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     private String desc;
 
     public String getCode() {
