@@ -6,16 +6,30 @@ import com.cviac.datamodel.cviacapp.EmployeeResponse;
 import java.util.List;
 
 import retrofit.Call;
+import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.POST;
 
 /**
  * Created by Shanmugam on 30-11-2016.
  */
 
 public interface CVIACApi {
+
+    @POST("/CVIACAPI/cviacdbop.php/otpreg")
+    Call<RegisterResponse> registerMobile(@Body String mobile);
+
+    @POST("/CVIACAPI/cviacdbop.php/verifyotp")
+    Call<VerifyResponse> verifyPin(@Body String mobile, @Body String otp);
+
     @GET("/CVIACAPI/cviacdbop.php")
     Call<List<Employee>> getEmployees();
 
-  //  Call<List<Employee>> getemployees();
+
+
+
+
+
+    //  Call<List<Employee>> getemployees();
 }
 
