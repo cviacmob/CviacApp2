@@ -39,27 +39,7 @@ public class Collegues extends Fragment {
         emps = getCollegues();
         adapter=new ColleguesAdapter(emps, getActivity().getApplicationContext());
         lv.setAdapter(adapter);
-        /*Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://apps.cviac.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        CVIACApi api = retrofit.create(CVIACApi.class);
-        final Call<List<Employee>> call = api.getEmployees();
-        call.enqueue(new Callback<List<Employee>>() {
-            @Override
-            public void onResponse(Response<List<Employee>> response, Retrofit retrofit) {
 
-                List<Employee> esp = response.body();
-                emps.addAll(esp);
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                emps = null;
-            }
-        });*/
         lv.setOnItemClickListener(new OnItemClickListener() {
 
             @Override

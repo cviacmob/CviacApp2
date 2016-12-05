@@ -36,6 +36,16 @@ public class CVIACApplication extends MultiDexApplication {
         ActiveAndroid.initialize(configurationBuilder.create());
 
     }
+
+    private boolean networkStatus = true;
+
+    public boolean isNetworkStatus() {
+        return networkStatus;
+    }
+
+    public void setNetworkStatus(boolean networkStatus) {
+        this.networkStatus = networkStatus;
+    }
 }
 
 

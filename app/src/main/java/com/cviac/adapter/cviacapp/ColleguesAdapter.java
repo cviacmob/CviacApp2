@@ -50,7 +50,7 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
 		holder.mobile = (TextView) vw.findViewById(R.id.textemail);
 		holder.empimage = (ImageView) vw.findViewById(empimage);
 		String url1=emp.getImage_url();
-		String imageurl="http://www.gantrypark.com/Portals/12/Users/066/14/53314/adam-parker-large.jpg";
+		//String imageurl="http://www.gantrypark.com/Portals/12/Users/066/14/53314/adam-parker-large.jpg";
 		if(url1==null)
 		{
 			Picasso.with(mContext).load(emp.getImage_url()).resize(80, 80).transform(new CircleTransform())

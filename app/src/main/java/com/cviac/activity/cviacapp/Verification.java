@@ -17,6 +17,8 @@ import com.cviac.cviacappapi.cviacapp.RegInfo;
 import com.cviac.cviacappapi.cviacapp.RegisterResponse;
 import com.cviac.cviacappapi.cviacapp.VerifyResponse;
 import com.cviac.datamodel.cviacapp.Employee;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -57,7 +59,10 @@ public class Verification extends Activity {
                 verifycode = e1.getText().toString();
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://apps.cviac.com")
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(
+                                new GsonBuilder()
+                                .excludeFieldsWithoutExposeAnnotation().create()
+                        ))
                         .build();
                 CVIACApi api = retrofit.create(CVIACApi.class);
                 RegInfo regInfo = new RegInfo();
@@ -110,7 +115,7 @@ public class Verification extends Activity {
 
                                 @Override
                                 public void onFailure(Throwable throwable) {
-                                    Toast.makeText(Verification.this, "GetEmployees Fails", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Verification.this, "GetEmployees Fails"+ throwable.getMessage()+""+throwable.getStackTrace(), Toast.LENGTH_SHORT).show();
                                     //emps = null;
                                 }
                             });

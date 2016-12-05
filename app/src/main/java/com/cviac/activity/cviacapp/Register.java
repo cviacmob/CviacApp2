@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.cviac.cviacappapi.cviacapp.CVIACApi;
 import com.cviac.cviacappapi.cviacapp.RegInfo;
@@ -34,10 +35,13 @@ public class Register extends Activity {
     EditText e1;
     String regmobile;
     ProgressDialog progressDialog;
+    RegInfo regInfo;
+    CVIACApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //  final String verifycode = "123";
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
         e1 = (EditText) findViewById(R.id.editTextphnum);
@@ -51,7 +55,12 @@ public class Register extends Activity {
 
             @Override
             public void onClick(View v) {
+
+
+                CVIACApplication app = (CVIACApplication) Register.this.getApplication();
+
                 regmobile = e1.getText().toString();
+            /*    if (app.isNetworkStatus()) {*/
                 progressDialog = new ProgressDialog(Register.this,
                         R.style.AppTheme);
 
@@ -67,9 +76,13 @@ public class Register extends Activity {
                         .baseUrl("http://apps.cviac.com")
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
-                CVIACApi api = retrofit.create(CVIACApi.class);
-                RegInfo regInfo = new RegInfo();
+                api = retrofit.create(CVIACApi.class);
+                    regInfo = new RegInfo();
                 regInfo.setMobile(regmobile);
+                /*} else {
+                    Toast.makeText(getApplicationContext(),
+                            "Please Check Your Internet Connection and try again", Toast.LENGTH_LONG).show();
+                }*/
                 final Call<RegisterResponse> call = api.registerMobile(regInfo);
                 call.enqueue(new Callback<RegisterResponse>() {
                     @Override
@@ -105,7 +118,10 @@ public class Register extends Activity {
 
                 });
             }
+
         });
+
+
     }
 
 
