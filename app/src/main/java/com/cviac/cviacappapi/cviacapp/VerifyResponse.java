@@ -5,7 +5,7 @@ package com.cviac.cviacappapi.cviacapp;
  */
 public class VerifyResponse {
 
-    private String code;
+    private int code;
 
     public String getDesc() {
         return desc;
@@ -17,11 +17,11 @@ public class VerifyResponse {
 
     private String desc;
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 }

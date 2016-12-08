@@ -4,7 +4,7 @@ package com.cviac.cviacappapi.cviacapp;
  * Created by Cviac on 02/12/2016.
  */
 public class RegisterResponse {
-    private String code;
+    private int code;
 
     public String getDesc() {
         return desc;
@@ -16,11 +16,11 @@ public class RegisterResponse {
 
     private String desc;
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 }

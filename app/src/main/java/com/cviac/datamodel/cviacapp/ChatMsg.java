@@ -22,7 +22,7 @@ public class ChatMsg implements Serializable {
 
     private String sendername;
 
-
+    private int status;
 
     public ChatMsg() {
         super();

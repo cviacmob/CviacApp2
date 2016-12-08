@@ -1,6 +1,7 @@
 package com.cviac.cviacappapi.cviacapp;
 
 import com.cviac.datamodel.cviacapp.Employee;
+import com.cviac.datamodel.cviacapp.EmployeeInfo;
 import com.cviac.datamodel.cviacapp.EmployeeResponse;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public interface CVIACApi {
     Call<VerifyResponse> verifyPin(@Body RegInfo regInfo);
 
     @GET("/CVIACAPI/cviacdbop.php")
-    Call<List<Employee>> getEmployees();
+    Call<List<EmployeeInfo>> getEmployees();
 
 
 

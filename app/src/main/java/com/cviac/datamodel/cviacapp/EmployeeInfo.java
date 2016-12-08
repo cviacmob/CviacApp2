@@ -1,45 +1,41 @@
 package com.cviac.datamodel.cviacapp;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
-import com.activeandroid.util.SQLiteUtils;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
-@Table(name = "employee")
-public class Employee extends Model implements Serializable {
+/**
+ * Created by Cviac on 08/12/2016.
+ */
 
-    @Column(name = "push_id")
+public class EmployeeInfo {
+
+
     private String push_id;
-    @Column(name = "emp_code")
+
     private String emp_code;
-    @Column(name = "emp_name")
+
     private String emp_name;
-    @Column(name = "mobile")
+
     private String mobile;
-    @Column(name = "email")
+
     private String email;
-    @Column(name = "dob")
+
     private Date dob;
-    @Column(name = "manager")
+
     private String manager;
-    @Column(name = "gender")
+
     private String gender;
-    @Column(name = "department")
+
     private String department;
-    @Column(name = "designation")
+
     private String designation;
-    @Column(name = "status")
+
     private String status;
-    @Column(name = "image_url")
+
     private String image_url;
 
 
-    public Employee() {
+    public EmployeeInfo() {
         // TODO Auto-generated constructor stub
     } public String getPush_id() {
         return push_id;
@@ -135,42 +131,6 @@ public class Employee extends Model implements Serializable {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
-    }
-
-
-
-
-   /* public String getformatedDate() {
-        return "2016/10/28";
-
-    }*/
-
-
-    public static List<Employee> getemployees() {
-        return new Select()
-                .from(Employee.class)
-                //  .where("sender = ?", from)
-                //.orderBy("Name ASC")
-                .execute();
-
-    }
-
-    public static Employee getemployees(String code) {
-        return new Select()
-                .from(Employee.class)
-                .where("emp_code = ?", code)
-                //.orderBy("Name ASC")
-                .executeSingle();
-
-    }
-
-    public static Employee getemployeeByMobile(String mobile) {
-        return new Select()
-                .from(Employee.class)
-                .where("mobile = ?", mobile)
-                //.orderBy("Name ASC")
-                .executeSingle();
-
     }
 
 
