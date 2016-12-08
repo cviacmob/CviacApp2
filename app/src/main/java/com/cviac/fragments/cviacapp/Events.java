@@ -1,8 +1,9 @@
-package com.cviac.activity.cviacapp;
+package com.cviac.fragments.cviacapp;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cviac.activity.cviacapp.R;
 import com.cviac.adapter.cviacapp.EventsAdapter;
 import com.cviac.datamodel.cviacapp.Employee;
 import com.cviac.datamodel.cviacapp.Event;

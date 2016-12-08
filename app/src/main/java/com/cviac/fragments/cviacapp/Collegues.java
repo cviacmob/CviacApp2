@@ -1,7 +1,9 @@
-package com.cviac.activity.cviacapp;
+package com.cviac.fragments.cviacapp;
 
 import java.util.List;
 
+import com.cviac.activity.cviacapp.FireChatActivity;
+import com.cviac.activity.cviacapp.R;
 import com.cviac.adapter.cviacapp.ColleguesAdapter;
 import com.cviac.cviacappapi.cviacapp.CVIACApi;
 import com.cviac.datamodel.cviacapp.Employee;
