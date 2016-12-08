@@ -79,15 +79,6 @@ public class HomeActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         mobile = prefs.getString("mobile","");
@@ -125,8 +116,6 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_profile) {
-
-
             final String MyPREFERENCES = "MyPrefs";
             SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
             String mobile = prefs.getString("mobile", "");
@@ -249,8 +238,8 @@ public class HomeActivity extends AppCompatActivity {
                                     "Presence update failed: " + firebaseError.getMessage(),
                                     Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(HomeActivity.this,
-                                    "Presence update success", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(HomeActivity.this,
+//                                    "Presence update success", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

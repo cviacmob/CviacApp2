@@ -61,9 +61,7 @@ public class Register extends Activity {
 
                 regmobile = e1.getText().toString();
             /*    if (app.isNetworkStatus()) {*/
-                progressDialog = new ProgressDialog(Register.this,
-                        R.style.AppTheme);
-
+                progressDialog = new ProgressDialog(Register.this,R.style.AppTheme_Dark_Dialog);
                 progressDialog.setIndeterminate(true);
                // progressDialog.setIndeterminateDrawable(R.drawable.custom_progress_dialog);
                 //android:indeterminateDrawable="@drawable/custom_progress_dialog"
@@ -87,15 +85,13 @@ public class Register extends Activity {
                 call.enqueue(new Callback<RegisterResponse>() {
                     @Override
                     public void onResponse(Response<RegisterResponse> response, Retrofit retrofit) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
                         RegisterResponse rsp = response.body();
-                        String code = rsp.getCode();
-                        if (code.equalsIgnoreCase("0")) {
-                            if (progressDialog != null) {
-                                progressDialog.dismiss();
-                            }
-
+                        int code = rsp.getCode();
+                        if (code== 0) {
                             if (e1.getText().toString().length() >= 10 && e1.getText().toString().length() <= 13) {
-
                                 if (progressDialog != null) {
                                     progressDialog.dismiss();
                                 }
@@ -104,15 +100,16 @@ public class Register extends Activity {
                                 startActivity(i);
                                 finish();
                             } else {
-                                e1.setError("Invalid phone number");
+                                e1.setError("Invalid mobile number");
                             }
                         }
-
-
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
                         t.printStackTrace();
                     }
 

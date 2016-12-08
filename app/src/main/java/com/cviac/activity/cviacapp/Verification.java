@@ -17,6 +17,7 @@ import com.cviac.cviacappapi.cviacapp.RegInfo;
 import com.cviac.cviacappapi.cviacapp.RegisterResponse;
 import com.cviac.cviacappapi.cviacapp.VerifyResponse;
 import com.cviac.datamodel.cviacapp.Employee;
+import com.cviac.datamodel.cviacapp.EmployeeInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -36,9 +37,10 @@ public class Verification extends Activity {
     String verifycode;
     Button buttonverify, buttonresend;
     String mobile;
-    List<Employee> emplist;
+    List<EmployeeInfo> emplist;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verification);
@@ -59,10 +61,7 @@ public class Verification extends Activity {
                 verifycode = e1.getText().toString();
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://apps.cviac.com")
-                        .addConverterFactory(GsonConverterFactory.create(
-                                new GsonBuilder()
-                                .excludeFieldsWithoutExposeAnnotation().create()
-                        ))
+                        .addConverterFactory(GsonConverterFactory.create())
                         .build();
                 CVIACApi api = retrofit.create(CVIACApi.class);
                 RegInfo regInfo = new RegInfo();
@@ -70,66 +69,21 @@ public class Verification extends Activity {
                 regInfo.setOtp(verifycode);
                 final Call<VerifyResponse> call = api.verifyPin(regInfo);
                 call.enqueue(new Callback<VerifyResponse>() {
-
                     @Override
                     public void onResponse(Response<VerifyResponse> response, Retrofit retrofit) {
                         VerifyResponse otp = response.body();
-                        String code = otp.getCode();
-                        if (code.equalsIgnoreCase("0")) {
-
-
-                            //employee details API
-                            Retrofit ret = new Retrofit.Builder()
-                                    .baseUrl("http://apps.cviac.com")
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-                            CVIACApi api = ret.create(CVIACApi.class);
-                            final Call<List<Employee>> call = api.getEmployees();
-                            call.enqueue(new Callback<List<Employee>>() {
-                                @Override
-                                public void onResponse(Response<List<Employee>> response, Retrofit retrofit) {
-
-                                     emplist = response.body();
-                                    for (Employee emp : emplist) {
-                                        emp.save();
-                                    }
-
-                                    //verification API
-                                    if (e1.getText().toString().equals(verifycode)) {
-                                        final String MyPREFERENCES = "MyPrefs";
-                                        SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = prefs.edit();
-                                        editor.putString("isRegistered", "true");
-                                        editor.putString("mobile", mobile);
-                                        editor.commit();
-                                        Intent i = new Intent(Verification.this, HomeActivity.class);
-                                        i.putExtra("mobile", mobile);
-                                        startActivity(i);
-                                        finish();
-                                    } else {
-                                        e1.setError("Invalid code");
-                                    }
-
-
-                                }
-
-                                @Override
-                                public void onFailure(Throwable throwable) {
-                                    Toast.makeText(Verification.this, "GetEmployees Fails"+ throwable.getMessage()+""+throwable.getStackTrace(), Toast.LENGTH_SHORT).show();
-                                    //emps = null;
-                                }
-                            });
-
-
-
-
-
+                        int code = otp.getCode();
+                        if (code == 0) {
+                           getEmployees();
                         }
-
+                        else {
+                            Toast.makeText(Verification.this, "Invalid PIN" , Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
+                        Toast.makeText(Verification.this, "API Invoke Error: " + t.getMessage() , Toast.LENGTH_SHORT).show();
                         t.printStackTrace();
                     }
                 });
@@ -139,5 +93,55 @@ public class Verification extends Activity {
 
             }
         });
+    }
+
+    private void getEmployees() {
+        Retrofit ret = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CVIACApi api = ret.create(CVIACApi.class);
+        final Call<List<EmployeeInfo>> call = api.getEmployees();
+        call.enqueue(new Callback<List<EmployeeInfo>>() {
+            @Override
+            public void onResponse(Response<List<EmployeeInfo>> response, Retrofit retrofit) {
+                emplist = response.body();
+                saveEmployeeInfo(emplist);
+                final String MyPREFERENCES = "MyPrefs";
+                SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("isRegistered", "true");
+                editor.putString("mobile", mobile);
+                editor.commit();
+                Intent i = new Intent(Verification.this, HomeActivity.class);
+                i.putExtra("mobile", mobile);
+                startActivity(i);
+                finish();
+            }
+            @Override
+            public void onFailure(Throwable throwable) {
+                Toast.makeText(Verification.this, "API Invoke Error :" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                //emps = null;
+            }
+        });
+
+    }
+
+    private void saveEmployeeInfo(List<EmployeeInfo> empInfos) {
+        for (EmployeeInfo empinfo : emplist) {
+           Employee emp = new Employee();
+            emp.setEmp_name(empinfo.getEmp_name());
+            emp.setMobile(empinfo.getMobile());
+            emp.setEmail(empinfo.getEmail());
+            emp.setEmp_code(empinfo.getEmp_code());
+            emp.setDepartment(empinfo.getDepartment());
+            emp.setDesignation(empinfo.getDesignation());
+            emp.setDob(empinfo.getDob());
+            emp.setGender(empinfo.getGender());
+            emp.setManager(empinfo.getManager());
+            emp.setImage_url(empinfo.getImage_url());
+            emp.setPush_id(empinfo.getPush_id());
+            emp.save();
+        }
     }
 }
