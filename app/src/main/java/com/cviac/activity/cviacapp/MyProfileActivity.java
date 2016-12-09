@@ -1,10 +1,13 @@
 package com.cviac.activity.cviacapp;
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 
 
@@ -12,8 +15,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -29,18 +35,42 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 
-public class MyProfileActivity extends AppCompatActivity {
+public class MyProfileActivity extends AppCompatActivity  implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     TextView tvempid, tvempname,tvemail,tvmobile,tvgender,tvdob,tvmanager,tvdepartment,tvdesignation;
     final Context context = this;
     ImageView imageViewRound;
 
-    private int REQUEST_CAMERA = 2, SELECT_FILE = 1;
+    /**
+     * Id to identify a camera permission request.
+     */
+    private static final int REQUEST_CAMERA = 0;
 
+    /**
+     * Id to identify a contacts permission request.
+     */
+    private static final int REQUEST_CONTACTS = 1;
+
+
+
+
+    // Whether the Log Fragment is currently shown.
+    private boolean mLogShown;
+
+    /**
+     * Root of the layout of this Activity.
+     */
+    private View mLayout;
+    private int  SELECT_FILE = 1;
+    public static final String TAG = "MyProfileActivity";
     private ImageView ivImage,btnSelect;
     private String userChoosenTask;
     /**
@@ -81,8 +111,14 @@ public class MyProfileActivity extends AppCompatActivity {
         tvemail.setText(emp.getEmail());
         tvmobile=(TextView)findViewById(R.id.textViewmobiler) ;
         tvmobile.setText(emp.getMobile());
+
+        Date dNow = new Date(String.valueOf(emp.getDob()));
+        SimpleDateFormat ft =
+                new SimpleDateFormat ("dd-MM-yyyy");
+
+
         tvdob=(TextView)findViewById(R.id.textViewdobr) ;
-        tvdob.setText(emp.getDob().toString());
+        tvdob.setText(ft.format(dNow));
         tvgender=(TextView)findViewById(R.id.textViewgenterr) ;
         tvgender.setText(emp.getGender());
         tvmanager=(TextView)findViewById(R.id.mageridr) ;
@@ -137,8 +173,10 @@ public class MyProfileActivity extends AppCompatActivity {
 
     private void cameraIntent()
     {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
+        View shor = null;
+        showCamera(shor);
+        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CAMERA);*/
     }
 
     @Override
@@ -208,6 +246,58 @@ public class MyProfileActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
+    public void showCamera(View view) {
+        Log.i(TAG, "Show camera button pressed. Checking permission.");
+        // BEGIN_INCLUDE(camera_permission)
+        // Check if the Camera permission is already available.
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Camera permission has not been granted.
+
+            requestCameraPermission();
+
+        } else {
+
+            // Camera permissions is already available, show the camera preview.
+            Log.i(TAG,
+                    "CAMERA permission has already been granted. Displaying camera preview.");
+
+        }
+        // END_INCLUDE(camera_permission)
+
+    }
+
+
+    private void requestCameraPermission() {
+        Log.i(TAG, "CAMERA permission has NOT been granted. Requesting permission.");
+
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                android.Manifest.permission.CAMERA)) {
+
+            Log.i(TAG,
+                    "Displaying camera permission rationale to provide additional context.");
+            Snackbar.make(mLayout, R.string.permission_camera_rationale,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ActivityCompat.requestPermissions(MyProfileActivity.this,
+                                    new String[]{android.Manifest.permission.CAMERA},
+                                    REQUEST_CAMERA);
+                        }
+                    })
+                    .show();
+        } else {
+
+            // Camera permission has not been granted yet. Request it directly.
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        }
+
+    }
+
 
 
 }

@@ -19,7 +19,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_above="@+id/sendbutton">
+            android:layout_above="@+id/editTextsend">
         </ListView>
         <ImageButton
             android:layout_width="50dp"
@@ -30,7 +30,7 @@
             android:layout_alignParentEnd="true"
             android:id="@+id/sendbutton"
             android:text="send"
-           >
+            >
 
         </ImageButton>
 
@@ -62,4 +62,3 @@
 
 
 </FrameLayout>
-
