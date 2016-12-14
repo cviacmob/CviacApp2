@@ -5,9 +5,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,11 +39,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.cviac.activity.cviacapp.R.id.textchat;
 
 public class  FireChatActivity extends Activity {
 
@@ -48,11 +59,15 @@ public class  FireChatActivity extends Activity {
     ActionBar actionBar;
     static ActionBar mActionBar;
     private DatabaseReference dbref;
-    RelativeLayout relativelayout;
-    ImageView customimageback, customimage;
+    RelativeLayout.LayoutParams relativelayout;
+    ImageView customimageback, customimage,imgvwtick;
     private String myempId;
     private String myempname;
     Context mContext;
+    RelativeLayout rp;
+    TextView txt,msgview;
+
+
 
 
     private String getNormalizedConverseId(String myid, String receverid) {
@@ -84,46 +99,88 @@ public class  FireChatActivity extends Activity {
         dbref = FirebaseDatabase.getInstance().getReference().
                                     child("conversations").child(converseId);
 
+
         actionmethod();
 
-        myAdapter = new FirebaseListAdapter<ChatMsg>(this,ChatMsg.class,R.layout.fragment_chat,dbref) {
+        myAdapter = new FirebaseListAdapter<ChatMsg>(this,ChatMsg.class,R.layout.fragment_chat ,dbref) {
             @Override
             protected void populateView(View vw, ChatMsg s, int i) {
 
                 if (myempId.equals(s.getSenderid())) {
-                    relativelayout = new RelativeLayout(getBaseContext());
-                    TextView msgview = new TextView(getBaseContext());
-                    msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+
+
 
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
+                     msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+                     txt = (TextView) vw.findViewById(R.id.duration);
+                    imgvwtick=(ImageView)vw.findViewById(R.id.list_image);
+                    RelativeLayout rLayout = (RelativeLayout)vw.findViewById(R.id.textchat);
+                    Resources res = getResources();
+                    Drawable drawable = res.getDrawable(R.drawable.bubble2);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    rLayout.setBackgroundDrawable(drawable);
                     msgview.setLayoutParams(layoutParams);
-                    msgview.setBackgroundResource(R.drawable.bubble2);
-
-
-
-
-                 /*   msgview.setLayoutParams(lp);
-                    layouth.addView(msgview);*/
-
-
-
+                    //msgview.setBackgroundResource(R.drawable.bubble2);
                     msgview.setText(s.getMsg());
+                    if(s.getStatus()==0)
+                    {
+                        imgvwtick.setBackgroundResource(R.drawable.schedule);
+                    }
+                    if(s.getStatus()==1)
+                    {
+                        imgvwtick.setBackgroundResource(R.drawable.done);
+                    }
+                    else if(s.getStatus()==2)
+                    {
+                        imgvwtick.setBackgroundResource(R.drawable.done_all);
+                    }else if(s.getStatus()==3)                  {
+                        imgvwtick.setBackgroundResource(R.drawable.done_all_colo);
+                    }
+
+
+
+
+
+                    Date dNow = new Date(String.valueOf(s.getCtime()));
+                    // given date
+                    Calendar calendar = GregorianCalendar.getInstance();
+                    calendar.setTime(dNow);
+
+                    SimpleDateFormat ft =
+                            new SimpleDateFormat ("yyyy-MM-dd  HH:mm");
+
+                    txt.setText(ft.format(dNow));
+
                 }
                 else {
-                    relativelayout = new RelativeLayout(getBaseContext());
-                    TextView msgview = new TextView(getBaseContext());
-                    msgview = (TextView) vw.findViewById(R.id.textchatmsg);
-
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    TextView msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
+                    TextView txt = (TextView) vw.findViewById(R.id.duration);
+                    msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
+
+                    RelativeLayout rLayout = (RelativeLayout)vw.findViewById(R.id.textchat);
+                    Resources res = getResources();
+                    Drawable drawable = res.getDrawable(R.drawable.bubble1);
+
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                    msgview.setLayoutParams(layoutParams);
-                    msgview.setBackgroundResource(R.drawable.bubble1);
-                    msgview.setText(s.getMsg());
+                    msgvieww.setLayoutParams(layoutParams);
+                    rLayout.setBackgroundDrawable(drawable);
+                  // msgview.setBackgroundResource(R.drawable.bubble1);
+                    msgvieww.setText(s.getMsg());
+
+                    Date dNow = new Date(String.valueOf(s.getCtime()));
+                    // given date
+                    Calendar calendar = GregorianCalendar.getInstance();
+                    calendar.setTime(dNow);
+
+                    SimpleDateFormat ft =
+                            new SimpleDateFormat ("yyyy-MM-dd  HH:mm");
+
+                    txt.setText(ft.format(dNow));
                 }
 
             }
@@ -140,6 +197,7 @@ public class  FireChatActivity extends Activity {
         msgview.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         msgview.setVerticalScrollBarEnabled(true);
         msgview.setMovementMethod(ScrollingMovementMethod.getInstance());
+
         msgview.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
 
         msgview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -192,6 +250,7 @@ public class  FireChatActivity extends Activity {
             updateValues.put("receivername",emp.getName());
             updateValues.put("status",0);
             updateValues.put("msgid",msgid);
+            updateValues.put("status",0);
             dbref.child(msgid).setValue(
                     updateValues,
                     new DatabaseReference.CompletionListener() {
@@ -226,9 +285,9 @@ public class  FireChatActivity extends Activity {
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
 
-            Picasso.with(mContext).load(R.drawable.bala).resize(110, 110).transform(new CircleTransform())
+            Picasso.with(mContext).load(R.drawable.bala).resize(100,100).transform(new CircleTransform())
                     .into(customimage);
-           Picasso.with(mContext).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
+           Picasso.with(mContext).load(R.drawable.backarrow).resize(90,90)
                     .into(customimageback);
 
 
@@ -237,7 +296,7 @@ public class  FireChatActivity extends Activity {
 
             customTitle.setText(emp.getName());
             // Change the font family (optional)
-            customTitle.setTypeface(Typeface.MONOSPACE);
+
             // Set the on click listener for the title
             customTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -249,7 +308,7 @@ public class  FireChatActivity extends Activity {
                     finish();
                 }
             });
-            customimageback.setOnClickListener(new View.OnClickListener() {
+           customimageback.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 //                    Intent i = new Intent(FireChatActivity.this, HomeActivity.class);

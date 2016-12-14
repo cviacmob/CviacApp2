@@ -200,12 +200,12 @@ public class ChatActivity extends Activity {
 
             View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
-            customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
+            //customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
 
             Picasso.with(mContext).load(R.drawable.bala).resize(110, 110).transform(new CircleTransform())
                     .into(customimage);
-            Picasso.with(mContext).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
-                    .into(customimageback);
+           // Picasso.with(mContext).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
+               //     .into(customimageback);
 
 
             // Get the textview of the title
@@ -213,7 +213,7 @@ public class ChatActivity extends Activity {
 
             customTitle.setText(emp.getName());
             // Change the font family (optional)
-            customTitle.setTypeface(Typeface.MONOSPACE);
+
             // Set the on click listener for the title
             customTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -225,14 +225,14 @@ public class ChatActivity extends Activity {
                     finish();
                 }
             });
-            customimageback.setOnClickListener(new OnClickListener() {
+           /* customimageback.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(ChatActivity.this, HomeActivity.class);
                     startActivity(i);
                     finish();
                 }
-            });
+            });*/
             // Apply the custom view
             actionBar.setCustomView(customView);
         }

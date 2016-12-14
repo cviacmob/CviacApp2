@@ -9,4 +9,7 @@
     <string name="hint_6_digit_code">Enter 6 digit code</string>
     <string name="err_msg_name">Invalid Mobile Number</string>
     <string name="title_activity_myprofileactivity">profile</string>
+    <string name="checkedmark">&#x2713;</string>
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Camera permission is needed to show the camera preview.</string>
 </resources>

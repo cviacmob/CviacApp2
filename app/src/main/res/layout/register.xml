@@ -64,32 +64,19 @@
             android:textColor="#3B3D3C"
             android:textSize="25dp" />
 
-        <TextView
-            android:id="@+id/textmayappy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/input_layout_name"
-            android:layout_alignStart="@+id/input_layout_name"
-            android:layout_below="@+id/buttonext"
-            android:layout_marginLeft="17dp"
-            android:layout_marginStart="17dp"
-            android:text="Carrier SMS charges may apply"
-            android:textColor="#3B3D3C" />
-
         <Button
             android:id="@+id/buttonext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textmayappy"
-            android:layout_alignStart="@+id/textmayappy"
-            android:layout_alignTop="@+id/input_layout_name"
-            android:layout_marginLeft="50dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="107dp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginStart="62dp"
             android:background="@drawable/roundshapebtn"
             android:text="Next"
             android:textSize="18dp"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:layout_below="@+id/input_layout_name"
+            android:layout_alignLeft="@+id/input_layout_name"
+            android:layout_alignStart="@+id/input_layout_name" />
 
     </RelativeLayout>
 

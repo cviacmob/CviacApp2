@@ -59,12 +59,12 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 			holder =  (ViewHolder) vw.getTag();
 		}
 
-		if (chat.isIn()) {
+		/*if (chat.isIn()) {
 			holder.msgview.setBackgroundResource(R.drawable.bubble1);
 		}
 		else {
 			holder.msgview.setBackgroundResource(R.drawable.bubble2);
-		}
+		}*/
 		holder.msgview.setText(chat.getMsg().toString());
 		return vw;
 	}
