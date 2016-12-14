@@ -22,8 +22,10 @@ import com.cviac.cviacappapi.cviacapp.RegInfo;
 import com.cviac.cviacappapi.cviacapp.RegisterResponse;
 import com.cviac.datamodel.cviacapp.Employee;
 import com.google.gson.Gson;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -69,10 +71,14 @@ public class Register extends Activity {
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
+                OkHttpClient okHttpClient = new OkHttpClient();
+                okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+                okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
 
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://apps.cviac.com")
                         .addConverterFactory(GsonConverterFactory.create())
+                        .client(okHttpClient)
                         .build();
                 api = retrofit.create(CVIACApi.class);
                     regInfo = new RegInfo();
@@ -110,6 +116,7 @@ public class Register extends Activity {
                         if (progressDialog != null) {
                             progressDialog.dismiss();
                         }
+                        Toast.makeText(Register.this,"Error: " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                         t.printStackTrace();
                     }
 

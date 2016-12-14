@@ -58,6 +58,7 @@ public class Verification extends Activity {
         buttonverify.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 verifycode = e1.getText().toString();
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://apps.cviac.com")

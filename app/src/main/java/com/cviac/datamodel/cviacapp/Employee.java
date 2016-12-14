@@ -4,7 +4,8 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
-import com.activeandroid.util.SQLiteUtils;
+import com.activeandroid.query.Update;
+
 
 import java.io.Serializable;
 import java.util.Date;
@@ -155,7 +156,7 @@ public class Employee extends Model implements Serializable {
 
     }
 
-    public static Employee getemployees(String code) {
+    public static Employee getemployee(String code) {
         return new Select()
                 .from(Employee.class)
                 .where("emp_code = ?", code)
@@ -171,6 +172,14 @@ public class Employee extends Model implements Serializable {
                 //.orderBy("Name ASC")
                 .executeSingle();
 
+    }
+
+    public static void updateProfileImageUrl(String empcode, String url) {
+        new Update(Employee.class)
+                .set("image_url = ?", url)
+                .where("emp_code = ?", empcode)
+                .execute();
+        return;
     }
 
 

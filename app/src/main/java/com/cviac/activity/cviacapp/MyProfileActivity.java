@@ -1,17 +1,25 @@
 package com.cviac.activity.cviacapp;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 
 
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.MenuItem;
@@ -19,45 +27,62 @@ import android.view.View;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.Manifest;
 
 
 import com.cviac.adapter.cviacapp.CircleTransform;
+import com.cviac.cviacappapi.cviacapp.CVIACApi;
+import com.cviac.cviacappapi.cviacapp.ProfileUpdateResponse;
 import com.cviac.datamodel.cviacapp.Employee;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.ResponseBody;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
+import retrofit.GsonConverterFactory;
+
+import static android.R.attr.data;
+
+
 public class MyProfileActivity extends AppCompatActivity {
 
-    TextView tvempid, tvempname,tvemail,tvmobile,tvgender,tvdob,tvmanager,tvdepartment,tvdesignation;
+    private static final int MY_PERMISSION_CAMERA = 10;
+    private static final int MY_PERMISSION_EXTERNAL_STORAGE = 11;
+
+    TextView tvempid, tvempname, tvemail, tvmobile, tvgender, tvdob, tvmanager, tvdepartment, tvdesignation;
     final Context context = this;
     ImageView imageViewRound;
 
     private int REQUEST_CAMERA = 2, SELECT_FILE = 1;
 
-    private ImageView ivImage,btnSelect;
+    private ImageView ivImage, btnSelect;
     private String userChoosenTask;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
-    // private EditText result;
+    private String empcode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ivImage = (ImageView) findViewById(R.id.imageViewprofile);
-        Picasso.with(context).load(R.drawable.bala).resize(220, 220).transform(new CircleTransform())
-                .into(ivImage);
+
         btnSelect = (ImageView) findViewById(R.id.imageButtonselect);
         Picasso.with(context).load(R.drawable.camera).resize(80, 80).transform(new CircleTransform())
                 .into(btnSelect);
@@ -70,53 +95,55 @@ public class MyProfileActivity extends AppCompatActivity {
         });
         //data from collegue
         Intent i = getIntent();
-        String empcode = i.getStringExtra("empcode");
+        empcode = i.getStringExtra("empcode");
 
-        Employee emp = Employee.getemployees(empcode);
+        Employee emp = Employee.getemployee(empcode);
         tvempid = (TextView) findViewById(R.id.textViewempcoder);
         tvempid.setText(emp.getEmp_code());
-        tvempname=(TextView)findViewById(R.id.textViewempnamer) ;
+        tvempname = (TextView) findViewById(R.id.textViewempnamer);
         tvempname.setText(emp.getEmp_name());
-        tvemail=(TextView)findViewById(R.id.textViewemailr) ;
+        tvemail = (TextView) findViewById(R.id.textViewemailr);
         tvemail.setText(emp.getEmail());
-        tvmobile=(TextView)findViewById(R.id.textViewmobiler) ;
+        tvmobile = (TextView) findViewById(R.id.textViewmobiler);
         tvmobile.setText(emp.getMobile());
-        tvdob=(TextView)findViewById(R.id.textViewdobr) ;
+        tvdob = (TextView) findViewById(R.id.textViewdobr);
         tvdob.setText(emp.getDob().toString());
-        tvgender=(TextView)findViewById(R.id.textViewgenterr) ;
+        tvgender = (TextView) findViewById(R.id.textViewgenterr);
         tvgender.setText(emp.getGender());
-        tvmanager=(TextView)findViewById(R.id.mageridr) ;
+        tvmanager = (TextView) findViewById(R.id.mageridr);
         tvmanager.setText(emp.getManager());
-        tvdepartment=(TextView)findViewById(R.id.textViewdeptr) ;
+        tvdepartment = (TextView) findViewById(R.id.textViewdeptr);
         tvdepartment.setText(emp.getDepartment());
-        tvdesignation=(TextView)findViewById(R.id.textViewdesig) ;
+        tvdesignation = (TextView) findViewById(R.id.textViewdesig);
         tvdesignation.setText(emp.getDesignation());
         //tvdesignation=(TextView)findViewById(R.id.textViewdesig) ;
         //tvdesignation.setText(emp.getS());
-
-
-
+        String imgUrl = emp.getImage_url();
+        if (imgUrl != null && imgUrl.length() > 0) {
+            Picasso.with(context).load(imgUrl).resize(220, 220).transform(new CircleTransform())
+                    .into(ivImage);
+        } else {
+            Picasso.with(context).load(R.drawable.ic_launcher).resize(220, 220).transform(new CircleTransform())
+                    .into(ivImage);
+        }
     }
 
     private void selectImage() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = {"Take Photo", "Choose from Library",
+                "Cancel"};
 
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MyProfileActivity.this);
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-
-
                 if (items[item].equals("Take Photo")) {
-                    userChoosenTask ="Take Photo";
-
+                    userChoosenTask = "Take Photo";
+                    dialog.dismiss();
                     cameraIntent();
-
                 } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask ="Choose from Library";
-
+                    userChoosenTask = "Choose from Library";
+                    dialog.dismiss();
                     galleryIntent();
 
                 } else if (items[item].equals("Cancel")) {
@@ -127,18 +154,57 @@ public class MyProfileActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void galleryIntent()
-    {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+    private void galleryIntent() {
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) &&
+                (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            // Start the Intent
+            startActivityForResult(galleryIntent, SELECT_FILE);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_EXTERNAL_STORAGE);
+        }
     }
 
-    private void cameraIntent()
-    {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQUEST_CAMERA);
+    private void cameraIntent() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_CAMERA);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_CAMERA);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSION_CAMERA: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                }
+            }
+            break;
+            case MY_PERMISSION_EXTERNAL_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                }
+                if (grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                }
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                // Start the Intent
+                startActivityForResult(galleryIntent, SELECT_FILE);
+            }
+        }
     }
 
     @Override
@@ -157,8 +223,7 @@ public class MyProfileActivity extends AppCompatActivity {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        getOutputMediaFile();
-        /*File destination = new File(Environment.getExternalStorageDirectory(),
+        File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
         FileOutputStream fo;
         try {
@@ -166,43 +231,84 @@ public class MyProfileActivity extends AppCompatActivity {
             fo = new FileOutputStream(destination);
             fo.write(bytes.toByteArray());
             fo.close();
+            uploadProfileImage(destination.getPath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
         ivImage.setImageBitmap(thumbnail);
     }
 
-    @SuppressWarnings("deprecation")
     private void onSelectFromGalleryResult(Intent data) {
-
-        Bitmap bm=null;
+        Bitmap bm = null;
         if (data != null) {
             try {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                // Get the cursor
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String targetPath = cursor.getString(columnIndex);
+                cursor.close();
+
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-            } catch (IOException e) {
+                ivImage.setImageBitmap(bm);
+                uploadProfileImage(targetPath);
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        ivImage.setImageBitmap(bm);
     }
-    private static File getOutputMediaFile(){
+
+    private void uploadProfileImage(String targetPath) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                //.baseUrl("http://192.168.1.12")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        File file = new File(targetPath);
+        RequestBody fbody = RequestBody.create(MediaType.parse("image/*"), file);
+        Call<ProfileUpdateResponse> call = api.profileUpdate(empcode, fbody);
+        call.enqueue(new Callback<ProfileUpdateResponse>() {
+            @Override
+            public void onResponse(Response<ProfileUpdateResponse> response, Retrofit retrofit) {
+                ProfileUpdateResponse rsp = response.body();
+                if (rsp.getImageUrl() != null) {
+                    Employee.updateProfileImageUrl(empcode,rsp.getImageUrl());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private static File getOutputMediaFile() {
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "CameraDemo");
 
-        if (!mediaStorageDir.exists()){
-            if (!mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
                 return null;
             }
         }
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         return new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
+                "IMG_" + timeStamp + ".jpg");
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();

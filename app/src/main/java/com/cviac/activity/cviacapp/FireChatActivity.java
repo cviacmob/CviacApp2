@@ -190,6 +190,7 @@ public class  FireChatActivity extends Activity {
             updateValues.put("sendername",myempname);
             updateValues.put("receiverid",emp.getEmpid());
             updateValues.put("receivername",emp.getName());
+            updateValues.put("status",0);
             updateValues.put("msgid",msgid);
             dbref.child(msgid).setValue(
                     updateValues,
@@ -251,8 +252,8 @@ public class  FireChatActivity extends Activity {
             customimageback.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(FireChatActivity.this, HomeActivity.class);
-                    startActivity(i);
+//                    Intent i = new Intent(FireChatActivity.this, HomeActivity.class);
+//                    startActivity(i);
                     finish();
                 }
             });
