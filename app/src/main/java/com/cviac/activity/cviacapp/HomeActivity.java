@@ -53,6 +53,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private String mobile;
 
+    private String empCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +80,11 @@ public class HomeActivity extends AppCompatActivity {
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         mobile = prefs.getString("mobile","");
+        empCode = mobile;
         if (mobile != null) {
             Employee emplogged = Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
+                empCode = emplogged.getEmp_code();
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("empid", emplogged.getEmp_code());
                 editor.putString("empname", emplogged.getEmp_name());
@@ -220,7 +224,7 @@ public class HomeActivity extends AppCompatActivity {
     private void updatePresence(String status, String mobile) {
 
         Map<String, Object> updateValues = new HashMap<>();
-        updateValues.put("lastseen", new Date().toString());
+        updateValues.put("lastseen", new Date());
         updateValues.put("status", status);
 
         DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
@@ -245,7 +249,7 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected Long doInBackground(String... params) {
-            updatePresence(params[0], mobile);
+            updatePresence(params[0], empCode);
             return null;
         }
     }

@@ -1,6 +1,7 @@
 package com.cviac.activity.cviacapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,8 +21,10 @@ import com.cviac.datamodel.cviacapp.Employee;
 import com.cviac.datamodel.cviacapp.EmployeeInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -38,6 +41,7 @@ public class Verification extends Activity {
     Button buttonverify, buttonresend;
     String mobile;
     List<EmployeeInfo> emplist;
+    ProgressDialog progressDialog;
 
     @Override
 
@@ -60,14 +64,19 @@ public class Verification extends Activity {
             public void onClick(View v) {
 
                 verifycode = e1.getText().toString();
+                OkHttpClient okHttpClient = new OkHttpClient();
+                okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+                okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://apps.cviac.com")
                         .addConverterFactory(GsonConverterFactory.create())
+                        .client(okHttpClient)
                         .build();
                 CVIACApi api = retrofit.create(CVIACApi.class);
                 RegInfo regInfo = new RegInfo();
                 regInfo.setMobile(mobile);
                 regInfo.setOtp(verifycode);
+                setProgressDialog();
                 final Call<VerifyResponse> call = api.verifyPin(regInfo);
                 call.enqueue(new Callback<VerifyResponse>() {
                     @Override
@@ -75,15 +84,18 @@ public class Verification extends Activity {
                         VerifyResponse otp = response.body();
                         int code = otp.getCode();
                         if (code == 0) {
+                            progressDialog.setMessage("Fetching Employees details...");
                            getEmployees();
                         }
                         else {
+                            progressDialog.dismiss();
                             Toast.makeText(Verification.this, "Invalid PIN" , Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
+                        progressDialog.dismiss();
                         Toast.makeText(Verification.this, "API Invoke Error: " + t.getMessage() , Toast.LENGTH_SHORT).show();
                         t.printStackTrace();
                     }
@@ -96,10 +108,24 @@ public class Verification extends Activity {
         });
     }
 
+    private void setProgressDialog() {
+        progressDialog = new ProgressDialog(Verification.this,R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Verifying...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+
+
     private void getEmployees() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
         Retrofit ret = new Retrofit.Builder()
                 .baseUrl("http://apps.cviac.com")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
                 .build();
         CVIACApi api = ret.create(CVIACApi.class);
         final Call<List<EmployeeInfo>> call = api.getEmployees();
@@ -108,6 +134,7 @@ public class Verification extends Activity {
             public void onResponse(Response<List<EmployeeInfo>> response, Retrofit retrofit) {
                 emplist = response.body();
                 saveEmployeeInfo(emplist);
+                progressDialog.dismiss();
                 final String MyPREFERENCES = "MyPrefs";
                 SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -121,6 +148,7 @@ public class Verification extends Activity {
             }
             @Override
             public void onFailure(Throwable throwable) {
+                progressDialog.dismiss();
                 Toast.makeText(Verification.this, "API Invoke Error :" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                 //emps = null;
             }

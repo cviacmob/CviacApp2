@@ -34,10 +34,13 @@ import com.cviac.adapter.cviacapp.CircleTransform;
 import com.cviac.datamodel.cviacapp.ChatMessage;
 import com.cviac.datamodel.cviacapp.ChatMsg;
 import com.cviac.datamodel.cviacapp.Conversation;
+import com.cviac.datamodel.cviacapp.PresenceInfo;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -65,7 +68,7 @@ public class  FireChatActivity extends Activity {
     private String myempname;
     Context mContext;
     RelativeLayout rp;
-    TextView txt,msgview;
+    TextView txt,msgview,presenceText;
 
 
 
@@ -284,6 +287,8 @@ public class  FireChatActivity extends Activity {
             View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
+            presenceText = (TextView) customView.findViewById(R.id.textView5);
+            setPresence(emp.getEmpid());
 
             String url1 = emp.getImageurl();
             if (url1 != null && url1.length() > 0) {
@@ -328,6 +333,35 @@ public class  FireChatActivity extends Activity {
             actionBar.setCustomView(customView);
         }
 
+    }
+
+    private void setPresence(String empCode) {
+        DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
+        DatabaseReference dbRef = mfiredbref.child(empCode);
+        if (dbRef != null) {
+            dbRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                   PresenceInfo info =  dataSnapshot.getValue(PresenceInfo.class);
+                    if (info != null) {
+                        if (info.getStatus().equalsIgnoreCase("online")) {
+                            presenceText.setText(info.getStatus());
+                        } else {
+                            presenceText.setText(info.getLastseen().toString());
+                        }
+                    }
+                    else {
+                        presenceText.setText("");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        presenceText.setText("");
     }
 
 
