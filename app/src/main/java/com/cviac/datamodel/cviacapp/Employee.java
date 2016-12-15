@@ -38,6 +38,8 @@ public class Employee extends Model implements Serializable {
     private String status;
     @Column(name = "image_url")
     private String image_url;
+    @Column(name = "doj")
+    private Date doj;
 
 
     public Employee() {
@@ -138,14 +140,13 @@ public class Employee extends Model implements Serializable {
         this.image_url = image_url;
     }
 
+    public Date getDoj() {
+        return doj;
+    }
 
-
-
-   /* public String getformatedDate() {
-        return "2016/10/28";
-
-    }*/
-
+    public void setDoj(Date doj) {
+        this.doj = doj;
+    }
 
     public static List<Employee> getemployees() {
         return new Select()
