@@ -1,43 +1,31 @@
 package com.cviac.activity.cviacapp;
 
+import android.Manifest;
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-
-
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.Manifest;
-
 
 import com.cviac.adapter.cviacapp.CircleTransform;
 import com.cviac.cviacappapi.cviacapp.CVIACApi;
 import com.cviac.cviacappapi.cviacapp.ProfileUpdateResponse;
 import com.cviac.datamodel.cviacapp.Employee;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.ResponseBody;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -45,19 +33,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit.Call;
 import retrofit.Callback;
+import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-import retrofit.GsonConverterFactory;
-
-import static android.R.attr.data;
 
 
 public class MyProfileActivity extends AppCompatActivity {
@@ -65,7 +50,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private static final int MY_PERMISSION_CAMERA = 10;
     private static final int MY_PERMISSION_EXTERNAL_STORAGE = 11;
 
-    TextView tvempid, tvempname, tvemail, tvmobile, tvgender, tvdob, tvmanager, tvdepartment, tvdesignation;
+    TextView tvempid, tvempname, tvemail, tvdoj,tvmobile, tvgender, tvdob, tvmanager, tvdepartment, tvdesignation;
     final Context context = this;
     ImageView imageViewRound;
 
@@ -73,6 +58,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
     private ImageView ivImage, btnSelect;
     private String userChoosenTask;
+
 
     private String empcode;
 
@@ -107,7 +93,9 @@ public class MyProfileActivity extends AppCompatActivity {
         tvmobile = (TextView) findViewById(R.id.textViewmobiler);
         tvmobile.setText(emp.getMobile());
         tvdob = (TextView) findViewById(R.id.textViewdobr);
-        tvdob.setText(emp.getDob().toString());
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(new Date(emp.getDob().toString()));
+
+        tvdob.setText(timeStamp);
         tvgender = (TextView) findViewById(R.id.textViewgenterr);
         tvgender.setText(emp.getGender());
         tvmanager = (TextView) findViewById(R.id.mageridr);
@@ -116,8 +104,10 @@ public class MyProfileActivity extends AppCompatActivity {
         tvdepartment.setText(emp.getDepartment());
         tvdesignation = (TextView) findViewById(R.id.textViewdesig);
         tvdesignation.setText(emp.getDesignation());
-        //tvdesignation=(TextView)findViewById(R.id.textViewdesig) ;
-        //tvdesignation.setText(emp.getS());
+        tvdoj=(TextView)findViewById(R.id.tvdojr);
+        String timeStam = new SimpleDateFormat("dd-MM-yyyy").format(new Date(emp.getDoj().toString()));
+        tvdoj.setText(timeStam);
+
         String imgUrl = emp.getImage_url();
         if (imgUrl != null && imgUrl.length() > 0) {
             Picasso.with(context).load(imgUrl).resize(220, 220).transform(new CircleTransform())
@@ -222,7 +212,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private void onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
         FileOutputStream fo;

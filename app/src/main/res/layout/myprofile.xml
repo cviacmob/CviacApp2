@@ -147,16 +147,6 @@
         android:layout_alignEnd="@+id/textViewempcode" />
 
     <TextView
-        android:text="Gender        "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewgender"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewdob"
-        android:layout_alignRight="@+id/textViewmobile"
-        android:layout_alignEnd="@+id/textViewmobile" />
-
-    <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -168,14 +158,16 @@
         android:id="@+id/textViewdesig" />
 
     <TextView
-        android:text="Magager_Id       "
+        android:text="Manager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:id="@+id/textViewmanager"
         android:layout_below="@+id/textViewgender"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/tvdojl"
+        android:layout_alignEnd="@+id/tvdojl" />
 
     <TextView
         android:text="Emp_Code              "
@@ -218,6 +210,39 @@
         android:layout_alignBottom="@+id/textViewempcode"
         android:layout_toRightOf="@+id/textViewmanager"
         android:layout_toEndOf="@+id/textViewmanager" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvdojr"
+        android:padding="5dp"
+        android:textColor="#2A51D8"
+        android:layout_below="@+id/textViewdobr"
+        android:layout_alignLeft="@+id/textViewdobr"
+        android:layout_alignStart="@+id/textViewdobr" />
+
+    <TextView
+        android:text="DOJ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvdojl"
+        android:padding="5dp"
+        android:layout_below="@+id/textViewdob"
+        android:layout_alignLeft="@+id/textViewgender"
+        android:layout_alignStart="@+id/textViewgender"
+        android:layout_alignRight="@+id/textViewdob"
+        android:layout_alignEnd="@+id/textViewdob" />
+
+    <TextView
+        android:text="Gender        "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewgender"
+        android:padding="5dp"
+        android:layout_below="@+id/tvdojl"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

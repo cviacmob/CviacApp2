@@ -25,6 +25,8 @@ public class EmployeeInfo {
     private String manager;
 
     private String gender;
+    private Date doj;
+
 
     private String department;
 
@@ -132,6 +134,12 @@ public class EmployeeInfo {
     public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
+    public Date getDoj() {
+        return doj;
+    }
 
+    public void setDoj(Date doj) {
+        this.doj = doj;
+    }
 
 }
