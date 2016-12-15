@@ -240,8 +240,10 @@ public class  FireChatActivity extends Activity {
         CVIACApplication app =  (CVIACApplication) getApplication();
         Chats chatFrag = app.getChatsFragment();
         Conversation cnv = Conversation.getConversation(emp.getEmpid());
+        boolean newconv = false;
         if (cnv == null) {
             cnv = new Conversation();
+            newconv = true;
         }
         cnv.setEmpid(emp.getEmpid());
         cnv.setImageurl(emp.getImageurl());
@@ -250,6 +252,12 @@ public class  FireChatActivity extends Activity {
         cnv.setLastmsg(msg.getMsg());
         cnv.save();
         if (chatFrag != null && chatFrag.adapter != null) {
+            if (newconv) {
+                chatFrag.adapter.add(cnv);
+            }
+            else {
+                //todo
+            }
             chatFrag.adapter.notifyDataSetChanged();
         }
 
