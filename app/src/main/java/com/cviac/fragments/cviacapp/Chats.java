@@ -35,7 +35,8 @@ public class Chats extends Fragment {
 		lv = (ListView) chatsfrgs.findViewById(R.id.chatlist);
 		lv.setDivider(null);
 		emps = getConversation();
-		lv.setAdapter(new ConversationAdapter(emps, getActivity().getApplicationContext()));
+		adapter = new ConversationAdapter(emps, getActivity().getApplicationContext());
+		lv.setAdapter(adapter);
 		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -57,75 +58,16 @@ public class Chats extends Fragment {
 				// Toast.makeText(lv.getContext(), "clicked:" + emp.getName(),
 				// Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
-				i.putExtra("conversewith",emp);
+				i.putExtra("conversewith", emp);
 				startActivity(i);
 
 
 			}
 		});
-
 		return chatsfrgs;
 	}
 
 	private List<Conversation> getConversation() {
-
-		List<ChatMessage> Chatmesages=ChatMessage.getConversations();
-		List<Conversation> emps = new ArrayList<Conversation>();
-		for(int i=0;i<Chatmesages.size();i++)
-		{
-			ChatMessage msg=Chatmesages.get(i);
-			Conversation cnv=new Conversation();
-			cnv.setName(msg.getName());
-			cnv.setEmpid(msg.getFrom());
-			cnv.setDatetime(msg.getCtime());
-			emps.add(cnv);
-		}
-
-
-
-
-		/*Conversation emp = new Conversation();
-		emp.setName("Renuga0");
-		emp.setEmpid("123");
-		emp.setLastmsg("welcome");
-		emp.setDatetime(new Date());
-		emps.add(emp);
-
-		emp = new Conversation();
-
-		emp.setName("Renuga");
-		emp.setEmpid("1234");
-		emp.setLastmsg("welcome");
-		emp.setDatetime(new Date());
-
-		emps.add(emp);
-
-		emp = new Conversation();
-		emp.setName("Renuga2");
-		emp.setEmpid("1235");
-		emp.setLastmsg("welcome");
-		emp.setDatetime(new Date());
-
-		emps.add(emp);
-
-		emp = new Conversation();
-		emp.setName("Renuga3");
-		emp.setEmpid("1236");
-		emp.setLastmsg("welcome");
-		emp.setDatetime(new Date());
-
-		emps.add(emp);
-
-		emp = new Conversation();
-		emp.setName("Renuga4");
-		emp.setEmpid("1237");
-		emp.setLastmsg("welcome");
-		emp.setDatetime(new Date());
-
-		emps.add(emp);
-*/
-		return emps;
-
+		return Conversation.getConversations();
 	}
-
 }

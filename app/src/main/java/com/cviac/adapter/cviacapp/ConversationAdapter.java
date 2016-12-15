@@ -39,34 +39,35 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vw = convertView;
         ViewHolder holder;
-        Conversation chat = getItem(position);
+        Conversation conv = getItem(position);
 
         if(convertView==null){
             
            LayoutInflater inf = LayoutInflater.from(getContext());
            vw = inf.inflate(R.layout.conversation_item, parent, false);
-             
-            /****** View Holder Object to contain tabitem.xml file elements ******/
-
             holder = new ViewHolder();
             holder.nameView = (TextView) vw.findViewById(R.id.textViewName);
             holder.msgview=(TextView)vw.findViewById(R.id.textViewLastmsg);
             holder.datetime=(TextView)vw.findViewById(R.id.textViewdatetime);
-            
-          //  holder.imgview=(ImageView)vw.findViewById(R.id.imageViewurl);
-    		Picasso.with(mContext).load(R.drawable.bala).resize(130, 130).transform(new CircleTransform())
-			.into(holder.imgview);
-
-    		holder.nameView.setText(chat.getName());
-    		holder.msgview.setText(chat.getLastmsg());
-    		holder.datetime.setText(chat.getformatedDate());
-             
-           /************  Set holder with LayoutInflater ************/
+			holder.imgview = (ImageView) vw.findViewById(R.id.imageViewurl);
             vw.setTag( holder );
         }
         else {
             holder=(ViewHolder)vw.getTag();
-        }    
+        }
+
+		String url1 = conv.getImageurl();
+		if (url1 != null && url1.length() > 0) {
+			Picasso.with(mContext).load(conv.getImageurl()).resize(80, 80).transform(new CircleTransform())
+					.into(holder.imgview);
+		} else {
+			Picasso.with(mContext).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
+					.into(holder.imgview);
+		}
+
+		holder.nameView.setText(conv.getName());
+		holder.msgview.setText(conv.getLastmsg());
+		holder.datetime.setText(conv.getformatedDate());
 		return vw;
 	}
 

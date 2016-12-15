@@ -70,6 +70,8 @@ public class HomeActivity extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -186,7 +188,10 @@ public class HomeActivity extends AppCompatActivity {
                 case 1:
                     return new Collegues();
                 case 2:
-                    return new Chats();
+                    Chats chatFrag = new Chats();
+                    CVIACApplication app =  (CVIACApplication) getApplication();
+                    app.setChatsFragment(chatFrag);
+                    return chatFrag;
                 case 3:
                     return new Events();
             }

@@ -1,15 +1,30 @@
 package com.cviac.datamodel.cviacapp;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-public class Conversation implements Serializable{
-	
-	String imageurl;
-	String name;
-	String lastmsg;
-	Date datetime;
-	String empid;
+@Table(name = "conversation")
+public class Conversation  extends Model implements Serializable{
+
+	@Column(name = "imageurl")
+	private String imageurl;
+	@Column(name = "name")
+	private String name;
+	@Column(name = "lastmsg")
+	private String lastmsg;
+	@Column(name = "timestmp")
+	private Date datetime;
+	@Column(name = "empid",index = true)
+	private String empid;
+
+	public Conversation() {
+	}
 
 	public String getImageurl() {
 		return imageurl;
@@ -54,6 +69,19 @@ public class Conversation implements Serializable{
 	public String getformatedDate() {
 		return "2016/10/28";
 
+	}
+
+	public static List<Conversation> getConversations() {
+		return new Select()
+				.from(Conversation.class)
+				.execute();
+	}
+
+	public static Conversation getConversation(String empCode) {
+		return new Select()
+				.from(Conversation.class)
+				.where("empid = ?", empCode)
+				.executeSingle();
 	}
 
 }

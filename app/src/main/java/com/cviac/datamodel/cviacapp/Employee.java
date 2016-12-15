@@ -16,7 +16,7 @@ public class Employee extends Model implements Serializable {
 
     @Column(name = "push_id")
     private String push_id;
-    @Column(name = "emp_code")
+    @Column(name = "emp_code",index = true)
     private String emp_code;
     @Column(name = "emp_name")
     private String emp_name;

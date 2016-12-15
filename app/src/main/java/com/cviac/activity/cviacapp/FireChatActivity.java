@@ -35,6 +35,7 @@ import com.cviac.datamodel.cviacapp.ChatMessage;
 import com.cviac.datamodel.cviacapp.ChatMsg;
 import com.cviac.datamodel.cviacapp.Conversation;
 import com.cviac.datamodel.cviacapp.PresenceInfo;
+import com.cviac.fragments.cviacapp.Chats;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -226,6 +227,7 @@ public class  FireChatActivity extends Activity {
                 if (msg.length() != 0) {
                     ChatMsg mgsopj = new ChatMsg();
                     mgsopj.setMsg(msg);
+                    saveLastConversationMessage(mgsopj);
                     new SendMessageTask().execute(mgsopj);
                     msgview.getText().clear();
                 }
@@ -233,7 +235,25 @@ public class  FireChatActivity extends Activity {
         });
     }
 
+    private void saveLastConversationMessage(ChatMsg msg) {
 
+        CVIACApplication app =  (CVIACApplication) getApplication();
+        Chats chatFrag = app.getChatsFragment();
+        Conversation cnv = Conversation.getConversation(emp.getEmpid());
+        if (cnv == null) {
+            cnv = new Conversation();
+        }
+        cnv.setEmpid(emp.getEmpid());
+        cnv.setImageurl(emp.getImageurl());
+        cnv.setName(emp.getName());
+        cnv.setDatetime(new Date());
+        cnv.setLastmsg(msg.getMsg());
+        cnv.save();
+        if (chatFrag != null && chatFrag.adapter != null) {
+            chatFrag.adapter.notifyDataSetChanged();
+        }
+
+    }
 
 
 

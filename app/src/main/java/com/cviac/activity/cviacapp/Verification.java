@@ -84,7 +84,7 @@ public class Verification extends Activity {
                         VerifyResponse otp = response.body();
                         int code = otp.getCode();
                         if (code == 0) {
-                            progressDialog.setMessage("Fetching Employees details...");
+                            progressDialog.setMessage("Retrieving Contacts from Server...");
                            getEmployees();
                         }
                         else {
@@ -133,6 +133,7 @@ public class Verification extends Activity {
             @Override
             public void onResponse(Response<List<EmployeeInfo>> response, Retrofit retrofit) {
                 emplist = response.body();
+                progressDialog.setMessage("Saving Contacts to database...");
                 saveEmployeeInfo(emplist);
                 progressDialog.dismiss();
                 final String MyPREFERENCES = "MyPrefs";
