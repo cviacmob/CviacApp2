@@ -285,8 +285,15 @@ public class  FireChatActivity extends Activity {
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
 
-            Picasso.with(mContext).load(R.drawable.bala).resize(100,100).transform(new CircleTransform())
-                    .into(customimage);
+            String url1 = emp.getImageurl();
+            if (url1 != null && url1.length() > 0) {
+                Picasso.with(mContext).load(emp.getImageurl()).resize(80, 80).transform(new CircleTransform())
+                        .into(customimage);
+            } else {
+                Picasso.with(mContext).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
+                        .into(customimage);
+            }
+
            Picasso.with(mContext).load(R.drawable.backarrow).resize(90,90)
                     .into(customimageback);
 

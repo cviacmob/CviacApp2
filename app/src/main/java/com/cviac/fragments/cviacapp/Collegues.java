@@ -48,10 +48,12 @@ public class Collegues extends Fragment {
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos1,
                                     long pos2) {
 
+
                 Employee emp = emps.get(pos1);
                 Conversation cov = new Conversation();
                 cov.setEmpid(emp.getEmp_code());
                 cov.setName(emp.getEmp_name());
+                cov.setImageurl(emp.getImage_url());
                 Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
                 i.putExtra("conversewith", cov);
 
