@@ -6,9 +6,6 @@ import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -69,23 +66,8 @@ public class Conversation  extends Model implements Serializable{
 		this.empid = empid;
 	}
 
-	public  String getformatedDate()
-	{
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(datetime);
-		Calendar today = Calendar.getInstance();
-		Calendar yesterday = Calendar.getInstance();
-		yesterday.add(Calendar.DATE, -1);
-		DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
-
-		if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
-			return timeFormatter.format(datetime);
-		} else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
-			return "yesterday";
-		} else {
-			DateFormat dateform = new SimpleDateFormat("dd/MM/yy");
-			return dateform.format(datetime);
-		}
+	public String getformatedDate() {
+		return "2016/10/28";
 
 	}
 
