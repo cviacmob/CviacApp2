@@ -19,6 +19,7 @@ import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -56,7 +57,7 @@ import java.util.Map;
 
 import static com.cviac.activity.cviacapp.R.id.textchat;
 
-public class  FireChatActivity extends Activity {
+public class FireChatActivity extends Activity {
 
     private List<ChatMessage> chats;
     private Conversation emp;
@@ -65,21 +66,21 @@ public class  FireChatActivity extends Activity {
     static ActionBar mActionBar;
     private DatabaseReference dbref;
     RelativeLayout.LayoutParams relativelayout;
-    ImageView customimageback, customimage,imgvwtick;
+    ImageView customimageback, customimage, imgvwtick;
     private String myempId;
     private String myempname;
     Context mContext;
     RelativeLayout rp;
-    TextView txt,msgview,presenceText;
+    TextView txt, msgview, presenceText;
 
-
+    ListView lv;
 
 
     private String getNormalizedConverseId(String myid, String receverid) {
         if (myid.compareTo(receverid) > 0) {
-            return myid+"_"+receverid;
+            return myid + "_" + receverid;
         }
-        return receverid+"_"+myid;
+        return receverid + "_" + myid;
     }
 
     @Override
@@ -88,40 +89,40 @@ public class  FireChatActivity extends Activity {
         setContentView(R.layout.activity_chat);
 
 
-        ListView lv = (ListView) findViewById(R.id.listViewChat);
+        lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
+
         //chats = new ArrayList<ChatMessage>();
 
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-        myempId = prefs.getString("empid","");
-        myempname = prefs.getString("empname","");
+        myempId = prefs.getString("empid", "");
+        myempname = prefs.getString("empname", "");
 
         Intent i = getIntent();
 
         emp = (Conversation) i.getSerializableExtra("conversewith");
-        final String converseId = getNormalizedConverseId(myempId,emp.getEmpid());
+        final String converseId = getNormalizedConverseId(myempId, emp.getEmpid());
         dbref = FirebaseDatabase.getInstance().getReference().
-                                    child("conversations").child(converseId);
+                child("conversations").child(converseId);
 
 
         actionmethod();
 
-        myAdapter = new FirebaseListAdapter<ChatMsg>(this,ChatMsg.class,R.layout.fragment_chat ,dbref) {
+        myAdapter = new FirebaseListAdapter<ChatMsg>(this, ChatMsg.class, R.layout.fragment_chat, dbref) {
             @Override
             protected void populateView(View vw, ChatMsg s, int i) {
 
                 if (myempId.equals(s.getSenderid())) {
 
 
-
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
-                     msgview = (TextView) vw.findViewById(R.id.textchatmsg);
-                     txt = (TextView) vw.findViewById(R.id.duration);
-                    imgvwtick=(ImageView)vw.findViewById(R.id.list_image);
-                    RelativeLayout rLayout = (RelativeLayout)vw.findViewById(R.id.textchat);
+                    msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+                    txt = (TextView) vw.findViewById(R.id.duration);
+                    imgvwtick = (ImageView) vw.findViewById(R.id.list_image);
+                    RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
                     Resources res = getResources();
                     Drawable drawable = res.getDrawable(R.drawable.bubble2);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -129,32 +130,21 @@ public class  FireChatActivity extends Activity {
                     msgview.setLayoutParams(layoutParams);
                     //msgview.setBackgroundResource(R.drawable.bubble2);
                     msgview.setText(s.getMsg());
-                    if(s.getStatus()==0)
-                    {
+                    if (s.getStatus() == 0) {
                         imgvwtick.setBackgroundResource(R.drawable.schedule);
                     }
-                    if(s.getStatus()==1)
-                    {
+                    if (s.getStatus() == 1) {
                         imgvwtick.setBackgroundResource(R.drawable.done);
-                    }
-                    else if(s.getStatus()==2)
-                    {
+                    } else if (s.getStatus() == 2) {
                         imgvwtick.setBackgroundResource(R.drawable.done_all);
-                    }else if(s.getStatus()==3)                  {
+                    } else if (s.getStatus() == 3) {
                         imgvwtick.setBackgroundResource(R.drawable.done_all_colo);
                     }
-
-
-
-
-
-
-                    String st=getformatteddate(s.getCtime());
+                    String st = getformatteddate(s.getCtime());
 
                     txt.setText(st);
 
-                }
-                else {
+                } else {
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -162,14 +152,14 @@ public class  FireChatActivity extends Activity {
                     TextView txt = (TextView) vw.findViewById(R.id.duration);
                     msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
 
-                    RelativeLayout rLayout = (RelativeLayout)vw.findViewById(R.id.textchat);
+                    RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
                     Resources res = getResources();
                     Drawable drawable = res.getDrawable(R.drawable.bubble1);
 
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                     msgvieww.setLayoutParams(layoutParams);
                     rLayout.setBackgroundDrawable(drawable);
-                  // msgview.setBackgroundResource(R.drawable.bubble1);
+                    // msgview.setBackgroundResource(R.drawable.bubble1);
                     msgvieww.setText(s.getMsg());
                     txt.setText(getformatteddate(s.getCtime()));
                 }
@@ -177,7 +167,6 @@ public class  FireChatActivity extends Activity {
             }
         };
         lv.setAdapter(myAdapter);
-
 
 
         final EditText msgview = (EditText) findViewById(R.id.editTextsend);
@@ -188,10 +177,11 @@ public class  FireChatActivity extends Activity {
         msgview.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         msgview.setVerticalScrollBarEnabled(true);
         msgview.setMovementMethod(ScrollingMovementMethod.getInstance());
-
+        getWindow().setSoftInputMode(WindowManager.
+                LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         msgview.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
 
-        msgview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+     /*   msgview.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
@@ -202,12 +192,13 @@ public class  FireChatActivity extends Activity {
                     msgview.setKeyListener(null);
                 }
             }
-        });
+        });*/
 
         sendbutton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
+
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 String msg = msgview.getText().toString();
@@ -217,6 +208,7 @@ public class  FireChatActivity extends Activity {
                     saveLastConversationMessage(mgsopj);
                     new SendMessageTask().execute(mgsopj);
                     msgview.getText().clear();
+
                 }
             }
         });
@@ -224,7 +216,7 @@ public class  FireChatActivity extends Activity {
 
     private void saveLastConversationMessage(ChatMsg msg) {
 
-        CVIACApplication app =  (CVIACApplication) getApplication();
+        CVIACApplication app = (CVIACApplication) getApplication();
         Chats chatFrag = app.getChatsFragment();
         Conversation cnv = Conversation.getConversation(emp.getEmpid());
         boolean newconv = false;
@@ -239,12 +231,10 @@ public class  FireChatActivity extends Activity {
         cnv.setLastmsg(msg.getMsg());
         cnv.save();
         if (chatFrag != null && chatFrag.adapter != null) {
-           chatFrag.reloadConversation();
+            chatFrag.reloadConversation();
         }
 
     }
-
-
 
 
     private class SendMessageTask extends AsyncTask<ChatMsg, Integer, Long> {
@@ -253,16 +243,15 @@ public class  FireChatActivity extends Activity {
         protected Long doInBackground(ChatMsg... params) {
             ChatMsg cmsg = params[0];
             Map<String, Object> updateValues = new HashMap<>();
-            String msgid = System.currentTimeMillis()+"";
-            updateValues.put("msg",cmsg.getMsg());
+            String msgid = System.currentTimeMillis() + "";
+            updateValues.put("msg", cmsg.getMsg());
             updateValues.put("ctime", new Date());
             updateValues.put("senderid", myempId);
-            updateValues.put("sendername",myempname);
-            updateValues.put("receiverid",emp.getEmpid());
-            updateValues.put("receivername",emp.getName());
-            updateValues.put("status",0);
-            updateValues.put("msgid",msgid);
-            updateValues.put("status",0);
+            updateValues.put("sendername", myempname);
+            updateValues.put("receiverid", emp.getEmpid());
+            updateValues.put("receivername", emp.getName());
+            updateValues.put("msgid", msgid);
+            updateValues.put("status", 0);
             dbref.child(msgid).setValue(
                     updateValues,
                     new DatabaseReference.CompletionListener() {
@@ -272,10 +261,9 @@ public class  FireChatActivity extends Activity {
                                 Toast.makeText(FireChatActivity.this,
                                         "Send message failed: " + firebaseError.getMessage(),
                                         Toast.LENGTH_LONG).show();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(FireChatActivity.this,
-                                        "Send message success" ,Toast.LENGTH_LONG).show();
+                                        "Send message success", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -301,13 +289,13 @@ public class  FireChatActivity extends Activity {
 
             String url1 = emp.getImageurl();
             if (url1 != null && url1.length() > 0) {
-                Picasso.with(mContext).load(emp.getImageurl()).resize(80, 80).transform(new CircleTransform())
+                Picasso.with(mContext).load(emp.getImageurl()).resize(100, 100).transform(new CircleTransform())
                         .into(customimage);
             } else {
                 Picasso.with(mContext).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
                         .into(customimage);
             }
-            Picasso.with(mContext).load(R.drawable.backarrow).resize(90,90)
+            Picasso.with(mContext).load(R.drawable.backarrow).resize(90, 90)
                     .into(customimageback);
 
 
@@ -328,7 +316,7 @@ public class  FireChatActivity extends Activity {
                     finish();
                 }
             });
-           customimageback.setOnClickListener(new View.OnClickListener() {
+            customimageback.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 //                    Intent i = new Intent(FireChatActivity.this, HomeActivity.class);
@@ -350,16 +338,15 @@ public class  FireChatActivity extends Activity {
             dbRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                   PresenceInfo info =  dataSnapshot.getValue(PresenceInfo.class);
+                    PresenceInfo info = dataSnapshot.getValue(PresenceInfo.class);
                     if (info != null) {
                         if (info.getStatus().equalsIgnoreCase("online")) {
                             presenceText.setText(info.getStatus());
                         } else {
-                            String st=getformatteddate(info.getLastseen());
+                            String st = getformatteddate(info.getLastseen());
                             presenceText.setText("last seen " + st);
                         }
-                    }
-                    else {
+                    } else {
                         presenceText.setText("");
                     }
                 }
@@ -372,10 +359,11 @@ public class  FireChatActivity extends Activity {
         }
         presenceText.setText("");
     }
-    private  String getformatteddate(Date dateTime)
-    {
+
+    private String getformatteddate(Date dateTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);
+
         Calendar today = Calendar.getInstance();
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DATE, -1);
@@ -386,8 +374,8 @@ public class  FireChatActivity extends Activity {
         } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
             return "yesterday at " + timeFormatter.format(dateTime);
         } else {
-            DateFormat dateform = new SimpleDateFormat("dd-MM-yyyy");
-            return dateform.format(dateTime);
+            DateFormat dateform = new SimpleDateFormat("dd-MMM-yy");
+            return dateform.format(dateTime) + " " + timeFormatter.format(dateTime);
         }
 
     }

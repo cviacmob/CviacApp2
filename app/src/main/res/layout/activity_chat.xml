@@ -30,6 +30,7 @@
             android:layout_alignParentEnd="true"
             android:id="@+id/sendbutton"
             android:text="send"
+            android:stackFromBottom="true"
             >
 
         </ImageButton>

@@ -18,21 +18,23 @@
     <TextView
         android:id="@+id/textViewdatetime"
         android:layout_width="wrap_content"
+        android:textColor="#818182"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textViewName"
         android:layout_alignBottom="@+id/textViewName"
         android:layout_alignParentRight="true"
         android:text="TextView"
-        android:textColor="@android:color/black" />
+         />
 
     <TextView
         android:id="@+id/textViewLastmsg"
         android:layout_width="wrap_content"
+        android:maxLines="1"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textViewName"
         android:layout_below="@+id/textViewName"
         android:text="TextView"
-        android:textColor="#090A0A" />
+        android:textColor="#818182"/>
 
     <TextView
         android:id="@+id/textViewName"
@@ -44,6 +46,6 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageViewurl"
         android:layout_toEndOf="@+id/imageViewurl"
-        android:layout_marginTop="13dp" />
+        android:layout_marginTop="11dp" />
 
 </RelativeLayout>

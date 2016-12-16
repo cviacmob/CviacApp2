@@ -55,16 +55,12 @@ public class Event extends Model  {
         this.event_id = event_id;
     }
 
-    static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-    static  Date date = new Date();
-    static String st=dateFormat.format(date);
 
 
-    public static Event getevents() {
-        return (Event) new Select()
+    public static List<Event> getevents() {
+        return  new Select()
                 .from(Event.class)
-                .where("event_date = ?",st)
-                //.orderBy("Name ASC")
+                .orderBy("event_date DESC")
             .execute();
 
     }
