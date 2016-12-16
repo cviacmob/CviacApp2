@@ -75,5 +75,12 @@ public class Collegues extends Fragment {
         return emplist;
     }
 
+    public void reloadFilterByName(String searchName) {
+        List<Employee> emplist = Employee.getemployees(searchName);
+        emps.clear();
+        emps.addAll(emplist);
+        adapter.notifyDataSetChanged();
+    }
+
 
 }
