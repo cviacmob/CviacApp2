@@ -43,6 +43,7 @@ public class Events extends Fragment {
 
                 Toast.makeText(lv1.getContext(), "clicked:" + emp.getEvent_title(), Toast.LENGTH_SHORT).show();
 
+
             }
         });
 
@@ -51,14 +52,15 @@ public class Events extends Fragment {
     }
 
     private List<Event> getEvents() {
+        return Event.getevents();
       /*  List<Event> evelist = (List<Event>) Event.getevents();
         if (evelist != null && evelist.size() != 0) {
             return evelist;
         }*/
 
-        List<Event> emps = new ArrayList<Event>();
-        Event emp = new Event();
-        emp.setEvent_title("Birthday");
+        //List<Event> emps = new ArrayList<Event>();
+       // Event emp = new Event();
+        /*emp.setEvent_title("Birthday");
         emp.setEvent_description("Wish you happy birthday");
               emps.add(emp);
         emp.save();
@@ -94,8 +96,8 @@ public class Events extends Fragment {
 
 
         emps.add(emp);
-        emp.save();
-        return emps;
+        emp.save();*/
+        //return emps;
 
     }
 }

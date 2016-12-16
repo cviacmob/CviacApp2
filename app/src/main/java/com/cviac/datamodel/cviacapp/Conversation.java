@@ -81,9 +81,9 @@ public class Conversation  extends Model implements Serializable{
 		if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
 			return timeFormatter.format(datetime);
 		} else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
-			return "yesterday";
+			return "YESTERDAY";
 		} else {
-			DateFormat dateform = new SimpleDateFormat("dd-MM-yyyy");
+			DateFormat dateform = new SimpleDateFormat("dd/MM/yyyy");
 			return dateform.format(datetime);
 		}
 

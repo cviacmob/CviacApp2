@@ -17,37 +17,50 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="14dp" />
 
+
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
         android:id="@+id/imageViewcustom"
-        android:layout_alignTop="@+id/imageViewback"
+        android:layout_alignBottom="@+id/imageViewback"
         android:layout_toRightOf="@+id/imageViewback"
         android:layout_toEndOf="@+id/imageViewback" />
 
-    <TextView
-        android:text="TextView"
-        android:textSize="15dp"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/actionbarTitle"
-        android:textColor="#FFFFFF"
-        android:layout_alignTop="@+id/imageViewcustom"
-        android:layout_toRightOf="@+id/imageViewcustom"
-        android:layout_toEndOf="@+id/imageViewcustom"
         android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp" />
+        android:layout_marginStart="11dp"
+        android:layout_alignBottom="@+id/imageViewcustom"
+        android:layout_toRightOf="@+id/imageViewcustom"
+        android:layout_alignParentTop="true">
 
-    <TextView
+        <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView5"
             android:textColor="#FFFFFF"
-        android:layout_alignBottom="@+id/imageViewcustom"
-        android:layout_alignLeft="@+id/actionbarTitle"
-        android:layout_alignStart="@+id/actionbarTitle" />
+            android:textSize="12.5dp"
+            android:paddingRight="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="TextView"
+            android:textSize="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/actionbarTitle"
+            android:textColor="#FFFFFF"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

@@ -85,18 +85,17 @@ public class Verification extends Activity {
                         int code = otp.getCode();
                         if (code == 0) {
                             progressDialog.setMessage("Retrieving Contacts from Server...");
-                           getEmployees();
-                        }
-                        else {
+                            getEmployees();
+                        } else {
                             progressDialog.dismiss();
-                            Toast.makeText(Verification.this, "Invalid PIN" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Verification.this, "Invalid PIN", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
                         progressDialog.dismiss();
-                        Toast.makeText(Verification.this, "API Invoke Error: " + t.getMessage() , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Verification.this, "API Invoke Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         t.printStackTrace();
                     }
                 });
@@ -106,16 +105,59 @@ public class Verification extends Activity {
 
             }
         });
+
+
+        buttonresend.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+                okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://apps.cviac.com")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(okHttpClient)
+                        .build();
+                CVIACApi api = retrofit.create(CVIACApi.class);
+                RegInfo regInfo = new RegInfo();
+                regInfo.setMobile(mobile);
+
+                final Call<RegisterResponse> call = api.registerMobile(regInfo);
+                call.enqueue(new Callback<RegisterResponse>() {
+                    @Override
+                    public void onResponse(Response<RegisterResponse> response, Retrofit retrofit) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                        Toast.makeText(Verification.this, "Error: " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        t.printStackTrace();
+                    }
+
+                });
+
+            }
+        });
+
+
     }
 
     private void setProgressDialog() {
-        progressDialog = new ProgressDialog(Verification.this,R.style.AppTheme_Dark_Dialog);
+        progressDialog = new ProgressDialog(Verification.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Verifying...");
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
-
 
 
     private void getEmployees() {
@@ -147,6 +189,7 @@ public class Verification extends Activity {
                 startActivity(i);
                 finish();
             }
+
             @Override
             public void onFailure(Throwable throwable) {
                 progressDialog.dismiss();
@@ -159,7 +202,7 @@ public class Verification extends Activity {
 
     private void saveEmployeeInfo(List<EmployeeInfo> empInfos) {
         for (EmployeeInfo empinfo : emplist) {
-           Employee emp = new Employee();
+            Employee emp = new Employee();
             emp.setEmp_name(empinfo.getEmp_name());
             emp.setMobile(empinfo.getMobile());
             emp.setEmail(empinfo.getEmail());
