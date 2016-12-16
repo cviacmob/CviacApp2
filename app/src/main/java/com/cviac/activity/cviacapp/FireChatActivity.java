@@ -239,13 +239,7 @@ public class  FireChatActivity extends Activity {
         cnv.setLastmsg(msg.getMsg());
         cnv.save();
         if (chatFrag != null && chatFrag.adapter != null) {
-            if (newconv) {
-                chatFrag.adapter.add(cnv);
-            }
-            else {
-                //todo
-            }
-            chatFrag.adapter.notifyDataSetChanged();
+           chatFrag.reloadConversation();
         }
 
     }

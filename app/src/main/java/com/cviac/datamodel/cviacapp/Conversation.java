@@ -92,6 +92,7 @@ public class Conversation  extends Model implements Serializable{
 	public static List<Conversation> getConversations() {
 		return new Select()
 				.from(Conversation.class)
+				.orderBy("timestmp DESC")
 				.execute();
 	}
 
