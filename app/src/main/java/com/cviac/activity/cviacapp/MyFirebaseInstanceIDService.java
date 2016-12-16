@@ -1,6 +1,7 @@
 package com.cviac.activity.cviacapp;
 
 import android.app.Service;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,8 +22,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         //Log.d(TAG, "Refreshed token: " + refreshedToken);
         if (refreshedToken != null) {
-            //Toast.makeText(getApplicationContext(), "ok", Toast.LENGTH_SHORT).show();
-
+            final String MyPREFERENCES = "MyPrefs";
+            SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("pushId", refreshedToken);
+            editor.putString("pushIdsynced", "false");
+            editor.commit();
         }
     }
 }

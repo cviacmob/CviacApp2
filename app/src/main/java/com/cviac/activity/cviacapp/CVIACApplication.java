@@ -22,6 +22,7 @@ import com.cviac.fragments.cviacapp.Chats;
 
 public class CVIACApplication extends MultiDexApplication {
 
+
     private Chats chatsFragment;
 
     @Override

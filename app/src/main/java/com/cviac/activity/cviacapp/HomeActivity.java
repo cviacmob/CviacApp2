@@ -55,6 +55,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private String empCode;
 
+    private Collegues empFrag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,7 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         new UpdateStatusTask().execute("online");
+        new UpdatePushIDTask().execute();
     }
 
 
@@ -191,7 +194,8 @@ public class HomeActivity extends AppCompatActivity {
 
             switch (position + 1) {
                 case 1:
-                    return new Collegues();
+                    empFrag =  new Collegues();
+                    return empFrag;
                 case 2:
                     Chats chatFrag = new Chats();
                     CVIACApplication app =  (CVIACApplication) getApplication();
@@ -231,14 +235,14 @@ public class HomeActivity extends AppCompatActivity {
         new UpdateStatusTask().execute("offline");
     }
 
-    private void updatePresence(String status, String mobile) {
+    private void updatePresence(String status, String empCode) {
 
         Map<String, Object> updateValues = new HashMap<>();
         updateValues.put("lastseen", new Date());
         updateValues.put("status", status);
 
         DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
-        mfiredbref.child(mobile).updateChildren(
+        mfiredbref.child(empCode).updateChildren(
                 updateValues,
                 new DatabaseReference.CompletionListener() {
                     @Override
@@ -260,6 +264,50 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         protected Long doInBackground(String... params) {
             updatePresence(params[0], empCode);
+            return null;
+        }
+    }
+
+    private void updatePushId(String empCode, String pushId) {
+
+        Map<String, Object> updateValues = new HashMap<>();
+        updateValues.put("pushId", pushId);
+
+        DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
+        mfiredbref.child(empCode).updateChildren(
+                updateValues,
+                new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError firebaseError, DatabaseReference databaseReference) {
+                        if (firebaseError != null) {
+                            Toast.makeText(HomeActivity.this,
+                                    "PushID update failed: " + firebaseError.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            final String MyPREFERENCES = "MyPrefs";
+                            SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("pushIdsynced", "true");
+                            editor.commit();
+//                            Toast.makeText(HomeActivity.this,
+//                                    "Presence update success", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                });
+    }
+
+    private class UpdatePushIDTask extends AsyncTask<String, Integer, Long> {
+
+        @Override
+        protected Long doInBackground(String... params) {
+            final String MyPREFERENCES = "MyPrefs";
+            SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+            String isSynced = prefs.getString("pushIdsynced","false");
+            if (isSynced.equalsIgnoreCase("false")) {
+                String pushId = prefs.getString("pushId","");
+                updatePushId(empCode, pushId);
+            }
             return null;
         }
     }
