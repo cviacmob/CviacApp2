@@ -45,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -175,16 +176,7 @@ public class  FireChatActivity extends Activity {
                     rLayout.setBackgroundDrawable(drawable);
                   // msgview.setBackgroundResource(R.drawable.bubble1);
                     msgvieww.setText(s.getMsg());
-
-                    Date dNow = new Date(String.valueOf(s.getCtime()));
-                    // given date
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.setTime(dNow);
-
-                    SimpleDateFormat ft =
-                            new SimpleDateFormat ("yyyy-MM-dd  HH:mm");
-
-                    txt.setText(ft.format(dNow));
+                    txt.setText(getformatteddate(s.getCtime()));
                 }
 
             }
@@ -326,8 +318,7 @@ public class  FireChatActivity extends Activity {
                 Picasso.with(mContext).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
                         .into(customimage);
             }
-
-           Picasso.with(mContext).load(R.drawable.backarrow).resize(90,90)
+            Picasso.with(mContext).load(R.drawable.backarrow).resize(90,90)
                     .into(customimageback);
 
 
@@ -375,7 +366,8 @@ public class  FireChatActivity extends Activity {
                         if (info.getStatus().equalsIgnoreCase("online")) {
                             presenceText.setText(info.getStatus());
                         } else {
-                            presenceText.setText(info.getLastseen().toString());
+                            String st=getformatteddate(info.getLastseen());
+                            presenceText.setText("last seen " + st);
                         }
                     }
                     else {
@@ -390,6 +382,25 @@ public class  FireChatActivity extends Activity {
             });
         }
         presenceText.setText("");
+    }
+    private  String getformatteddate(Date dateTime)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "today at  " + timeFormatter.format(dateTime);
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "yesterday at " + timeFormatter.format(dateTime);
+        } else {
+            DateFormat dateform = new SimpleDateFormat("dd-MM-yyyy");
+            return dateform.format(dateTime);
+        }
+
     }
 
 

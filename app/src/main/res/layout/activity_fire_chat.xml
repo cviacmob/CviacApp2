@@ -30,6 +30,7 @@
                 android:background="@drawable/bubble2"
                 android:ems="10"
                 android:gravity="bottom"
+                android:hint="Type a message"
                 android:textColor="#090A0A"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"

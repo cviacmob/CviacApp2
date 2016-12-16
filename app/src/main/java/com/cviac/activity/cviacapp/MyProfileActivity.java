@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -67,6 +69,14 @@ public class MyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //data from collegue
+        Intent i = getIntent();
+        empcode = i.getStringExtra("empcode");
+        Employee emp = Employee.getemployee(empcode);
+        //title set
+        setTitle(emp.getEmp_name());
+
+
         ivImage = (ImageView) findViewById(R.id.imageViewprofile);
 
         btnSelect = (ImageView) findViewById(R.id.imageButtonselect);
@@ -79,11 +89,9 @@ public class MyProfileActivity extends AppCompatActivity {
                 selectImage();
             }
         });
-        //data from collegue
-        Intent i = getIntent();
-        empcode = i.getStringExtra("empcode");
 
-        Employee emp = Employee.getemployee(empcode);
+
+
         tvempid = (TextView) findViewById(R.id.textViewempcoder);
         tvempid.setText(emp.getEmp_code());
         tvempname = (TextView) findViewById(R.id.textViewempnamer);

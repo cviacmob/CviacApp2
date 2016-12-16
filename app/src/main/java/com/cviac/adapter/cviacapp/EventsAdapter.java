@@ -1,6 +1,8 @@
 
 package com.cviac.adapter.cviacapp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import com.cviac.adapter.cviacapp.ConversationAdapter.ViewHolder;
@@ -54,9 +56,10 @@ public class EventsAdapter extends ArrayAdapter<Event> {
             holder.disview = (TextView) vw.findViewById(R.id.textViewDescription);
             holder.imgview = (ImageView) vw.findViewById(R.id.imageViewevent);
             Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
-            holder.nameView.setText(even.getTitle());
-            holder.typeview.setText(even.getformatedDate());
-            holder.disview.setText(even.getDiscription());
+            holder.nameView.setText(even.getEvent_title());
+           // String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(new Date(even.getEvent_date().toString()));
+           // holder.typeview.setText(timeStamp);
+            holder.disview.setText(even.getEvent_description());
         } else {
             holder = (ViewHolder) vw.getTag();
         }

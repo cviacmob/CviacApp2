@@ -1,14 +1,10 @@
 package com.cviac.cviacappapi.cviacapp;
 
-import com.cviac.datamodel.cviacapp.Employee;
 import com.cviac.datamodel.cviacapp.EmployeeInfo;
-import com.cviac.datamodel.cviacapp.EmployeeResponse;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.ResponseBody;
 
 import java.util.List;
 
-import okhttp3.MultipartBody;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.GET;

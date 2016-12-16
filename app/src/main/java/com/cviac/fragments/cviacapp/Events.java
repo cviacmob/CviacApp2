@@ -41,7 +41,7 @@ public class Events extends Fragment {
 
                 Event emp = emps.get(pos1);
 
-                Toast.makeText(lv1.getContext(), "clicked:" + emp.getTitle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(lv1.getContext(), "clicked:" + emp.getEvent_title(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -58,15 +58,15 @@ public class Events extends Fragment {
 
         List<Event> emps = new ArrayList<Event>();
         Event emp = new Event();
-        emp.setTitle("Birthday");
-        emp.setDiscription("Wish you happy birthday");
-        emps.add(emp);
+        emp.setEvent_title("Birthday");
+        emp.setEvent_description("Wish you happy birthday");
+              emps.add(emp);
         emp.save();
 
 
         emp = new Event();
-        emp.setTitle("Birthday");
-        emp.setDiscription("Wish you happy birthday");
+        emp.setEvent_title("Birthday");
+        emp.setEvent_description("Wish you happy birthday");
 
 
         emp.save();
@@ -74,23 +74,23 @@ public class Events extends Fragment {
         emps.add(emp);
 
         emp = new Event();
-        emp.setTitle("Birthday");
-        emp.setDiscription("Wish you happy birthday");
+        emp.setEvent_title("Birthday");
+        emp.setEvent_description("Wish you happy birthday");
 
 
         emps.add(emp);
         emp.save();
 
         emp = new Event();
-        emp.setTitle("Birthday");
-        emp.setDiscription("Wish you happy birthday");
+        emp.setEvent_title("Birthday");
+        emp.setEvent_description("Wish you happy birthday");
 
 
         emps.add(emp);
         emp.save();
         emp = new Event();
-        emp.setTitle("Birthday");
-        emp.setDiscription("Wish you happy birthday");
+        emp.setEvent_title("Birthday");
+        emp.setEvent_description("Wish you happy birthday");
 
 
         emps.add(emp);

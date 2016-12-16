@@ -13,15 +13,6 @@ android:padding="5dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/ic_launcher" />
-    <TextView
-        android:id="@+id/colleguesname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/empimage"
-        android:layout_toRightOf="@+id/empimage"
-        android:text="TextView"
-        android:textColor="#090A0A"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textemail"
@@ -31,5 +22,17 @@ android:padding="5dp"
         android:layout_below="@+id/colleguesname"
         android:text="TextView"
         android:textColor="#090A0A" />
+
+    <TextView
+        android:id="@+id/colleguesname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="#090A0A"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/empimage"
+        android:layout_toEndOf="@+id/empimage"
+        android:layout_marginTop="12dp" />
 
 </RelativeLayout>
