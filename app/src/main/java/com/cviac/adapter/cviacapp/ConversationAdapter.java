@@ -67,7 +67,7 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
 
 		holder.nameView.setText(conv.getName());
 		holder.msgview.setText(conv.getLastmsg());
-		holder.datetime.setText(conv.getformatedDate());
+		holder.datetime.setText(conv.getformatteddate());
 		return vw;
 	}
 

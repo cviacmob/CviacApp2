@@ -148,15 +148,10 @@ public class  FireChatActivity extends Activity {
 
 
 
-                    Date dNow = new Date(String.valueOf(s.getCtime()));
-                    // given date
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.setTime(dNow);
 
-                    SimpleDateFormat ft =
-                            new SimpleDateFormat ("yyyy-MM-dd  HH:mm");
+                    String st=getformatteddate(s.getCtime());
 
-                    txt.setText(ft.format(dNow));
+                    txt.setText(st);
 
                 }
                 else {
@@ -244,10 +239,19 @@ public class  FireChatActivity extends Activity {
         cnv.setLastmsg(msg.getMsg());
         cnv.save();
         if (chatFrag != null && chatFrag.adapter != null) {
-           chatFrag.reloadConversation();
+            if (newconv) {
+                chatFrag.adapter.add(cnv);
+            }
+            else {
+                //todo
+            }
+            chatFrag.adapter.notifyDataSetChanged();
         }
 
     }
+
+
+
 
     private class SendMessageTask extends AsyncTask<ChatMsg, Integer, Long> {
 
