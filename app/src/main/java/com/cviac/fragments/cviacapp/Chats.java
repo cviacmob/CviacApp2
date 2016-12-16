@@ -35,13 +35,15 @@ public class Chats extends Fragment {
 		lv = (ListView) chatsfrgs.findViewById(R.id.chatlist);
 		lv.setDivider(null);
 		emps = getConversation();
+		if (emps == null) {
+			emps = new ArrayList<>();
+		}
 		adapter = new ConversationAdapter(emps, getActivity().getApplicationContext());
 		lv.setAdapter(adapter);
 		lv.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				// TODO Auto-generated method stub
 				Conversation selectedItem = emps.get(position);
 				emps.remove(selectedItem);
 				adapter.notifyDataSetChanged();
@@ -52,19 +54,19 @@ public class Chats extends Fragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos1, long pos2) {
-
 				Conversation emp = emps.get(pos1);
-
-				// Toast.makeText(lv.getContext(), "clicked:" + emp.getName(),
-				// Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
 				i.putExtra("conversewith", emp);
 				startActivity(i);
-
-
 			}
 		});
 		return chatsfrgs;
+	}
+
+	public void reloadConversation() {
+		emps.clear();
+		emps.addAll(getConversation());
+		adapter.notifyDataSetChanged();
 	}
 
 	private List<Conversation> getConversation() {

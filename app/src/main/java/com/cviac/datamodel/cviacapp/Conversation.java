@@ -68,12 +68,12 @@ public class Conversation  extends Model implements Serializable{
 
 	public String getformatedDate() {
 		return "2016/10/28";
-
 	}
 
 	public static List<Conversation> getConversations() {
 		return new Select()
 				.from(Conversation.class)
+				.orderBy("timestmp DESC")
 				.execute();
 	}
 
