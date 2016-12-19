@@ -1,10 +1,14 @@
 package com.cviac.activity.cviacapp;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -135,8 +139,28 @@ public class HomeActivity extends AppCompatActivity {
         }
         if(id==R.id.action_search)
         {
+            MenuItem menuItem =(MenuItem)findViewById(R.id.action_search);
+            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
 
-            return true;
+
+            SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+                public boolean onQueryTextChange(String newText) {
+                    // This is your adapter that will be filtered
+                    return true;
+                }
+
+                public boolean onQueryTextSubmit(String query) {
+                    // **Here you can get the value "query" which is entered in the search box.**
+
+                    //searchView.getQuery();
+                    return true;
+                }
+            };
+            searchView.setOnQueryTextListener(queryTextListener);
+
+
+
+return true;
         }
 
         return super.onOptionsItemSelected(item);

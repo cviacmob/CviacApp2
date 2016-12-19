@@ -22,6 +22,10 @@ public interface CVIACApi {
     @POST("/CVIACAPI/cviacdbop.php/otpreg")
     Call<RegisterResponse> registerMobile(@Body RegInfo regInfo);
 
+
+    @POST("/CVIACAPI/cviacdbop.php/additionalregistration")
+    Call<AdditinalRegisterResponse> registeradditionalverification(@Body AdditionalRegInfo regInfo);
+
     @POST("/CVIACAPI/cviacdbop.php/verifyotp")
     Call<VerifyResponse> verifyPin(@Body RegInfo regInfo);
 
