@@ -8,6 +8,7 @@ import java.util.List;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
@@ -33,6 +34,8 @@ public interface CVIACApi {
     Call<ProfileUpdateResponse> profileUpdate(@Query("emp_code") String empcode,  @Part("fileToUpload\"; filename=\"pp.png\" ") RequestBody file);
     //  Call<List<Employee>> getemployees();
 
+    @POST("/fcm/send")
+    Call<FCMSendMessageResponse> sendPushMessage(@Header("Authorization") String key, @Body PushMessageInfo info);
 
 }
 

@@ -9,6 +9,7 @@ import java.util.Date;
 public class PresenceInfo {
     String status;
     Date lastseen;
+    String pushId;
 
     public PresenceInfo() {
     }
@@ -27,5 +28,13 @@ public class PresenceInfo {
 
     public void setLastseen(Date lastseen) {
         this.lastseen = lastseen;
+    }
+
+    public String getPushId() {
+        return pushId;
+    }
+
+    public void setPushId(String pushId) {
+        this.pushId = pushId;
     }
 }

@@ -10,6 +10,8 @@ import java.util.Date;
 
 public class ChatMsg implements Serializable {
 
+    private String msgId;
+
     private String msg;
 
     private Date ctime;
@@ -83,5 +85,13 @@ public class ChatMsg implements Serializable {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
+    }
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 }
