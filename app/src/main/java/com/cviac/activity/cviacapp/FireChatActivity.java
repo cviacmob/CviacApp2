@@ -32,6 +32,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cviac.adapter.cviacapp.CircleTransform;
+import com.cviac.cviacappapi.cviacapp.CVIACApi;
+import com.cviac.cviacappapi.cviacapp.FCMSendMessageResponse;
+import com.cviac.cviacappapi.cviacapp.PushMessageInfo;
 import com.cviac.datamodel.cviacapp.ChatMessage;
 import com.cviac.datamodel.cviacapp.ChatMsg;
 import com.cviac.datamodel.cviacapp.Conversation;
@@ -43,6 +46,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -54,8 +58,16 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 import static com.cviac.activity.cviacapp.R.id.textchat;
+import static com.google.android.gms.measurement.internal.zzl.api;
 
 public class FireChatActivity extends Activity {
 
@@ -72,7 +84,7 @@ public class FireChatActivity extends Activity {
     Context mContext;
     RelativeLayout rp;
     TextView txt, msgview, presenceText;
-
+    PresenceInfo presenceInfo;
     ListView lv;
 
 
@@ -91,6 +103,7 @@ public class FireChatActivity extends Activity {
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
+        lv.setStackFromBottom(true);
 
         //chats = new ArrayList<ChatMessage>();
 
@@ -127,9 +140,12 @@ public class FireChatActivity extends Activity {
                     Drawable drawable = res.getDrawable(R.drawable.bubble2);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     rLayout.setBackgroundDrawable(drawable);
+                   // rLayout.setBackgroundColor(Color.parseColor("#C4FED4"));
                     msgview.setLayoutParams(layoutParams);
                     //msgview.setBackgroundResource(R.drawable.bubble2);
                     msgview.setText(s.getMsg());
+                    //rLayout.setBackgroundResource(R.color.green);
+
                     if (s.getStatus() == 0) {
                         imgvwtick.setBackgroundResource(R.drawable.schedule);
                     }
@@ -236,6 +252,38 @@ public class FireChatActivity extends Activity {
 
     }
 
+    private void SendPushNotification(ChatMsg cmsg) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://fcm.googleapis.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        String key = "key=AAAA_01YtJE:APA91bEUGI2jvP6PqBQXuV35rN6yHjUkCYshgQGHvuZkPaYwkRqSmSuukmxnaAbunLQgb_ALrd6ZonqteEjaZ34AD7quSa4-1NZdpzA4fvvfGSYwVLNR-FzvnJlVvA2h-TnGLKka3vO_eAr52shm29VA0XHvFm9SWQ";
+        PushMessageInfo pinfo = new PushMessageInfo();
+        pinfo.setTo(presenceInfo.getPushId());
+        PushMessageInfo.DataInfo dinfo = new PushMessageInfo.DataInfo();
+        dinfo.setMsg(cmsg.getMsg());
+        dinfo.setSendername(cmsg.getSendername());
+        dinfo.setSenderid(cmsg.getSenderid());
+        dinfo.setMsgId(cmsg.getMsgId());
+        pinfo.setData(dinfo);
+        final Call<FCMSendMessageResponse> call = api.sendPushMessage(key,pinfo);
+        call.enqueue(new Callback<FCMSendMessageResponse>() {
+            @Override
+            public void onResponse(Response<FCMSendMessageResponse> response, Retrofit retrofit) {
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
 
     private class SendMessageTask extends AsyncTask<ChatMsg, Integer, Long> {
 
@@ -245,12 +293,18 @@ public class FireChatActivity extends Activity {
             Map<String, Object> updateValues = new HashMap<>();
             String msgid = System.currentTimeMillis() + "";
             updateValues.put("msg", cmsg.getMsg());
-            updateValues.put("ctime", new Date());
+            cmsg.setCtime(new Date());
+            updateValues.put("ctime",cmsg.getCtime() );
+            cmsg.setSenderid(myempId);
             updateValues.put("senderid", myempId);
+            cmsg.setSendername(myempname);
             updateValues.put("sendername", myempname);
+            cmsg.setReceiverid(emp.getEmpid());
             updateValues.put("receiverid", emp.getEmpid());
+            cmsg.setReceivername(emp.getName());
             updateValues.put("receivername", emp.getName());
             updateValues.put("msgid", msgid);
+            cmsg.setMsgId(msgid);
             updateValues.put("status", 0);
             dbref.child(msgid).setValue(
                     updateValues,
@@ -267,6 +321,12 @@ public class FireChatActivity extends Activity {
                             }
                         }
                     });
+
+            if (presenceInfo != null && presenceInfo.getStatus().equalsIgnoreCase("offline")) {
+                if ((presenceInfo.getPushId() != null) && presenceInfo.getPushId().length() > 0) {
+                    SendPushNotification(cmsg);
+                }
+            }
             return null;
         }
     }
@@ -311,6 +371,7 @@ public class FireChatActivity extends Activity {
                 public void onClick(View v) {
                     //Log.w("MainActivity", "ActionBar's title clicked.");
                     Intent i = new Intent(FireChatActivity.this, MyProfileActivity.class);
+
                     i.putExtra("empcode", emp.getEmpid());
                     startActivity(i);
                     finish();
@@ -338,12 +399,12 @@ public class FireChatActivity extends Activity {
             dbRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    PresenceInfo info = dataSnapshot.getValue(PresenceInfo.class);
-                    if (info != null) {
-                        if (info.getStatus().equalsIgnoreCase("online")) {
-                            presenceText.setText(info.getStatus());
+                    presenceInfo = dataSnapshot.getValue(PresenceInfo.class);
+                    if (presenceInfo != null) {
+                        if (presenceInfo.getStatus().equalsIgnoreCase("online")) {
+                            presenceText.setText(presenceInfo.getStatus());
                         } else {
-                            String st = getformatteddate(info.getLastseen());
+                            String st = getformatteddate(presenceInfo.getLastseen());
                             presenceText.setText("last seen " + st);
                         }
                     } else {

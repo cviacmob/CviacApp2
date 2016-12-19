@@ -9,13 +9,11 @@ import java.util.Date;
 public class AdditionalRegInfo {
     private String mobile;
 
-    public String getEmpcode() {
-        return empcode;
-    }
+    private String dob;
 
-    public void setEmpcode(String empcode) {
-        this.empcode = empcode;
-    }
+    private String otp;
+    private String emp_code;
+
 
     public String getMobile() {
         return mobile;
@@ -25,13 +23,6 @@ public class AdditionalRegInfo {
         this.mobile = mobile;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public String getOtp() {
         return otp;
@@ -41,8 +32,21 @@ public class AdditionalRegInfo {
         this.otp = otp;
     }
 
-    private String empcode;
-    private Date date;
+    public String getEmp_code() {
+        return emp_code;
+    }
 
-    private String otp;
+    public void setEmp_code(String emp_code) {
+        this.emp_code = emp_code;
+    }
+
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
 }

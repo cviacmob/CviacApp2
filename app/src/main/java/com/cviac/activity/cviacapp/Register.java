@@ -112,6 +112,7 @@ public class Register extends Activity {
                         else if(code== 1001)
                         {
                             Intent i = new Intent(Register.this, AdditionalVerification.class);
+                            i.putExtra("mobile", regmobile);
                             startActivity(i);
                             finish();
                         }

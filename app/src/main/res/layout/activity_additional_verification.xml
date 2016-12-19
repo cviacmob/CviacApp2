@@ -14,24 +14,6 @@
         android:paddingTop="60dp">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_mobile"
-                android:layout_width="266dp"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="@string/hint_email"
-                android:layout_below="@+id/input_Mobilenumber"
-                android:layout_alignRight="@+id/input_dob"
-                android:layout_alignEnd="@+id/input_dob"
-                android:layout_marginTop="34dp"
-                android:layout_weight="1" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

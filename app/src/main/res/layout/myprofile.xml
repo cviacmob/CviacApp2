@@ -137,7 +137,7 @@
         android:layout_alignStart="@+id/mageridr" />
 
     <TextView
-        android:text="Emp_Name             "
+        android:text="Name             "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewname"
@@ -170,7 +170,7 @@
         android:layout_alignEnd="@+id/tvdojl" />
 
     <TextView
-        android:text="Emp_Code              "
+        android:text="Code              "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewempcode"
