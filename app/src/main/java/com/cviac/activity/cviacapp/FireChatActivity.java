@@ -142,6 +142,8 @@ public class FireChatActivity extends Activity {
                     msgview.setLayoutParams(layoutParams);
                     //msgview.setBackgroundResource(R.drawable.bubble2);
                     msgview.setText(s.getMsg());
+
+
                     if (s.getStatus() == 0) {
                         imgvwtick.setBackgroundResource(R.drawable.schedule);
                     }
@@ -174,6 +176,8 @@ public class FireChatActivity extends Activity {
                     // msgview.setBackgroundResource(R.drawable.bubble1);
                     msgvieww.setText(s.getMsg());
                     txt.setText(getformatteddate(s.getCtime()));
+                    s.setStatus(3);
+                    new UpdateMessageStatusTask().execute(s);
                 }
 
             }
@@ -279,6 +283,23 @@ public class FireChatActivity extends Activity {
 
             }
         });
+    }
+
+    private class UpdateMessageStatusTask extends AsyncTask<ChatMsg, Integer, Long> {
+
+        @Override
+        protected Long doInBackground(ChatMsg... params) {
+            ChatMsg cmsg = params[0];
+            Map<String, Object> updateValues = new HashMap<>();
+            updateValues.put("status", cmsg.getStatus());
+            dbref.child(cmsg.getMsgId()).setValue(null, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                }
+            });
+            return null;
+        }
     }
 
     private class SendMessageTask extends AsyncTask<ChatMsg, Integer, Long> {
