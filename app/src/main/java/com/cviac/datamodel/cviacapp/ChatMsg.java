@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class ChatMsg implements Serializable {
 
-    private String msgId;
+    private String msgid;
 
     private String msg;
 
@@ -87,11 +87,11 @@ public class ChatMsg implements Serializable {
         this.ctime = ctime;
     }
 
-    public String getMsgId() {
-        return msgId;
+    public String getMsgid() {
+        return msgid;
     }
 
-    public void setMsgId(String msgId) {
-        this.msgId = msgId;
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
     }
 }

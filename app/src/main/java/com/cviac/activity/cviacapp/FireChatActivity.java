@@ -174,8 +174,11 @@ public class FireChatActivity extends Activity {
                     // msgview.setBackgroundResource(R.drawable.bubble1);
                     msgvieww.setText(s.getMsg());
                     txt.setText(getformatteddate(s.getCtime()));
-                    s.setStatus(3);
-                    new UpdateMessageStatusTask().execute(s);
+
+                    if (s.getStatus() != 3) {
+                        s.setStatus(3);
+                        new UpdateMessageStatusTask().execute(s);
+                    }
                 }
 
             }
@@ -267,7 +270,7 @@ public class FireChatActivity extends Activity {
         dinfo.setMsg(cmsg.getMsg());
         dinfo.setSendername(cmsg.getSendername());
         dinfo.setSenderid(cmsg.getSenderid());
-        dinfo.setMsgId(cmsg.getMsgId());
+        dinfo.setMsgId(cmsg.getMsgid());
         pinfo.setData(dinfo);
         final Call<FCMSendMessageResponse> call = api.sendPushMessage(key,pinfo);
         call.enqueue(new Callback<FCMSendMessageResponse>() {
@@ -290,7 +293,7 @@ public class FireChatActivity extends Activity {
             ChatMsg cmsg = params[0];
             Map<String, Object> updateValues = new HashMap<>();
             updateValues.put("status", cmsg.getStatus());
-            dbref.child(cmsg.getMsgId()).setValue(null, new DatabaseReference.CompletionListener() {
+            dbref.child(cmsg.getMsgid()).updateChildren(updateValues, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
@@ -319,7 +322,7 @@ public class FireChatActivity extends Activity {
             cmsg.setReceivername(emp.getName());
             updateValues.put("receivername", emp.getName());
             updateValues.put("msgid", msgid);
-            cmsg.setMsgId(msgid);
+            cmsg.setMsgid(msgid);
             updateValues.put("status", 0);
             dbref.child(msgid).setValue(
                     updateValues,
@@ -337,7 +340,7 @@ public class FireChatActivity extends Activity {
                         }
                     });
 
-            if (presenceInfo.getStatus().equalsIgnoreCase("offline")) {
+            if ( presenceInfo.getStatus().equalsIgnoreCase("offline")) {
                 if ((presenceInfo.getPushId() != null) && presenceInfo.getPushId().length() > 0) {
                     SendPushNotification(cmsg);
                 }
