@@ -176,7 +176,7 @@ public class FireChatActivity extends Activity {
                     txt.setText(getformatteddate(s.getCtime()));
 
                     if (s.getStatus() != 3) {
-                        s.setStatus(3);
+                       // s.setStatus(3);
                         new UpdateMessageStatusTask().execute(s);
                     }
                 }
@@ -292,7 +292,7 @@ public class FireChatActivity extends Activity {
         protected Long doInBackground(ChatMsg... params) {
             ChatMsg cmsg = params[0];
             Map<String, Object> updateValues = new HashMap<>();
-            updateValues.put("status", cmsg.getStatus());
+            updateValues.put("status", 3);
             dbref.child(cmsg.getMsgid()).updateChildren(updateValues, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

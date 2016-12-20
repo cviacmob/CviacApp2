@@ -1,9 +1,11 @@
 package com.cviac.activity.cviacapp;
 
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
@@ -40,6 +42,43 @@ public class CVIACApplication extends MultiDexApplication {
         configurationBuilder.addModelClasses(Event.class);
         configurationBuilder.addModelClasses(Conversation.class);
         ActiveAndroid.initialize(configurationBuilder.create());
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        });
 
     }
 
