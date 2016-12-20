@@ -103,7 +103,6 @@ public class FireChatActivity extends Activity {
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
-        lv.setStackFromBottom(true);
 
         //chats = new ArrayList<ChatMessage>();
 
@@ -140,12 +139,9 @@ public class FireChatActivity extends Activity {
                     Drawable drawable = res.getDrawable(R.drawable.bubble2);
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                     rLayout.setBackgroundDrawable(drawable);
-                   // rLayout.setBackgroundColor(Color.parseColor("#C4FED4"));
                     msgview.setLayoutParams(layoutParams);
                     //msgview.setBackgroundResource(R.drawable.bubble2);
                     msgview.setText(s.getMsg());
-                    //rLayout.setBackgroundResource(R.color.green);
-
                     if (s.getStatus() == 0) {
                         imgvwtick.setBackgroundResource(R.drawable.schedule);
                     }
@@ -178,6 +174,8 @@ public class FireChatActivity extends Activity {
                     // msgview.setBackgroundResource(R.drawable.bubble1);
                     msgvieww.setText(s.getMsg());
                     txt.setText(getformatteddate(s.getCtime()));
+                    s.setStatus(3);
+                    new UpdateMessageStatusTask().execute(s);
                 }
 
             }
@@ -285,6 +283,23 @@ public class FireChatActivity extends Activity {
         });
     }
 
+    private class UpdateMessageStatusTask extends AsyncTask<ChatMsg, Integer, Long> {
+
+        @Override
+        protected Long doInBackground(ChatMsg... params) {
+            ChatMsg cmsg = params[0];
+            Map<String, Object> updateValues = new HashMap<>();
+            updateValues.put("status", cmsg.getStatus());
+            dbref.child(cmsg.getMsgId()).setValue(null, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+
+                }
+            });
+            return null;
+        }
+    }
+
     private class SendMessageTask extends AsyncTask<ChatMsg, Integer, Long> {
 
         @Override
@@ -322,7 +337,7 @@ public class FireChatActivity extends Activity {
                         }
                     });
 
-            if (presenceInfo != null && presenceInfo.getStatus().equalsIgnoreCase("offline")) {
+            if (presenceInfo.getStatus().equalsIgnoreCase("offline")) {
                 if ((presenceInfo.getPushId() != null) && presenceInfo.getPushId().length() > 0) {
                     SendPushNotification(cmsg);
                 }
@@ -371,7 +386,6 @@ public class FireChatActivity extends Activity {
                 public void onClick(View v) {
                     //Log.w("MainActivity", "ActionBar's title clicked.");
                     Intent i = new Intent(FireChatActivity.this, MyProfileActivity.class);
-
                     i.putExtra("empcode", emp.getEmpid());
                     startActivity(i);
                     finish();
