@@ -72,4 +72,10 @@ public class Chats extends Fragment {
 	private List<Conversation> getConversation() {
 		return Conversation.getConversations();
 	}
+	public void reloadFilterByChats(String searchName) {
+		List<Conversation> chatlist = Conversation.getmessage(searchName);
+		emps.clear();
+		emps.addAll(chatlist);
+		adapter.notifyDataSetChanged();
+	}
 }

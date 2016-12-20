@@ -158,10 +158,9 @@ public class Employee extends Model implements Serializable {
     }
 
     public static List<Employee> getemployees(String filterByName) {
-        return new Select()
-                .from(Employee.class)
-                .where("Name = %?", filterByName)
-                .orderBy("Name ASC")
+        return new Select().from(Employee.class)
+                .where("emp_name LIKE ?", new String[]{'%' + filterByName + '%'})
+                // .orderBy("Name ASC")
                 .execute();
 
     }

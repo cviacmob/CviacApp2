@@ -102,5 +102,12 @@ public class Conversation  extends Model implements Serializable{
 				.where("empid = ?", empCode)
 				.executeSingle();
 	}
+	public static List<Conversation> getmessage(String filterByName) {
+		return new Select().from(Conversation.class)
+				.where("name LIKE ?", new String[]{'%' + filterByName + '%'})
+				 .orderBy("timestmp DESC")
+				.execute();
+
+	}
 
 }

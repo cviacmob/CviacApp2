@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -59,7 +59,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private String empCode;
 
+    private Chats chatFrag;
+
     private Collegues empFrag;
+
+    TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
         final String MyPREFERENCES = "MyPrefs";
@@ -109,6 +113,14 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
 
         return true;
     }
@@ -139,31 +151,29 @@ public class HomeActivity extends AppCompatActivity {
         }
         if(id==R.id.action_search)
         {
-            MenuItem menuItem =(MenuItem)findViewById(R.id.action_search);
-            SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-
-
-            SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-                public boolean onQueryTextChange(String newText) {
-                    // This is your adapter that will be filtered
-                    return true;
-                }
-
-                public boolean onQueryTextSubmit(String query) {
-                    // **Here you can get the value "query" which is entered in the search box.**
-
-                    //searchView.getQuery();
-                    return true;
-                }
-            };
-            searchView.setOnQueryTextListener(queryTextListener);
-
-
-
-return true;
+            return true;
         }
 
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+       int pos =  tabLayout.getSelectedTabPosition();
+        TabLayout.Tab tab = tabLayout.getTabAt(pos);
+        if (tab.getText().toString().equalsIgnoreCase("CHATS")) {
+            chatFrag.reloadFilterByChats(newText);
+        }
+        else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
+            empFrag.reloadFilterByName(newText);
+        }
+        return false;
     }
 
     /**
@@ -221,7 +231,7 @@ return true;
                     empFrag =  new Collegues();
                     return empFrag;
                 case 2:
-                    Chats chatFrag = new Chats();
+                    chatFrag = new Chats();
                     CVIACApplication app =  (CVIACApplication) getApplication();
                     app.setChatsFragment(chatFrag);
                     return chatFrag;
