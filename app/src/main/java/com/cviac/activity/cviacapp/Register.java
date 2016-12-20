@@ -109,6 +109,13 @@ public class Register extends Activity {
                                 e1.setError("Invalid mobile number");
                             }
                         }
+                        else if(code== 1001)
+                        {
+                            Intent i = new Intent(Register.this, AdditionalVerification.class);
+                            i.putExtra("mobile", regmobile);
+                            startActivity(i);
+                            finish();
+                        }
                     }
 
                     @Override

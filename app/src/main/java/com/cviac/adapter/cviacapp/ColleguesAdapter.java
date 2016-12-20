@@ -1,5 +1,6 @@
 package com.cviac.adapter.cviacapp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
@@ -67,5 +68,6 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
         return vw;
 
     }
+
 
 }

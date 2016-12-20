@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -62,7 +63,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private String userChoosenTask;
 
 
-    private String empcode;
+    private String empcode,empcoded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +76,22 @@ public class MyProfileActivity extends AppCompatActivity {
         Employee emp = Employee.getemployee(empcode);
         //title set
         setTitle(emp.getEmp_name());
+        btnSelect = (ImageView) findViewById(R.id.imageButtonselect);
+        final String MyPREFERENCES = "MyPrefs";
+        SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        String mobile = prefs.getString("mobile", "");
+        Employee emplogged = Employee.getemployeeByMobile(mobile);
+        empcoded=emplogged.getEmp_code();
+        if(!empcode.equals(empcoded) )
+        {
+
+            btnSelect.setVisibility(View.INVISIBLE);
+        }
 
 
         ivImage = (ImageView) findViewById(R.id.imageViewprofile);
 
-        btnSelect = (ImageView) findViewById(R.id.imageButtonselect);
+
         Picasso.with(context).load(R.drawable.camera).resize(80, 80).transform(new CircleTransform())
                 .into(btnSelect);
         btnSelect.setOnClickListener(new View.OnClickListener() {

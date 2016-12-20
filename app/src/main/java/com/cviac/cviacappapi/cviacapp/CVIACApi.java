@@ -37,5 +37,8 @@ public interface CVIACApi {
     @POST("/fcm/send")
     Call<FCMSendMessageResponse> sendPushMessage(@Header("Authorization") String key, @Body PushMessageInfo info);
 
+    @POST("/CVIACAPI/cviacdbop.php/additionalregistration")
+    Call<AdditinalRegisterResponse> registeradditionalverification(@Body AdditionalRegInfo regInfor);
+
 }
 

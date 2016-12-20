@@ -16,6 +16,8 @@
             android:id="@+id/listViewChat"
             android:layout_width="match_parent"
             android:layout_height="470dp"
+            android:transcriptMode="alwaysScroll"
+            android:stackFromBottom="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
