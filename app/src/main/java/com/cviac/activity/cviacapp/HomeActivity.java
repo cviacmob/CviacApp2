@@ -1,5 +1,8 @@
 package com.cviac.activity.cviacapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -26,18 +29,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cviac.cviacappapi.cviacapp.CVIACApi;
 import com.cviac.datamodel.cviacapp.Employee;
+import com.cviac.datamodel.cviacapp.EmployeeInfo;
 import com.cviac.fragments.cviacapp.Chats;
 import com.cviac.fragments.cviacapp.Collegues;
 import com.cviac.fragments.cviacapp.Events;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.okhttp.OkHttpClient;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -55,8 +69,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    List<EmployeeInfo> emplist;
 
     private String mobile;
+    ProgressDialog progressDialog;
 
     private String empCode;
 
@@ -66,6 +82,9 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     TabLayout tabLayout;
 
+    private AlarmManager alarmMgr;
+    private PendingIntent alarmIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +93,14 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         setTitle(getString(R.string.app_name));
         getCollegues();
 
-
+        setAlaram();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
 
 
         // Set up the ViewPager with the sections adapter.
@@ -94,7 +113,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-        mobile = prefs.getString("mobile","");
+        mobile = prefs.getString("mobile", "");
         empCode = mobile;
         if (mobile != null) {
             Employee emplogged = Employee.getemployeeByMobile(mobile);
@@ -111,6 +130,19 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         new UpdatePushIDTask().execute();
     }
 
+    private void setAlaram() {
+        List<Employee> emplist = Employee.eventsbydate();
+
+        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 6);
+        calendar.set(Calendar.MINUTE, 0);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+               AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,6 +157,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(this);
 
+
         return true;
     }
 
@@ -136,9 +169,6 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_profile) {
             final String MyPREFERENCES = "MyPrefs";
             SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
@@ -152,8 +182,13 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
             return true;
         }
-        if(id==R.id.action_search)
-        {
+        if (id == R.id.action_search) {
+            return true;
+        }
+        if (id == R.id.action_refresh) {
+            // DeleteEmployeeInfo(emplist);
+            getEmployees();
+
             return true;
         }
 
@@ -168,12 +203,11 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextChange(String newText) {
-       int pos =  tabLayout.getSelectedTabPosition();
+        int pos = tabLayout.getSelectedTabPosition();
         TabLayout.Tab tab = tabLayout.getTabAt(pos);
         if (tab.getText().toString().equalsIgnoreCase("CHATS")) {
             chatFrag.reloadFilterByChats(newText);
-        }
-        else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
+        } else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
             empFrag.reloadFilterByName(newText);
         }
         return false;
@@ -231,11 +265,11 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
             switch (position + 1) {
                 case 1:
-                    empFrag =  new Collegues();
+                    empFrag = new Collegues();
                     return empFrag;
                 case 2:
                     chatFrag = new Chats();
-                    CVIACApplication app =  (CVIACApplication) getApplication();
+                    CVIACApplication app = (CVIACApplication) getApplication();
                     app.setChatsFragment(chatFrag);
                     return chatFrag;
                 case 3:
@@ -340,120 +374,88 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         protected Long doInBackground(String... params) {
             final String MyPREFERENCES = "MyPrefs";
             SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-            String isSynced = prefs.getString("pushIdsynced","false");
+            String isSynced = prefs.getString("pushIdsynced", "false");
             if (isSynced.equalsIgnoreCase("false")) {
-                String pushId = prefs.getString("pushId","");
+                String pushId = prefs.getString("pushId", "");
                 updatePushId(empCode, pushId);
             }
             return null;
         }
     }
 
-    private List<Employee> getCollegues()
-    {
+    private List<Employee> getCollegues() {
         List<Employee> emplist = Employee.getemployees();
         if (emplist != null && emplist.size() != 0) {
             return emplist;
         }
 
-
-       /* List<Employee> emps = new ArrayList<Employee>();
-        Employee emp = new Employee();
-        emp.setName("Bala");
-        emp.setEmpID("CV0089");
-        emp.setEmailID("balachakravarthy@gmail.com");
-        emp.setMobile("9791234809");
-        emp.setGender("Male");
-        emp.setManagername("Ramesh");
-        emp.setDepartment("Mobility");
-        emp.setDesignation("Software Engineer");
-        emp.setImageurl(R.drawable.ic_launcher);
-        emps.add(emp);
-        emp.save();
-
-        emp = new Employee();
-        emp.setName("Sairam");
-        emp.setEmpID("CV0090");
-
-        emp.setEmailID("sairam_rangaraj@cviac.com");
-        emp.setMobile("9894250016");
-        emp.setGender("Male");
-        emp.setManagername("Ramesh");
-        emp.setDepartment("Mobility");
-        emp.setDesignation("Software Engineer");
-        emp.setImageurl(R.drawable.bala);
-        emp.save();
-        emps.add(emp);
-
-        emp = new Employee();
-        emp.setName("Gunaseelan");
-        emp.setEmpID("CV0099");
-
-        emp.setEmailID("gunaseelan_subburam@cviac.com");
-        emp.setMobile("8489674524");
-        emp.setGender("Male");
-        emp.setManagername("Ramesh");
-        emp.setDepartment("Mobility");
-        emp.setDesignation("Software Engineer");
-        emp.setImageurl(R.drawable.bala);
-        emp.save();
-        emps.add(emp);
-
-
-        emp = new Employee();
-        emp.setName("Shanmugam");
-        emp.setEmpID("CV0091");
-        emp.setEmailID("shanmugam_ekambaram@cviac.com");
-        emp.setMobile("7871816364");
-        emp.setGender("Male");
-        emp.setManagername("Ramesh");
-        emp.setDepartment("Mobility");
-        emp.setDesignation("Software Engineer");
-        emp.setImageurl(R.drawable.shan);
-        emp.save();
-        emps.add(emp);
-
-        emp = new Employee();
-        emp.setName("kadhiravan");
-        emp.setEmpID("CV0098");
-        emp.setEmailID("kathiravan_krishnan@cviac.com");
-        emp.setMobile("9791402344");
-        emp.setGender("male");
-        emp.setManagername("Ramesh");
-        emp.setDepartment("Mobility");
-        emp.setDesignation("Software Engineer");
-        emp.setImageurl(R.drawable.bala);
-        emps.add(emp);
-        emp.save();
-
-        emp = new Employee();
-        emp.setName("Vinoth Kumar");
-        emp.setEmpID("CV0087");
-        emp.setEmailID("vinothkumar_seenu@cviac.com");
-        emp.setMobile("7092947730");
-        emp.setGender("male");
-        emp.setManagername("Ramesh");
-        emp.setDepartment("Mobility");
-        emp.setDesignation("Software Engineer");
-        emp.setImageurl(R.drawable.bala);
-        emps.add(emp);
-        emp.save();
-
-        emp = new Employee();
-        emp.setName("Ramesh");
-        emp.setEmpID("CV0100");
-        emp.setEmailID("ramesh_ayyasamy@cviac.com");
-        emp.setMobile("7893939008");
-        emp.setGender("male");
-        emp.setManagername("VC");
-        emp.setDepartment("Mobility");
-        emp.setDesignation("Software Engineer");
-        emp.setImageurl(R.drawable.ic_launcher);
-        emps.add(emp);
-        emp.save();
-*/
         return emplist;
 
     }
+
+    private void setProgressDialog() {
+        progressDialog = new ProgressDialog(HomeActivity.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+
+        progressDialog.setMessage("Refreshing your contacts...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    private void getEmployees() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit ret = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+
+        CVIACApi api = ret.create(CVIACApi.class);
+        setProgressDialog();
+        final Call<List<EmployeeInfo>> call = api.getEmployees();
+        call.enqueue(new Callback<List<EmployeeInfo>>() {
+            @Override
+            public void onResponse(Response<List<EmployeeInfo>> response, Retrofit retrofit) {
+                emplist = response.body();
+                progressDialog.setMessage("Saving Contacts to database...");
+                Employee.deleteAll();
+                saveEmployeeInfo(emplist);
+                progressDialog.dismiss();
+                Toast.makeText(HomeActivity.this, "your contacts list has been updated", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                progressDialog.dismiss();
+                Toast.makeText(HomeActivity.this, "API Invoke Error :" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                //emps = null;
+            }
+        });
+
+    }
+
+    private void saveEmployeeInfo(List<EmployeeInfo> empInfos) {
+        for (EmployeeInfo empinfo : emplist) {
+            Employee emp = new Employee();
+            emp.setEmp_name(empinfo.getEmp_name());
+            emp.setMobile(empinfo.getMobile());
+            emp.setEmail(empinfo.getEmail());
+            emp.setEmp_code(empinfo.getEmp_code());
+            emp.setDepartment(empinfo.getDepartment());
+            emp.setDesignation(empinfo.getDesignation());
+            emp.setDob(empinfo.getDob());
+            emp.setGender(empinfo.getGender());
+            emp.setManager(empinfo.getManager());
+            emp.setImage_url(empinfo.getImage_url());
+            emp.setPush_id(empinfo.getPush_id());
+            emp.setDoj(empinfo.getDoj());
+            emp.save();
+
+        }
+    }
+
 
 }

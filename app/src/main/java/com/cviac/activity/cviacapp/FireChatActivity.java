@@ -340,7 +340,7 @@ public class FireChatActivity extends Activity {
                         }
                     });
 
-            if ( presenceInfo.getStatus().equalsIgnoreCase("offline")) {
+            if (presenceInfo!=null&& presenceInfo.getStatus().equalsIgnoreCase("offline")) {
                 if ((presenceInfo.getPushId() != null) && presenceInfo.getPushId().length() > 0) {
                     SendPushNotification(cmsg);
                 }

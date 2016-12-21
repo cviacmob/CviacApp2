@@ -3,11 +3,15 @@ package com.cviac.datamodel.cviacapp;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
 
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +20,7 @@ public class Employee extends Model implements Serializable {
 
     @Column(name = "push_id")
     private String push_id;
-    @Column(name = "emp_code",index = true)
+    @Column(name = "emp_code", index = true)
     private String emp_code;
     @Column(name = "emp_name")
     private String emp_name;
@@ -44,7 +48,9 @@ public class Employee extends Model implements Serializable {
 
     public Employee() {
         // TODO Auto-generated constructor stub
-    } public String getPush_id() {
+    }
+
+    public String getPush_id() {
         return push_id;
     }
 
@@ -191,5 +197,27 @@ public class Employee extends Model implements Serializable {
         return;
     }
 
+    public static void deleteAll() {
+        new Delete().from(Employee.class).execute();
+    }
+
+    private static String getTodayEvent() {
+        Calendar cal = Calendar.getInstance();
+        int dat = cal.get(Calendar.DAY_OF_MONTH);
+        String dformat = String.format("%02d", dat);
+        int mnth = cal.get(Calendar.MONTH) + 1;
+        String mformat = String.format("%02d", mnth);
+        String wdate = "'%-" + mformat + "-" + dformat + "'";
+        return wdate;
+    }
+
+
+    public static List<Employee> eventsbydate() {
+        String eventdate = getTodayEvent();
+        return new Select()
+                .from(Employee.class)
+                .where("dob LIKE ?", eventdate)
+                .execute();
+    }
 
 }

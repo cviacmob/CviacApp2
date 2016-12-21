@@ -8,11 +8,17 @@ import com.cviac.datamodel.cviacapp.Employee;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import static com.cviac.activity.cviacapp.R.id.empimage;
@@ -22,6 +28,7 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
     private List<Employee> emps;
 
     private int lastPostion = -1;
+    String url1;
 
     Context mContext;
 
@@ -50,11 +57,12 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
             holder.mobile = (TextView) vw.findViewById(R.id.textemail);
             holder.empimage = (ImageView) vw.findViewById(empimage);
             vw.setTag(holder);
+
         } else {
             holder = (ViewHolder) vw.getTag();
         }
 
-        String url1 = emp.getImage_url();
+        url1 = emp.getImage_url();
         if (url1 != null && url1.length() > 0) {
             Picasso.with(mContext).load(emp.getImage_url()).resize(80, 80).transform(new CircleTransform())
                     .into(holder.empimage);
@@ -64,10 +72,48 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
         }
         holder.nameView.setText(emp.getEmp_name());
         holder.mobile.setText(emp.getEmail());
+     /*   holder.empimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setPositiveButton("Get Pro", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                LayoutInflater inflater =  LayoutInflater.from(getContext());
+                View dialogLayout = inflater.inflate(R.layout.customalert, null);
+                dialog.setView(dialogLayout);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                dialog.show();
+
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface d) {
+                        ImageView image = (ImageView) dialog.findViewById(R.id.goProDialogImage);
+                        Bitmap icon = BitmapFactory.decodeResource(mContext.getResources(), Integer.parseInt(url1));
+                        float imageWidthInPX = (float)image.getWidth();
+
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(imageWidthInPX),
+                                Math.round(imageWidthInPX * (float)icon.getHeight() / (float)icon.getWidth()));
+                        image.setLayoutParams(layoutParams);
+
+
+                    }
+                });
+            }
+        });*/
 
         return vw;
 
     }
+
 
 
 }

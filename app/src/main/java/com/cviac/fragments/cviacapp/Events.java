@@ -1,5 +1,7 @@
 package com.cviac.fragments.cviacapp;
 
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class Events extends Fragment {
     private ListView lv1;
     List<Event> emps;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,7 +45,7 @@ public class Events extends Fragment {
 
                 Event emp = emps.get(pos1);
 
-                Toast.makeText(lv1.getContext(), "clicked:" + emp.getEvent_title(), Toast.LENGTH_SHORT).show();
+               // Toast.makeText(lv1.getContext(), "clicked:" + emp.getEvent_title(), Toast.LENGTH_SHORT).show();
 
 
             }
@@ -53,51 +57,9 @@ public class Events extends Fragment {
 
     private List<Event> getEvents() {
         return Event.getevents();
-      /*  List<Event> evelist = (List<Event>) Event.getevents();
-        if (evelist != null && evelist.size() != 0) {
-            return evelist;
-        }*/
-
-        //List<Event> emps = new ArrayList<Event>();
-       // Event emp = new Event();
-        /*emp.setEvent_title("Birthday");
-        emp.setEvent_description("Wish you happy birthday");
-              emps.add(emp);
-        emp.save();
-
-
-        emp = new Event();
-        emp.setEvent_title("Birthday");
-        emp.setEvent_description("Wish you happy birthday");
-
-
-        emp.save();
-
-        emps.add(emp);
-
-        emp = new Event();
-        emp.setEvent_title("Birthday");
-        emp.setEvent_description("Wish you happy birthday");
-
-
-        emps.add(emp);
-        emp.save();
-
-        emp = new Event();
-        emp.setEvent_title("Birthday");
-        emp.setEvent_description("Wish you happy birthday");
-
-
-        emps.add(emp);
-        emp.save();
-        emp = new Event();
-        emp.setEvent_title("Birthday");
-        emp.setEvent_description("Wish you happy birthday");
-
-
-        emps.add(emp);
-        emp.save();*/
-        //return emps;
-
     }
+
+
+
+
 }

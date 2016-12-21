@@ -45,8 +45,7 @@ public class AdditionalVerification extends AppCompatActivity implements View.On
     ProgressDialog progressDialog;
     AdditionalRegInfo regInfor;
     CVIACApi api;
-    String date;
-    String mobile;
+
 
 
     @Override
