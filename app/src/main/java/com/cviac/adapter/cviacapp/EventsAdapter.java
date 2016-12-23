@@ -5,10 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.cviac.adapter.cviacapp.ConversationAdapter.ViewHolder;
 import com.cviac.activity.cviacapp.R;
-import com.cviac.datamodel.cviacapp.Conversation;
-import com.cviac.datamodel.cviacapp.Event;
+import com.cviac.datamodel.cviacapp.EventInfo;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -19,15 +17,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class EventsAdapter extends ArrayAdapter<Event> {
+public class EventsAdapter extends ArrayAdapter<EventInfo> {
 
-    private List<Event> eve;
+    private List<EventInfo> eve;
+
 
     private int lastPostion = -1;
 
     Context mContext;
 
-    public EventsAdapter(List<Event> objects, Context context) {
+    public EventsAdapter(List<EventInfo> objects, Context context) {
         super(context, R.layout.events_item, objects);
         eve = objects;
         mContext = context;
@@ -43,9 +42,11 @@ public class EventsAdapter extends ArrayAdapter<Event> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        EventInfo even=getItem(position);
         View vw = convertView;
         ViewHolder holder;
-        Event even = getItem(position);
+
+        EventInfo evennn = getItem(position);
         if (convertView == null) {
 
             LayoutInflater inf = LayoutInflater.from(getContext());
@@ -55,14 +56,20 @@ public class EventsAdapter extends ArrayAdapter<Event> {
             holder.typeview = (TextView) vw.findViewById(R.id.textViewdate);
             holder.disview = (TextView) vw.findViewById(R.id.textViewDescription);
             holder.imgview = (ImageView) vw.findViewById(R.id.imageViewevent);
-            Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
-            holder.nameView.setText(even.getEvent_title());
-           // String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(new Date(even.getEvent_date().toString()));
-           // holder.typeview.setText(timeStamp);
-            holder.disview.setText(even.getEvent_description());
+            vw.setTag(holder);
         } else {
             holder = (ViewHolder) vw.getTag();
         }
+        String st=holder.imgview.toString();
+        if(st!=null)
+        {
+            Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
+        }
+        holder.nameView.setText(even.getEvent_title());
+        String timeStam = new SimpleDateFormat("dd/MM/yy").format(new Date());
+        holder.typeview.setText(timeStam);
+        holder.disview.setText(even.getEvent_description());
+
         return vw;
 
 

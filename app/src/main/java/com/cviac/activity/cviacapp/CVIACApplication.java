@@ -2,9 +2,7 @@ package com.cviac.activity.cviacapp;
 
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -14,7 +12,7 @@ import com.activeandroid.Configuration;
 import com.cviac.datamodel.cviacapp.ChatMessage;
 import com.cviac.datamodel.cviacapp.Conversation;
 import com.cviac.datamodel.cviacapp.Employee;
-import com.cviac.datamodel.cviacapp.Event;
+import com.cviac.datamodel.cviacapp.EventInfo;
 import com.cviac.fragments.cviacapp.Chats;
 
 
@@ -39,7 +37,7 @@ public class CVIACApplication extends MultiDexApplication {
         Configuration.Builder configurationBuilder = new Configuration.Builder(this);
         configurationBuilder.addModelClasses(ChatMessage.class);
         configurationBuilder.addModelClasses(Employee.class);
-        configurationBuilder.addModelClasses(Event.class);
+        configurationBuilder.addModelClasses(EventInfo.class);
         configurationBuilder.addModelClasses(Conversation.class);
         ActiveAndroid.initialize(configurationBuilder.create());
 

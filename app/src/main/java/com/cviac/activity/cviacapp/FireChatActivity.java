@@ -176,7 +176,7 @@ public class FireChatActivity extends Activity {
                     txt.setText(getformatteddate(s.getCtime()));
 
                     if (s.getStatus() != 3) {
-                       // s.setStatus(3);
+                        // s.setStatus(3);
                         new UpdateMessageStatusTask().execute(s);
                     }
                 }

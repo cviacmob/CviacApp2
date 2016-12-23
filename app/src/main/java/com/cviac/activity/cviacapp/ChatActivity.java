@@ -204,8 +204,8 @@ public class ChatActivity extends Activity {
 
             Picasso.with(mContext).load(R.drawable.bala).resize(110, 110).transform(new CircleTransform())
                     .into(customimage);
-           // Picasso.with(mContext).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
-               //     .into(customimageback);
+            // Picasso.with(mContext).load(R.drawable.backarrow).resize(55, 55).transform(new CircleTransform())
+            //     .into(customimageback);
 
 
             // Get the textview of the title

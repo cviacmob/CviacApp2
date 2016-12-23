@@ -79,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     private Chats chatFrag;
 
     private Collegues empFrag;
+    private Events eventsFrag;
 
     TabLayout tabLayout;
 
@@ -131,7 +132,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void setAlaram() {
-        List<Employee> emplist = Employee.eventsbydate();
+        //List<Employee> emplist = Employee.eventsbydate();
 
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
@@ -141,7 +142,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         calendar.set(Calendar.HOUR_OF_DAY, 6);
         calendar.set(Calendar.MINUTE, 0);
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-               AlarmManager.INTERVAL_DAY, alarmIntent);
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 
     @Override
@@ -209,6 +210,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             chatFrag.reloadFilterByChats(newText);
         } else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
             empFrag.reloadFilterByName(newText);
+        } else if (tab.getText().toString().equalsIgnoreCase("Events")) {
+            empFrag.reloadFilterByName(newText);
         }
         return false;
     }
@@ -273,7 +276,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
                     app.setChatsFragment(chatFrag);
                     return chatFrag;
                 case 3:
-                    return new Events();
+                    eventsFrag = new Events();
+                    return eventsFrag;
             }
             return null;
 

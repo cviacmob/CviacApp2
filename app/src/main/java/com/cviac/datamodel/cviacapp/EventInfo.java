@@ -4,9 +4,8 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.cviac.fragments.cviacapp.Events;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Table(name = "events")
-public class Event extends Model  {
+public class EventInfo extends Model {
 
     @Column(name = "event_title")
     private String event_title;
@@ -59,39 +58,12 @@ public class Event extends Model  {
     }
 
 
-
-    public static List<Event> getevents() {
-        return  new Select()
-                .from(Event.class)
+    public static List<EventInfo> getevents() {
+        return new Select()
+                .from(EventInfo.class)
                 .orderBy("event_date DESC")
-            .execute();
+                .execute();
     }
 
-
-
-
-
-
-
-
-    public   String getformatteddate()
-    {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(event_date);
-        Calendar today = Calendar.getInstance();
-        Calendar yesterday = Calendar.getInstance();
-        yesterday.add(Calendar.DATE, -1);
-        DateFormat timeFormatter = new SimpleDateFormat("dd/MM/yy");
-
-        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
-            return "TODAY";
-        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
-            return "YESTERDAY";
-        } else {
-            DateFormat dateform = new SimpleDateFormat("dd/MM/yy");
-            return dateform.format(event_date);
-        }
-
-    }
 
 }

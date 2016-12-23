@@ -110,6 +110,11 @@ public class Verification extends Activity {
         buttonresend.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = new ProgressDialog(Verification.this,R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Processing.....");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
                 OkHttpClient okHttpClient = new OkHttpClient();
                 okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
                 okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
@@ -132,6 +137,7 @@ public class Verification extends Activity {
                             progressDialog.dismiss();
                         }
 
+                        Toast.makeText(Verification.this, "Code sent successfully to your registered mobile ", Toast.LENGTH_LONG).show();
                     }
 
                     @Override

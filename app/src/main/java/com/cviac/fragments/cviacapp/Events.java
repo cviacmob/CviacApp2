@@ -1,14 +1,12 @@
 package com.cviac.fragments.cviacapp;
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
+import com.cviac.adapter.cviacapp.ColleguesAdapter;
 import com.cviac.adapter.cviacapp.EventsAdapter;
 import com.cviac.datamodel.cviacapp.Employee;
-import com.cviac.datamodel.cviacapp.Event;
+import com.cviac.datamodel.cviacapp.EventInfo;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,12 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class Events extends Fragment {
     private ListView lv1;
-    List<Event> emps;
+    List<EventInfo> empss;
+    EventsAdapter adapter;
+
 
 
 
@@ -34,18 +33,18 @@ public class Events extends Fragment {
         //((TextView)event.findViewById(R.id.events)).setText("Events");
         lv1 = (ListView) events.findViewById(R.id.eventslist);
         lv1.setDivider(null);
-        emps = getEvents();
-        lv1.setAdapter(new EventsAdapter(emps, getActivity().getApplicationContext()));
-
+        empss = getEvents();
+        adapter=new EventsAdapter(empss, getActivity().getApplicationContext());
+        lv1.setAdapter(adapter);
         lv1.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos1,
                                     long pos2) {
 
-                Event emp = emps.get(pos1);
+                EventInfo emp = empss.get(pos1);
 
-               // Toast.makeText(lv1.getContext(), "clicked:" + emp.getEvent_title(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(lv1.getContext(), "clicked:" + emp.getEvent_title(), Toast.LENGTH_SHORT).show();
 
 
             }
@@ -55,9 +54,10 @@ public class Events extends Fragment {
         return events;
     }
 
-    private List<Event> getEvents() {
-        return Event.getevents();
+    private List<EventInfo> getEvents() {
+        return EventInfo.getevents();
     }
+
 
 
 

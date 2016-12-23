@@ -65,8 +65,6 @@ public class Register extends Activity {
             /*    if (app.isNetworkStatus()) {*/
                 progressDialog = new ProgressDialog(Register.this,R.style.AppTheme_Dark_Dialog);
                 progressDialog.setIndeterminate(true);
-               // progressDialog.setIndeterminateDrawable(R.drawable.custom_progress_dialog);
-                //android:indeterminateDrawable="@drawable/custom_progress_dialog"
                 progressDialog.setMessage("Registering...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -81,7 +79,7 @@ public class Register extends Activity {
                         .client(okHttpClient)
                         .build();
                 api = retrofit.create(CVIACApi.class);
-                    regInfo = new RegInfo();
+                regInfo = new RegInfo();
                 regInfo.setMobile(regmobile);
                 /*} else {
                     Toast.makeText(getApplicationContext(),

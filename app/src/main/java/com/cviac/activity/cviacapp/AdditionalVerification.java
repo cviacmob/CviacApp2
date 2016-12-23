@@ -47,7 +47,6 @@ public class AdditionalVerification extends AppCompatActivity implements View.On
     CVIACApi api;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +67,7 @@ public class AdditionalVerification extends AppCompatActivity implements View.On
 
                 CVIACApplication app = (CVIACApplication) AdditionalVerification.this.getApplication();
 
-               //regmobile = etmobile.getText().toString();
+                //regmobile = etmobile.getText().toString();
                 regempcode = etempcode.getText().toString();
                 regdate = etdob.getText().toString();
 
@@ -118,12 +117,9 @@ public class AdditionalVerification extends AppCompatActivity implements View.On
                             finish();
 
 
-                        }else if(code==1003)
-                        {
+                        } else if (code == 1003) {
                             Toast.makeText(AdditionalVerification.this, "Employee_code not found ", Toast.LENGTH_LONG).show();
-                        }
-                        else if(code ==1013)
-                        {
+                        } else if (code == 1013) {
                             Toast.makeText(AdditionalVerification.this, "credentials not found ", Toast.LENGTH_LONG).show();
                         }
                     }

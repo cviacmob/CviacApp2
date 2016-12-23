@@ -1,16 +1,24 @@
 package com.cviac.datamodel.cviacapp;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
+import com.activeandroid.util.SQLiteUtils;
 
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -202,22 +210,38 @@ public class Employee extends Model implements Serializable {
     }
 
     private static String getTodayEvent() {
+
+
         Calendar cal = Calendar.getInstance();
         int dat = cal.get(Calendar.DAY_OF_MONTH);
         String dformat = String.format("%02d", dat);
         int mnth = cal.get(Calendar.MONTH) + 1;
         String mformat = String.format("%02d", mnth);
-        String wdate = "'%-" + mformat + "-" + dformat + "'";
+        String wdate = "-" + mformat + "-" + dformat;
+
+
         return wdate;
     }
 
 
     public static List<Employee> eventsbydate() {
         String eventdate = getTodayEvent();
-        return new Select()
+        List<Employee> result = new ArrayList<>();
+        List<Employee> emplist = new Select()
                 .from(Employee.class)
-                .where("dob LIKE ?", eventdate)
                 .execute();
+
+        for (Employee emp : emplist) {
+            SimpleDateFormat format = new SimpleDateFormat("-MM-dd");
+            String dt = format.format(emp.getDob());
+            if (dt.equals(eventdate)) {
+                result.add(emp);
+            }
+
+        }
+        return result;
     }
 
+
 }
+
