@@ -6,18 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -25,21 +20,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cviac.adapter.cviacapp.CircleTransform;
-import com.cviac.cviacappapi.cviacapp.CVIACApi;
-import com.cviac.cviacappapi.cviacapp.FCMSendMessageResponse;
-import com.cviac.cviacappapi.cviacapp.PushMessageInfo;
-import com.cviac.datamodel.cviacapp.ChatMessage;
-import com.cviac.datamodel.cviacapp.ChatMsg;
-import com.cviac.datamodel.cviacapp.Conversation;
-import com.cviac.datamodel.cviacapp.PresenceInfo;
-import com.cviac.fragments.cviacapp.Chats;
+import com.cviac.com.cviac.app.adapaters.CircleTransform;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.FCMSendMessageResponse;
+import com.cviac.com.cviac.app.restapis.PushMessageInfo;
+import com.cviac.com.cviac.app.datamodels.ChatMessage;
+import com.cviac.com.cviac.app.datamodels.ChatMsg;
+import com.cviac.com.cviac.app.datamodels.Conversation;
+import com.cviac.com.cviac.app.datamodels.PresenceInfo;
+import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,13 +42,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,9 +57,6 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static com.cviac.activity.cviacapp.R.id.textchat;
-import static com.google.android.gms.measurement.internal.zzl.api;
 
 public class FireChatActivity extends Activity {
 
@@ -81,11 +70,12 @@ public class FireChatActivity extends Activity {
     ImageView customimageback, customimage, imgvwtick;
     private String myempId;
     private String myempname;
-    Context mContext;
+    //Context mContext;
     RelativeLayout rp;
     TextView txt, msgview, presenceText;
     PresenceInfo presenceInfo;
     ListView lv;
+    int fromNotify = 0;
 
 
     private String getNormalizedConverseId(String myid, String receverid) {
@@ -114,6 +104,7 @@ public class FireChatActivity extends Activity {
         Intent i = getIntent();
 
         emp = (Conversation) i.getSerializableExtra("conversewith");
+        fromNotify = i.getIntExtra("fromnotify",0);
         final String converseId = getNormalizedConverseId(myempId, emp.getEmpid());
         dbref = FirebaseDatabase.getInstance().getReference().
                 child("conversations").child(converseId);
@@ -234,7 +225,7 @@ public class FireChatActivity extends Activity {
     private void saveLastConversationMessage(ChatMsg msg) {
 
         CVIACApplication app = (CVIACApplication) getApplication();
-        Chats chatFrag = app.getChatsFragment();
+        ChatsFragment chatFrag = app.getChatsFragment();
         Conversation cnv = Conversation.getConversation(emp.getEmpid());
         boolean newconv = false;
         if (cnv == null) {
@@ -367,13 +358,13 @@ public class FireChatActivity extends Activity {
 
             String url1 = emp.getImageurl();
             if (url1 != null && url1.length() > 0) {
-                Picasso.with(mContext).load(emp.getImageurl()).resize(100, 100).transform(new CircleTransform())
+                Picasso.with(this).load(emp.getImageurl()).resize(100, 100).transform(new CircleTransform())
                         .into(customimage);
             } else {
-                Picasso.with(mContext).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
+                Picasso.with(this).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
                         .into(customimage);
             }
-            Picasso.with(mContext).load(R.drawable.backarrow).resize(90, 90)
+            Picasso.with(this).load(R.drawable.backarrow).resize(90, 90)
                     .into(customimageback);
 
 
@@ -397,8 +388,11 @@ public class FireChatActivity extends Activity {
             customimageback.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Intent i = new Intent(FireChatActivity.this, HomeActivity.class);
-//                    startActivity(i);
+
+                    if (fromNotify == 1) {
+                        Intent i = new Intent(FireChatActivity.this, HomeActivity.class);
+                        startActivity(i);
+                    }
                     finish();
                 }
             });

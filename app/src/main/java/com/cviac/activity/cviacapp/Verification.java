@@ -7,20 +7,17 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
-import com.cviac.cviacappapi.cviacapp.CVIACApi;
-import com.cviac.cviacappapi.cviacapp.RegInfo;
-import com.cviac.cviacappapi.cviacapp.RegisterResponse;
-import com.cviac.cviacappapi.cviacapp.VerifyResponse;
-import com.cviac.datamodel.cviacapp.Employee;
-import com.cviac.datamodel.cviacapp.EmployeeInfo;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.RegInfo;
+import com.cviac.com.cviac.app.restapis.RegisterResponse;
+import com.cviac.com.cviac.app.restapis.VerifyResponse;
+import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.List;
@@ -31,8 +28,6 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-
-import static android.R.id.input;
 
 
 public class Verification extends Activity {
@@ -137,7 +132,7 @@ public class Verification extends Activity {
                             progressDialog.dismiss();
                         }
 
-                        Toast.makeText(Verification.this, "Code sent successfully to your registered mobile ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Verification.this, "OTP re-sent to your registered mobile ", Toast.LENGTH_LONG).show();
                     }
 
                     @Override

@@ -64,13 +64,13 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name="com.cviac.com.cviac.app.services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         -->
-        <service android:name=".MyFirebaseInstanceIDService">
+        <service android:name="com.cviac.com.cviac.app.services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -83,7 +83,7 @@
 
       />
 
-        <receiver android:name=".AlarmReceiver">
+        <receiver android:name="com.cviac.com.cviac.app.receivers.AlarmReceiver">
         <intent-filter>
             <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
             <category android:name="android.intent.category.DEFAULT" />

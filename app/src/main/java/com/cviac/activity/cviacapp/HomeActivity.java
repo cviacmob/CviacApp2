@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -29,12 +28,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cviac.cviacappapi.cviacapp.CVIACApi;
-import com.cviac.datamodel.cviacapp.Employee;
-import com.cviac.datamodel.cviacapp.EmployeeInfo;
-import com.cviac.fragments.cviacapp.Chats;
-import com.cviac.fragments.cviacapp.Collegues;
-import com.cviac.fragments.cviacapp.Events;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.receivers.AlarmReceiver;
+import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
+import com.cviac.com.cviac.app.fragments.ChatsFragment;
+import com.cviac.com.cviac.app.fragments.ContactsFragment;
+import com.cviac.com.cviac.app.fragments.EventsFragment;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -76,10 +76,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private String empCode;
 
-    private Chats chatFrag;
+    private ChatsFragment chatFrag;
 
-    private Collegues empFrag;
-    private Events eventsFrag;
+    private ContactsFragment empFrag;
+    private EventsFragment eventsFrag;
 
     TabLayout tabLayout;
 
@@ -186,7 +186,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         if (id == R.id.action_search) {
             return true;
         }
-        if (id == R.id.action_refresh) {
+        if (id == R.id.refresh_action) {
             // DeleteEmployeeInfo(emplist);
             getEmployees();
 
@@ -210,7 +210,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             chatFrag.reloadFilterByChats(newText);
         } else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
             empFrag.reloadFilterByName(newText);
-        } else if (tab.getText().toString().equalsIgnoreCase("Events")) {
+        } else if (tab.getText().toString().equalsIgnoreCase("EventsFragment")) {
             empFrag.reloadFilterByName(newText);
         }
         return false;
@@ -268,15 +268,15 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
             switch (position + 1) {
                 case 1:
-                    empFrag = new Collegues();
+                    empFrag = new ContactsFragment();
                     return empFrag;
                 case 2:
-                    chatFrag = new Chats();
+                    chatFrag = new ChatsFragment();
                     CVIACApplication app = (CVIACApplication) getApplication();
                     app.setChatsFragment(chatFrag);
                     return chatFrag;
                 case 3:
-                    eventsFrag = new Events();
+                    eventsFrag = new EventsFragment();
                     return eventsFrag;
             }
             return null;

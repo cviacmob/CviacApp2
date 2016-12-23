@@ -9,11 +9,11 @@ import android.support.multidex.MultiDexApplication;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
-import com.cviac.datamodel.cviacapp.ChatMessage;
-import com.cviac.datamodel.cviacapp.Conversation;
-import com.cviac.datamodel.cviacapp.Employee;
-import com.cviac.datamodel.cviacapp.EventInfo;
-import com.cviac.fragments.cviacapp.Chats;
+import com.cviac.com.cviac.app.datamodels.ChatMessage;
+import com.cviac.com.cviac.app.datamodels.Conversation;
+import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.datamodels.EventInfo;
+import com.cviac.com.cviac.app.fragments.ChatsFragment;
 
 
 /**
@@ -23,7 +23,7 @@ import com.cviac.fragments.cviacapp.Chats;
 public class CVIACApplication extends MultiDexApplication {
 
 
-    private Chats chatsFragment;
+    private ChatsFragment chatsFragment;
 
     @Override
     protected void attachBaseContext(Context context) {
@@ -90,11 +90,11 @@ public class CVIACApplication extends MultiDexApplication {
         this.networkStatus = networkStatus;
     }
 
-    public Chats getChatsFragment() {
+    public ChatsFragment getChatsFragment() {
         return chatsFragment;
     }
 
-    public void setChatsFragment(Chats chatsFragment) {
+    public void setChatsFragment(ChatsFragment chatsFragment) {
         this.chatsFragment = chatsFragment;
     }
 }

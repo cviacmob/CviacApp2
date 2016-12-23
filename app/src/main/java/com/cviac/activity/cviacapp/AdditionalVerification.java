@@ -12,16 +12,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.cviac.cviacappapi.cviacapp.AdditinalRegisterResponse;
-import com.cviac.cviacappapi.cviacapp.AdditionalRegInfo;
-import com.cviac.cviacappapi.cviacapp.CVIACApi;
+import com.cviac.com.cviac.app.restapis.AdditinalRegisterResponse;
+import com.cviac.com.cviac.app.restapis.AdditionalRegInfo;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.Call;

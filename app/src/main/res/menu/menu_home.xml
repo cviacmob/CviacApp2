@@ -9,7 +9,7 @@
         android:title="@string/action_group"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_refresh"
+        android:id="@+id/refresh_action"
         android:orderInCategory="100"
         android:title="@string/action_grouprefersh"
         app:showAsAction="never" />
