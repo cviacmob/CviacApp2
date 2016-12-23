@@ -60,8 +60,16 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
             Picasso.with(mContext).load(emp.getImage_url()).resize(80, 80).transform(new CircleTransform())
                     .into(holder.empimage);
         } else {
-            Picasso.with(mContext).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
-                    .into(holder.empimage);
+            if(emp.getGender().equalsIgnoreCase("female"))
+            {
+                Picasso.with(mContext).load(R.drawable.female).resize(80, 80).transform(new CircleTransform())
+                        .into(holder.empimage);
+            }else
+            {
+                Picasso.with(mContext).load(R.drawable.ic_boy).resize(80, 80).transform(new CircleTransform())
+                        .into(holder.empimage);
+            }
+
         }
         holder.nameView.setText(emp.getEmp_name());
         holder.mobile.setText(emp.getEmail());

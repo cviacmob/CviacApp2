@@ -127,8 +127,16 @@ public class MyProfileActivity extends AppCompatActivity {
             Picasso.with(context).load(imgUrl).resize(220, 220).transform(new CircleTransform())
                     .into(ivImage);
         } else {
-            Picasso.with(context).load(R.drawable.ic_launcher).resize(220, 220).transform(new CircleTransform())
-                    .into(ivImage);
+            if(emp.getGender().equalsIgnoreCase("female"))
+            {
+                Picasso.with(context).load(R.drawable.female).resize(220, 220).transform(new CircleTransform())
+                        .into(ivImage);
+            }else
+            {
+                Picasso.with(context).load(R.drawable.ic_boy).resize(220, 220).transform(new CircleTransform())
+                        .into(ivImage);
+            }
+
         }
     }
 

@@ -71,13 +71,13 @@ import retrofit.Retrofit;
 public class FireChatActivity extends Activity implements View.OnClickListener {
 
     private List<ChatMessage> chats;
-    private Conversation emp;
+    private Conversation conv;
     private FirebaseListAdapter<ChatMsg> myAdapter;
     ActionBar actionBar;
     static ActionBar mActionBar;
     private DatabaseReference dbref;
     RelativeLayout.LayoutParams relativelayout;
-    ImageView customimageback, customimage, imgvwtick,cuscall;
+    ImageView customimageback, customimage, imgvwtick, cuscall;
     private String myempId;
     private String myempname;
     //Context mContext;
@@ -114,9 +114,9 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
         Intent i = getIntent();
 
-        emp = (Conversation) i.getSerializableExtra("conversewith");
+        conv = (Conversation) i.getSerializableExtra("conversewith");
         fromNotify = i.getIntExtra("fromnotify", 0);
-        final String converseId = getNormalizedConverseId(myempId, emp.getEmpid());
+        final String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
         dbref = FirebaseDatabase.getInstance().getReference().
                 child("conversations").child(converseId);
 
@@ -234,17 +234,19 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.progress:
-                ImageView   cuscall = (ImageView)findViewById(R.id.ivcall);
+                ImageView cuscall = (ImageView) findViewById(R.id.ivcall);
                 onClick(cuscall);
                 break;
         }
@@ -255,15 +257,15 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
         CVIACApplication app = (CVIACApplication) getApplication();
         ChatsFragment chatFrag = app.getChatsFragment();
-        Conversation cnv = Conversation.getConversation(emp.getEmpid());
+        Conversation cnv = Conversation.getConversation(conv.getEmpid());
         boolean newconv = false;
         if (cnv == null) {
             cnv = new Conversation();
             newconv = true;
         }
-        cnv.setEmpid(emp.getEmpid());
-        cnv.setImageurl(emp.getImageurl());
-        cnv.setName(emp.getName());
+        cnv.setEmpid(conv.getEmpid());
+        cnv.setImageurl(conv.getImageurl());
+        cnv.setName(conv.getName());
         cnv.setDatetime(new Date());
         cnv.setLastmsg(msg.getMsg());
         cnv.save();
@@ -309,11 +311,11 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        Employee callemp =  Employee.getemployee(emp.getEmpid());
+        Employee callemp = Employee.getemployee(conv.getEmpid());
         if (callemp != null && callemp.getMobile() != null) {
             Intent callIntent = new Intent(Intent.ACTION_CALL);
             callIntent.setData(Uri.parse("tel:" + callemp.getMobile()));
-            if (ContextCompat.checkSelfPermission(this,(Manifest.permission.CALL_PHONE))
+            if (ContextCompat.checkSelfPermission(this, (Manifest.permission.CALL_PHONE))
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(FireChatActivity.this, new String[]{Manifest.permission.CALL_PHONE}, MY_PERMISSION_CALL_PHONE);
                 return;
@@ -322,15 +324,15 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
         }
 
 
-
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
             case MY_PERMISSION_CALL_PHONE: {
-                Employee callemp =  Employee.getemployee(emp.getEmpid());
+                Employee callemp = Employee.getemployee(conv.getEmpid());
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:" + callemp.getMobile()));
@@ -374,10 +376,10 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
             updateValues.put("senderid", myempId);
             cmsg.setSendername(myempname);
             updateValues.put("sendername", myempname);
-            cmsg.setReceiverid(emp.getEmpid());
-            updateValues.put("receiverid", emp.getEmpid());
-            cmsg.setReceivername(emp.getName());
-            updateValues.put("receivername", emp.getName());
+            cmsg.setReceiverid(conv.getEmpid());
+            updateValues.put("receiverid", conv.getEmpid());
+            cmsg.setReceivername(conv.getName());
+            updateValues.put("receivername", conv.getName());
             updateValues.put("msgid", msgid);
             cmsg.setMsgid(msgid);
             updateValues.put("status", 0);
@@ -422,18 +424,27 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
 
             presenceText = (TextView) customView.findViewById(R.id.textView5);
-            setPresence(emp.getEmpid());
+            setPresence(conv.getEmpid());
            /* Picasso.with(this).load(R.drawable.ic_call).resize(120, 100).transform(new CircleTransform())
                     .into(cuscall);*/
 
-            String url1 = emp.getImageurl();
+            String url1 = conv.getImageurl();
             if (url1 != null && url1.length() > 0) {
-                Picasso.with(this).load(emp.getImageurl()).resize(100, 100).transform(new CircleTransform())
+                Picasso.with(this).load(conv.getImageurl()).resize(100, 100).transform(new CircleTransform())
                         .into(customimage);
             } else {
-                Picasso.with(this).load(R.drawable.boy_512).resize(80, 80).transform(new CircleTransform())
-                        .into(customimage);
+                Employee emp = Employee.getemployee(conv.getEmpid());
+                conv.setImageurl(emp.getImage_url());
+                if (emp.getGender().equalsIgnoreCase("female")) {
+                    Picasso.with(this).load(R.drawable.female).resize(100, 100).transform(new CircleTransform())
+                            .into(customimage);
+                } else {
+                    Picasso.with(this).load(R.drawable.ic_boy).resize(100, 100).transform(new CircleTransform())
+                            .into(customimage);
+                }
+
             }
+
             Picasso.with(this).load(R.drawable.backarrow).resize(90, 90)
                     .into(customimageback);
 
@@ -441,7 +452,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
             // Get the textview of the title
             TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
 
-            customTitle.setText(emp.getName());
+            customTitle.setText(conv.getName());
             // Change the font family (optional)
 
             // Set the on click listener for the title
@@ -450,7 +461,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                 public void onClick(View v) {
                     //Log.w("MainActivity", "ActionBar's title clicked.");
                     Intent i = new Intent(FireChatActivity.this, MyProfileActivity.class);
-                    i.putExtra("empcode", emp.getEmpid());
+                    i.putExtra("empcode", conv.getEmpid());
                     startActivity(i);
                     finish();
                 }
