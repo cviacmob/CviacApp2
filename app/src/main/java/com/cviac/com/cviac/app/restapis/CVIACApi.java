@@ -31,7 +31,7 @@ public interface CVIACApi {
 
     @Multipart
     @POST("/CVIACAPI/upload.php")
-    Call<ProfileUpdateResponse> profileUpdate(@Query("emp_code") String empcode,  @Part("fileToUpload\"; filename=\"pp.png\" ") RequestBody file);
+    Call<ProfileUpdateResponse> profileUpdate(@Query("emp_code") String empcode, @Part("fileToUpload\"; filename=\"pp.png\" ") RequestBody file);
     //  Call<List<Employee>> getemployees();
 
     @POST("/fcm/send")

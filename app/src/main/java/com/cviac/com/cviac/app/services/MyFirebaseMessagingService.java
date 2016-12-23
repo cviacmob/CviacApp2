@@ -15,6 +15,7 @@ import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -34,7 +35,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Map<String,String> data = remoteMessage.getData();
+            Map<String, String> data = remoteMessage.getData();
             showNotification(data);
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
@@ -45,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private void showNotification(Map<String,String> data) {
+    private void showNotification(Map<String, String> data) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.cviac_logo)
@@ -58,15 +59,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         conv.setName(data.get("sendername"));
         conv.setEmpid(data.get("senderid"));
         conv.setLastmsg(data.get("msg"));
-        resultIntent.putExtra("fromnotify",1);
+        conv.setDatetime(new Date());
+        resultIntent.putExtra("fromnotify", 1);
         resultIntent.putExtra("conversewith", conv);
+        Conversation.updateOrInsertConversation(conv);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(FireChatActivity.class);
         // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT );
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
@@ -75,6 +78,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         mNotificationManager.notify(0, mBuilder.build());
 
-        Conversation.updateOrInsertConversation(conv);
+
     }
 }

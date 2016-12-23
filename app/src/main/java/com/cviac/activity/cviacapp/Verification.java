@@ -35,6 +35,7 @@ public class Verification extends Activity {
     String verifycode;
     Button buttonverify, buttonresend;
     String mobile;
+    int counter = 0;
     List<EmployeeInfo> emplist;
     ProgressDialog progressDialog;
 
@@ -105,52 +106,64 @@ public class Verification extends Activity {
         buttonresend.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog = new ProgressDialog(Verification.this,R.style.AppTheme_Dark_Dialog);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Processing.....");
-                progressDialog.setCancelable(false);
-                progressDialog.show();
-                OkHttpClient okHttpClient = new OkHttpClient();
-                okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
-                okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
 
+            if (counter < 3) {
+                setresentcode();
+            } else {
+                Toast.makeText(Verification.this, "you exceeded max attempts", Toast.LENGTH_LONG).show();
+            }
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://apps.cviac.com")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .client(okHttpClient)
-                        .build();
-                CVIACApi api = retrofit.create(CVIACApi.class);
-                RegInfo regInfo = new RegInfo();
-                regInfo.setMobile(mobile);
-
-                final Call<RegisterResponse> call = api.registerMobile(regInfo);
-                call.enqueue(new Callback<RegisterResponse>() {
-                    @Override
-                    public void onResponse(Response<RegisterResponse> response, Retrofit retrofit) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-
-                        Toast.makeText(Verification.this, "OTP re-sent to your registered mobile ", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-                        Toast.makeText(Verification.this, "Error: " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        t.printStackTrace();
-                    }
-
-                });
 
             }
         });
 
 
     }
+
+    private void setresentcode() {
+        progressDialog = new ProgressDialog(Verification.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Processing.....");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        RegInfo regInfo = new RegInfo();
+        regInfo.setMobile(mobile);
+
+        final Call<RegisterResponse> call = api.registerMobile(regInfo);
+        call.enqueue(new Callback<RegisterResponse>() {
+            @Override
+            public void onResponse(Response<RegisterResponse> response, Retrofit retrofit) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+
+                Toast.makeText(Verification.this, "OTP re-sent to your registered mobile ", Toast.LENGTH_LONG).show();
+                counter++;
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(Verification.this, "Try again later..", Toast.LENGTH_LONG).show();
+                t.printStackTrace();
+            }
+
+        });
+    }
+
 
     private void setProgressDialog() {
         progressDialog = new ProgressDialog(Verification.this, R.style.AppTheme_Dark_Dialog);

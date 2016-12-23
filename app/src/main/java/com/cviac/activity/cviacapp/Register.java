@@ -52,77 +52,85 @@ public class Register extends Activity {
 
                 CVIACApplication app = (CVIACApplication) Register.this.getApplication();
 
-                regmobile = e1.getText().toString();
+
+
+                if (e1.getText().toString().length() >= 10 && e1.getText().toString().length() <= 13) {
+                    regmobile = e1.getText().toString();
             /*    if (app.isNetworkStatus()) {*/
-                progressDialog = new ProgressDialog(Register.this,R.style.AppTheme_Dark_Dialog);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Registering...");
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+                    progressDialog = new ProgressDialog(Register.this, R.style.AppTheme_Dark_Dialog);
+                    progressDialog.setIndeterminate(true);
+                    progressDialog.setMessage("Registering...");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
 
-                OkHttpClient okHttpClient = new OkHttpClient();
-                okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
-                okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+                    okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://apps.cviac.com")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .client(okHttpClient)
-                        .build();
-                api = retrofit.create(CVIACApi.class);
-                regInfo = new RegInfo();
-                regInfo.setMobile(regmobile);
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("http://apps.cviac.com")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .client(okHttpClient)
+                            .build();
+                    api = retrofit.create(CVIACApi.class);
+                    regInfo = new RegInfo();
+                    regInfo.setMobile(regmobile);
                 /*} else {
                     Toast.makeText(getApplicationContext(),
                             "Please Check Your Internet Connection and try again", Toast.LENGTH_LONG).show();
                 }*/
-                final Call<RegisterResponse> call = api.registerMobile(regInfo);
-                call.enqueue(new Callback<RegisterResponse>() {
-                    @Override
-                    public void onResponse(Response<RegisterResponse> response, Retrofit retrofit) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-                        RegisterResponse rsp = response.body();
-                        int code = rsp.getCode();
-                        if (code== 0) {
-                            if (e1.getText().toString().length() >= 10 && e1.getText().toString().length() <= 13) {
-                                if (progressDialog != null) {
-                                    progressDialog.dismiss();
+                    final Call<RegisterResponse> call = api.registerMobile(regInfo);
+                    call.enqueue(new Callback<RegisterResponse>() {
+                        @Override
+                        public void onResponse(Response<RegisterResponse> response, Retrofit retrofit) {
+                            if (progressDialog != null) {
+                                progressDialog.dismiss();
+                            }
+                            RegisterResponse rsp = response.body();
+                            int code = rsp.getCode();
+                            if (code == 0) {
+                                if (e1.getText().toString().length() >= 10 && e1.getText().toString().length() <= 13) {
+                                    if (progressDialog != null) {
+                                        progressDialog.dismiss();
+                                    }
+                                    Intent i = new Intent(Register.this, Verification.class);
+                                    i.putExtra("mobile", regmobile);
+                                    startActivity(i);
+                                    finish();
+                                } else {
+                                    e1.setError("Invalid mobile number");
                                 }
-                                Intent i = new Intent(Register.this, Verification.class);
+                            } else if (code == 1001) {
+                                Intent i = new Intent(Register.this, AdditionalVerification.class);
                                 i.putExtra("mobile", regmobile);
                                 startActivity(i);
                                 finish();
-                            } else {
-                                e1.setError("Invalid mobile number");
                             }
                         }
-                        else if(code== 1001)
-                        {
-                            Intent i = new Intent(Register.this, AdditionalVerification.class);
-                            i.putExtra("mobile", regmobile);
-                            startActivity(i);
-                            finish();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Throwable t) {
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-                        Toast.makeText(Register.this,"Error: " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                        t.printStackTrace();
-                    }
 
-                });
+
+                        @Override
+                        public void onFailure(Throwable t) {
+                            if (progressDialog != null) {
+                                progressDialog.dismiss();
+                            }
+                            Toast.makeText(Register.this, "Error: " + t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            t.printStackTrace();
+                        }
+
+                    });
+                }else{
+                    e1.setError("Enter valid mobile number");
+                }
+
             }
 
         });
 
 
     }
+
 
 
 }

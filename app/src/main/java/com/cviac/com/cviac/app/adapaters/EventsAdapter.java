@@ -42,7 +42,7 @@ public class EventsAdapter extends ArrayAdapter<EventInfo> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        EventInfo even=getItem(position);
+        EventInfo even = getItem(position);
         View vw = convertView;
         ViewHolder holder;
 
@@ -60,13 +60,12 @@ public class EventsAdapter extends ArrayAdapter<EventInfo> {
         } else {
             holder = (ViewHolder) vw.getTag();
         }
-        String st=holder.imgview.toString();
-        if(st!=null)
-        {
+        String st = holder.imgview.toString();
+        if (st != null) {
             Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
         }
         holder.nameView.setText(even.getEvent_title());
-        String timeStam = new SimpleDateFormat("dd/MM/yy").format(new Date());
+        String timeStam = new SimpleDateFormat("dd-MM-yy").format(new Date());
         holder.typeview.setText(timeStam);
         holder.disview.setText(even.getEvent_description());
 

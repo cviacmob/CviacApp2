@@ -49,7 +49,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private static final int MY_PERMISSION_CAMERA = 10;
     private static final int MY_PERMISSION_EXTERNAL_STORAGE = 11;
 
-    TextView tvempid, tvempname, tvemail, tvdoj,tvmobile, tvgender, tvdob, tvmanager, tvdepartment, tvdesignation;
+    TextView tvempid, tvempname, tvemail, tvdoj, tvmobile, tvgender, tvdob, tvmanager, tvdepartment, tvdesignation;
     final Context context = this;
     ImageView imageViewRound;
 
@@ -59,7 +59,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private String userChoosenTask;
 
 
-    private String empcode,empcoded;
+    private String empcode, empcoded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +77,8 @@ public class MyProfileActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String mobile = prefs.getString("mobile", "");
         Employee emplogged = Employee.getemployeeByMobile(mobile);
-        empcoded=emplogged.getEmp_code();
-        if(!empcode.equals(empcoded) )
-        {
+        empcoded = emplogged.getEmp_code();
+        if (!empcode.equals(empcoded)) {
 
             btnSelect.setVisibility(View.INVISIBLE);
         }
@@ -97,7 +96,6 @@ public class MyProfileActivity extends AppCompatActivity {
                 selectImage();
             }
         });
-
 
 
         tvempid = (TextView) findViewById(R.id.textViewempcoder);
@@ -120,7 +118,7 @@ public class MyProfileActivity extends AppCompatActivity {
         tvdepartment.setText(emp.getDepartment());
         tvdesignation = (TextView) findViewById(R.id.textViewdesig);
         tvdesignation.setText(emp.getDesignation());
-        tvdoj=(TextView)findViewById(R.id.tvdojr);
+        tvdoj = (TextView) findViewById(R.id.tvdojr);
         String timeStam = new SimpleDateFormat("dd-MM-yyyy").format(new Date(emp.getDoj().toString()));
         tvdoj.setText(timeStam);
 
@@ -289,7 +287,7 @@ public class MyProfileActivity extends AppCompatActivity {
             public void onResponse(Response<ProfileUpdateResponse> response, Retrofit retrofit) {
                 ProfileUpdateResponse rsp = response.body();
                 if (rsp.getImageUrl() != null) {
-                    Employee.updateProfileImageUrl(empcode,rsp.getImageUrl());
+                    Employee.updateProfileImageUrl(empcode, rsp.getImageUrl());
                 }
             }
 

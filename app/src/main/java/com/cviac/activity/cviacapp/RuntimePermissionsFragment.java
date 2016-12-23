@@ -29,7 +29,7 @@ public class RuntimePermissionsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.myprofile, null);
 
         // BEGIN_INCLUDE(m_only_permission)

@@ -23,6 +23,7 @@ public class CircleTransform implements Transformation {
             source.recycle();
         }
 
+
         Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
 
         Canvas canvas = new Canvas(bitmap);

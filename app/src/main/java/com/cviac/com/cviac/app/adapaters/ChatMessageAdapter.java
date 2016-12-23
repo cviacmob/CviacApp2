@@ -15,39 +15,39 @@ import android.widget.TextView;
 
 public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
-	private List<ChatMessage> chats;
-	public ArrayAdapter adapter;
+    private List<ChatMessage> chats;
+    public ArrayAdapter adapter;
 
-	private int lastPostion = -1;
+    private int lastPostion = -1;
 
-	Context mContext;
+    Context mContext;
 
-	public ChatMessageAdapter(List<ChatMessage> objects, Context context) {
-		super(context, R.layout.fragment_chat, objects);
-		chats = objects;
-		mContext = context;
-	}
-	public static class ViewHolder {
-		public TextView msgview;
-	}
+    public ChatMessageAdapter(List<ChatMessage> objects, Context context) {
+        super(context, R.layout.fragment_chat, objects);
+        chats = objects;
+        mContext = context;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View vw = convertView;
+    public static class ViewHolder {
+        public TextView msgview;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View vw = convertView;
         ViewHolder holder;
-		ChatMessage chat = getItem(position);
-		if(convertView==null) {
-			LayoutInflater inf = LayoutInflater.from(getContext());
-			vw = inf.inflate(R.layout.fragment_chat, parent, false);
-			holder = new ViewHolder();
-			holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
-			vw.setTag(holder);
-		}
-		else {
-			holder =  (ViewHolder) vw.getTag();
-		}
+        ChatMessage chat = getItem(position);
+        if (convertView == null) {
+            LayoutInflater inf = LayoutInflater.from(getContext());
+            vw = inf.inflate(R.layout.fragment_chat, parent, false);
+            holder = new ViewHolder();
+            holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+            vw.setTag(holder);
+        } else {
+            holder = (ViewHolder) vw.getTag();
+        }
 
-		holder.msgview.setText(chat.getMsg().toString());
-		return vw;
-	}
+        holder.msgview.setText(chat.getMsg().toString());
+        return vw;
+    }
 }

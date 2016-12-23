@@ -62,16 +62,12 @@ public class AdditionalVerification extends AppCompatActivity implements View.On
 
 
                 CVIACApplication app = (CVIACApplication) AdditionalVerification.this.getApplication();
-
-                //regmobile = etmobile.getText().toString();
                 regempcode = etempcode.getText().toString();
                 regdate = etdob.getText().toString();
 
             /*    if (app.isNetworkStatus()) {*/
                 progressDialog = new ProgressDialog(AdditionalVerification.this, R.style.AppTheme_Dark_Dialog);
                 progressDialog.setIndeterminate(true);
-                // progressDialog.setIndeterminateDrawable(R.drawable.custom_progress_dialog);
-                //android:indeterminateDrawable="@drawable/custom_progress_dialog"
                 progressDialog.setMessage("Registering...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -90,10 +86,7 @@ public class AdditionalVerification extends AppCompatActivity implements View.On
                 regInfor.setMobile(regmobile);
                 regInfor.setEmp_code(regempcode);
                 regInfor.setDob(regdate);
-                /*} else {
-                    Toast.makeText(getApplicationContext(),
-                            "Please Check Your Internet Connection and try again", Toast.LENGTH_LONG).show();
-                }*/
+
                 final Call<AdditinalRegisterResponse> call = api.registeradditionalverification(regInfor);
                 call.enqueue(new Callback<AdditinalRegisterResponse>() {
 

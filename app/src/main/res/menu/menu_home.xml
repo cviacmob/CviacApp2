@@ -3,16 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.cviac.activity.cviacapp.HomeActivity">
 
-    <item
-        android:id="@+id/action_profile"
-        android:orderInCategory="100"
-        android:title="@string/action_group"
-        app:showAsAction="never" />
+
     <item
         android:id="@+id/refresh_action"
         android:orderInCategory="100"
         android:title="@string/action_grouprefersh"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_profile"
+        android:orderInCategory="100"
+        android:title="@string/action_group"
+        app:showAsAction="never" />
+
   <!--  <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

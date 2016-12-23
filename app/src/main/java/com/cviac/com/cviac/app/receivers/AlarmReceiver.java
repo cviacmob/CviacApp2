@@ -40,7 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
 
 
-        String lastAlarm = prefs.getString("lastalaram",null);
+        String lastAlarm = prefs.getString("lastalaram", null);
         if (lastAlarm != null) {
             if (lastAlarm.equalsIgnoreCase(getDate())) {
                 return;
@@ -49,7 +49,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         String srt = null;
         List<Employee> emplist = Employee.eventsbydate();
-
 
 
         int counter = 0;

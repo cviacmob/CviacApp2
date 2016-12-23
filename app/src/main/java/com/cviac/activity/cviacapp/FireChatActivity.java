@@ -1,18 +1,27 @@
 package com.cviac.activity.cviacapp;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -26,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cviac.com.cviac.app.adapaters.CircleTransform;
+import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.restapis.FCMSendMessageResponse;
 import com.cviac.com.cviac.app.restapis.PushMessageInfo;
@@ -58,7 +68,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class FireChatActivity extends Activity {
+public class FireChatActivity extends Activity implements View.OnClickListener {
 
     private List<ChatMessage> chats;
     private Conversation emp;
@@ -67,7 +77,7 @@ public class FireChatActivity extends Activity {
     static ActionBar mActionBar;
     private DatabaseReference dbref;
     RelativeLayout.LayoutParams relativelayout;
-    ImageView customimageback, customimage, imgvwtick;
+    ImageView customimageback, customimage, imgvwtick,cuscall;
     private String myempId;
     private String myempname;
     //Context mContext;
@@ -76,6 +86,7 @@ public class FireChatActivity extends Activity {
     PresenceInfo presenceInfo;
     ListView lv;
     int fromNotify = 0;
+    private static final int MY_PERMISSION_CALL_PHONE = 10;
 
 
     private String getNormalizedConverseId(String myid, String receverid) {
@@ -104,7 +115,7 @@ public class FireChatActivity extends Activity {
         Intent i = getIntent();
 
         emp = (Conversation) i.getSerializableExtra("conversewith");
-        fromNotify = i.getIntExtra("fromnotify",0);
+        fromNotify = i.getIntExtra("fromnotify", 0);
         final String converseId = getNormalizedConverseId(myempId, emp.getEmpid());
         dbref = FirebaseDatabase.getInstance().getReference().
                 child("conversations").child(converseId);
@@ -220,6 +231,24 @@ public class FireChatActivity extends Activity {
                 }
             }
         });
+
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.progress:
+                ImageView   cuscall = (ImageView)findViewById(R.id.ivcall);
+                onClick(cuscall);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void saveLastConversationMessage(ChatMsg msg) {
@@ -263,7 +292,7 @@ public class FireChatActivity extends Activity {
         dinfo.setSenderid(cmsg.getSenderid());
         dinfo.setMsgId(cmsg.getMsgid());
         pinfo.setData(dinfo);
-        final Call<FCMSendMessageResponse> call = api.sendPushMessage(key,pinfo);
+        final Call<FCMSendMessageResponse> call = api.sendPushMessage(key, pinfo);
         call.enqueue(new Callback<FCMSendMessageResponse>() {
             @Override
             public void onResponse(Response<FCMSendMessageResponse> response, Retrofit retrofit) {
@@ -275,6 +304,43 @@ public class FireChatActivity extends Activity {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        Employee callemp =  Employee.getemployee(emp.getEmpid());
+        if (callemp != null && callemp.getMobile() != null) {
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + callemp.getMobile()));
+            if (ContextCompat.checkSelfPermission(this,(Manifest.permission.CALL_PHONE))
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(FireChatActivity.this, new String[]{Manifest.permission.CALL_PHONE}, MY_PERMISSION_CALL_PHONE);
+                return;
+            }
+            startActivity(callIntent);
+        }
+
+
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSION_CALL_PHONE: {
+                Employee callemp =  Employee.getemployee(emp.getEmpid());
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + callemp.getMobile()));
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    startActivity(callIntent);
+                }
+            }
+        }
     }
 
     private class UpdateMessageStatusTask extends AsyncTask<ChatMsg, Integer, Long> {
@@ -303,7 +369,7 @@ public class FireChatActivity extends Activity {
             String msgid = System.currentTimeMillis() + "";
             updateValues.put("msg", cmsg.getMsg());
             cmsg.setCtime(new Date());
-            updateValues.put("ctime",cmsg.getCtime() );
+            updateValues.put("ctime", cmsg.getCtime());
             cmsg.setSenderid(myempId);
             updateValues.put("senderid", myempId);
             cmsg.setSendername(myempname);
@@ -331,7 +397,7 @@ public class FireChatActivity extends Activity {
                         }
                     });
 
-            if (presenceInfo!=null&& presenceInfo.getStatus().equalsIgnoreCase("offline")) {
+            if (presenceInfo != null && presenceInfo.getStatus().equalsIgnoreCase("offline")) {
                 if ((presenceInfo.getPushId() != null) && presenceInfo.getPushId().length() > 0) {
                     SendPushNotification(cmsg);
                 }
@@ -339,6 +405,7 @@ public class FireChatActivity extends Activity {
             return null;
         }
     }
+
 
     public void actionmethod() {
 
@@ -353,15 +420,18 @@ public class FireChatActivity extends Activity {
             View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
+
             presenceText = (TextView) customView.findViewById(R.id.textView5);
             setPresence(emp.getEmpid());
+           /* Picasso.with(this).load(R.drawable.ic_call).resize(120, 100).transform(new CircleTransform())
+                    .into(cuscall);*/
 
             String url1 = emp.getImageurl();
             if (url1 != null && url1.length() > 0) {
                 Picasso.with(this).load(emp.getImageurl()).resize(100, 100).transform(new CircleTransform())
                         .into(customimage);
             } else {
-                Picasso.with(this).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
+                Picasso.with(this).load(R.drawable.boy_512).resize(80, 80).transform(new CircleTransform())
                         .into(customimage);
             }
             Picasso.with(this).load(R.drawable.backarrow).resize(90, 90)
@@ -396,6 +466,7 @@ public class FireChatActivity extends Activity {
                     finish();
                 }
             });
+
 
             // Apply the custom view
             actionBar.setCustomView(customView);

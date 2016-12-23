@@ -39,7 +39,9 @@ public class EmployeeInfo {
 
     public EmployeeInfo() {
         // TODO Auto-generated constructor stub
-    } public String getPush_id() {
+    }
+
+    public String getPush_id() {
         return push_id;
     }
 
@@ -134,6 +136,7 @@ public class EmployeeInfo {
     public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
+
     public Date getDoj() {
         return doj;
     }

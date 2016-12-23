@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.cviac.activity.cviacapp.HomeActivity">
+
+
+    <item
+        android:id="@+id/progress"
+        android:icon="@drawable/ic_call"
+        android:showAsAction="ifRoom"
+        android:title="@string/progress"
+        />
+
+
+
+
+</menu>

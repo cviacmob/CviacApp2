@@ -19,11 +19,9 @@ public class EventsFragment extends Fragment {
 
     private ListView lv1;
 
-    private  List<EventInfo> empss;
+    private List<EventInfo> empss;
 
     private EventsAdapter adapter;
-
-
 
 
     @Override
@@ -35,7 +33,7 @@ public class EventsFragment extends Fragment {
         lv1 = (ListView) events.findViewById(R.id.eventslist);
         lv1.setDivider(null);
         empss = getEvents();
-        adapter=new EventsAdapter(empss, getActivity().getApplicationContext());
+        adapter = new EventsAdapter(empss, getActivity().getApplicationContext());
         lv1.setAdapter(adapter);
         lv1.setOnItemClickListener(new OnItemClickListener() {
 
@@ -58,9 +56,6 @@ public class EventsFragment extends Fragment {
     private List<EventInfo> getEvents() {
         return EventInfo.getevents();
     }
-
-
-
 
 
 }
