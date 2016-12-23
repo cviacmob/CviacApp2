@@ -47,7 +47,7 @@ public class Collegues extends Fragment {
         lv = (ListView) vw.findViewById(R.id.collegueslist);
         lv.setDivider(null);
         emps = getCollegues();
-        adapter=new ColleguesAdapter(emps, getActivity().getApplicationContext());
+        adapter = new ColleguesAdapter(emps, getActivity().getApplicationContext());
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new OnItemClickListener() {
@@ -89,7 +89,6 @@ public class Collegues extends Fragment {
         emps.addAll(emplist);
         adapter.notifyDataSetChanged();
     }
-
 
 
 }
