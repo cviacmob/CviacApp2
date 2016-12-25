@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.datamodels.Conversation;
+import com.cviac.com.cviac.app.datamodels.Employee;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -60,8 +61,15 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
             Picasso.with(mContext).load(conv.getImageurl()).resize(80, 80).transform(new CircleTransform())
                     .into(holder.imgview);
         } else {
-            Picasso.with(mContext).load(R.drawable.ic_launcher).resize(80, 80).transform(new CircleTransform())
-                    .into(holder.imgview);
+            Employee emp = Employee.getemployee(conv.getEmpid());
+            conv.setImageurl(emp.getImage_url());
+            if (emp.getGender().equalsIgnoreCase("female")) {
+                Picasso.with(mContext).load(R.drawable.female).resize(80, 80).transform(new CircleTransform())
+                        .into(holder.imgview);
+            } else {
+                Picasso.with(mContext).load(R.drawable.ic_boy).resize(80, 80).transform(new CircleTransform())
+                        .into(holder.imgview);
+            }
         }
 
         holder.nameView.setText(conv.getName());
