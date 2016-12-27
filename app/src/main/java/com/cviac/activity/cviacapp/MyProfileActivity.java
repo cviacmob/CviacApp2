@@ -253,7 +253,7 @@ public class MyProfileActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),thumbnail,"" ,null);
-        Picasso.with(this).load(path).resize(220, 220).transform(new CircleTransform())
+        Picasso.with(this).load(path).resize(350, 350).transform(new CircleTransform())
                 .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
         //ivImage.setImageBitmap(thumbnail);
 
@@ -278,7 +278,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
                 String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),bm,"" ,null);
-                Picasso.with(this).load(path).resize(220, 220).transform(new CircleTransform())
+                Picasso.with(this).load(path).resize(350, 350).transform(new CircleTransform())
                         .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
 
                 //ivImage.setImageBitmap(bm);
