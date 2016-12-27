@@ -5,6 +5,7 @@ import java.util.List;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -59,16 +60,16 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
         String url1 = conv.getImageurl();
         if (url1 != null && url1.length() > 0) {
             Picasso.with(mContext).load(conv.getImageurl()).resize(80, 80).transform(new CircleTransform())
-                    .into(holder.imgview);
+                    .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
         } else {
             Employee emp = Employee.getemployee(conv.getEmpid());
             conv.setImageurl(emp.getImage_url());
             if (emp.getGender().equalsIgnoreCase("female")) {
                 Picasso.with(mContext).load(R.drawable.female).resize(80, 80).transform(new CircleTransform())
-                        .into(holder.imgview);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
             } else {
                 Picasso.with(mContext).load(R.drawable.ic_boy).resize(80, 80).transform(new CircleTransform())
-                        .into(holder.imgview);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
             }
         }
 

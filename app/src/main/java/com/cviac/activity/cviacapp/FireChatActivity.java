@@ -51,6 +51,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
@@ -431,16 +432,16 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
             String url1 = conv.getImageurl();
             if (url1 != null && url1.length() > 0) {
                 Picasso.with(this).load(conv.getImageurl()).resize(100, 100).transform(new CircleTransform())
-                        .into(customimage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(customimage);
             } else {
                 Employee emp = Employee.getemployee(conv.getEmpid());
                 conv.setImageurl(emp.getImage_url());
                 if (emp.getGender().equalsIgnoreCase("female")) {
                     Picasso.with(this).load(R.drawable.female).resize(100, 100).transform(new CircleTransform())
-                            .into(customimage);
+                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(customimage);
                 } else {
                     Picasso.with(this).load(R.drawable.ic_boy).resize(100, 100).transform(new CircleTransform())
-                            .into(customimage);
+                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(customimage);
                 }
 
             }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.datamodels.Employee;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -58,16 +59,16 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
         url1 = emp.getImage_url();
         if (url1 != null && url1.length() > 0) {
             Picasso.with(mContext).load(emp.getImage_url()).resize(80, 80).transform(new CircleTransform())
-                    .into(holder.empimage);
+                    .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.empimage);
         } else {
             if(emp.getGender().equalsIgnoreCase("female"))
             {
                 Picasso.with(mContext).load(R.drawable.female).resize(80, 80).transform(new CircleTransform())
-                        .into(holder.empimage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.empimage);
             }else
             {
                 Picasso.with(mContext).load(R.drawable.ic_boy).resize(80, 80).transform(new CircleTransform())
-                        .into(holder.empimage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.empimage);
             }
 
         }
@@ -114,6 +115,11 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
         return vw;
 
     }
+
+
+
+
+
 
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
@@ -62,7 +63,7 @@ public class EventsAdapter extends ArrayAdapter<EventInfo> {
         }
         String st = holder.imgview.toString();
         if (st != null) {
-            Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).into(holder.imgview);
+            Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
         }
         holder.nameView.setText(even.getEvent_title());
         String timeStam = new SimpleDateFormat("dd-MM-yy").format(new Date());

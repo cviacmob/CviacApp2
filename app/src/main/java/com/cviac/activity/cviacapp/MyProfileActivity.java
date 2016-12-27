@@ -2,6 +2,7 @@ package com.cviac.activity.cviacapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cviac.com.cviac.app.adapaters.CircleTransform;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
@@ -27,6 +29,7 @@ import com.cviac.com.cviac.app.restapis.ProfileUpdateResponse;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -58,7 +61,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private ImageView ivImage, btnSelect;
     private String userChoosenTask;
 
-
+    ProgressDialog progressDialog;
     private String empcode, empcoded;
 
     @Override
@@ -125,16 +128,16 @@ public class MyProfileActivity extends AppCompatActivity {
         String imgUrl = emp.getImage_url();
         if (imgUrl != null && imgUrl.length() > 0) {
             Picasso.with(context).load(imgUrl).resize(220, 220).transform(new CircleTransform())
-                    .into(ivImage);
+                    .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
         } else {
             if(emp.getGender().equalsIgnoreCase("female"))
             {
                 Picasso.with(context).load(R.drawable.female).resize(220, 220).transform(new CircleTransform())
-                        .into(ivImage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
             }else
             {
                 Picasso.with(context).load(R.drawable.ic_boy).resize(220, 220).transform(new CircleTransform())
-                        .into(ivImage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
             }
 
         }
@@ -227,7 +230,7 @@ public class MyProfileActivity extends AppCompatActivity {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
             else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
+             onCaptureImageResult(data);
         }
     }
 
@@ -249,8 +252,11 @@ public class MyProfileActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),thumbnail,"" ,null);
+        Picasso.with(this).load(path).resize(220, 220).transform(new CircleTransform())
+                .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
+        //ivImage.setImageBitmap(thumbnail);
 
-        ivImage.setImageBitmap(thumbnail);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -271,7 +277,11 @@ public class MyProfileActivity extends AppCompatActivity {
                 cursor.close();
 
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                ivImage.setImageBitmap(bm);
+                String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),bm,"" ,null);
+                Picasso.with(this).load(path).resize(220, 220).transform(new CircleTransform())
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
+
+                //ivImage.setImageBitmap(bm);
                 uploadProfileImage(targetPath);
 
             } catch (Exception e) {
@@ -281,6 +291,11 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     private void uploadProfileImage(String targetPath) {
+        progressDialog = new ProgressDialog(MyProfileActivity.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("image uploading.....");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://apps.cviac.com")
                 //.baseUrl("http://192.168.1.12")
@@ -293,14 +308,22 @@ public class MyProfileActivity extends AppCompatActivity {
         call.enqueue(new Callback<ProfileUpdateResponse>() {
             @Override
             public void onResponse(Response<ProfileUpdateResponse> response, Retrofit retrofit) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
                 ProfileUpdateResponse rsp = response.body();
                 if (rsp.getImageUrl() != null) {
                     Employee.updateProfileImageUrl(empcode, rsp.getImageUrl());
+                    Toast.makeText(MyProfileActivity.this, "Profile photo updated ", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                Toast.makeText(MyProfileActivity.this, "Profile photo updated failure", Toast.LENGTH_LONG).show();
                 t.printStackTrace();
             }
         });
