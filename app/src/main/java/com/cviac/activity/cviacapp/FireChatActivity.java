@@ -394,8 +394,8 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                                         "Send message failed: " + firebaseError.getMessage(),
                                         Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(FireChatActivity.this,
-                                        "Send message success", Toast.LENGTH_LONG).show();
+                               /* Toast.makeText(FireChatActivity.this,
+                                        "Send message success", Toast.LENGTH_LONG).show();*/
                             }
                         }
                     });

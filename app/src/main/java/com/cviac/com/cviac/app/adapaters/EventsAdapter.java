@@ -66,7 +66,7 @@ public class EventsAdapter extends ArrayAdapter<EventInfo> {
             Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
         }
         holder.nameView.setText(even.getEvent_title());
-        String timeStam = new SimpleDateFormat("dd-MM-yy").format(new Date());
+        String timeStam = new SimpleDateFormat("dd-MM-yy").format(even.getEvent_date());
         holder.typeview.setText(timeStam);
         holder.disview.setText(even.getEvent_description());
 
