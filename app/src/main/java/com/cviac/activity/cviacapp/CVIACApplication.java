@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
@@ -14,6 +15,15 @@ import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.EmailInfo;
+import com.cviac.com.cviac.app.restapis.EmailResponse;
+
+import retrofit.Call;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -97,6 +107,36 @@ public class CVIACApplication extends MultiDexApplication {
     public void setChatsFragment(ChatsFragment chatsFragment) {
         this.chatsFragment = chatsFragment;
     }
+
+    public void sendEmail(String emailid, String subject, String msgBody) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        EmailInfo emailinfo = new EmailInfo(emailid, subject, msgBody);
+        Call<EmailResponse> call = api.sendEmail(emailinfo);
+call.enqueue(new retrofit.Callback<EmailResponse>() {
+    @Override
+    public void onResponse(retrofit.Response<EmailResponse> response, Retrofit retrofit) {
+        EmailResponse rsp = response.body();
+        Toast.makeText(CVIACApplication.this, "Send Email Success", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+
+    }
+});
+
+
+
+
+
+    }
+
 }
 
 

@@ -3,6 +3,7 @@ package com.cviac.activity.cviacapp;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -87,6 +88,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
     PresenceInfo presenceInfo;
     ListView lv;
     int fromNotify = 0;
+    ProgressDialog progressDialog;
     private static final int MY_PERMISSION_CALL_PHONE = 10;
 
 
@@ -96,11 +98,18 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
         }
         return receverid + "_" + myid;
     }
-
+    private void setProgressDialog() {
+        progressDialog = new ProgressDialog(FireChatActivity.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        setProgressDialog();
 
 
         lv = (ListView) findViewById(R.id.listViewChat);
@@ -131,6 +140,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                 if (myempId.equals(s.getSenderid())) {
 
 
+
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -158,6 +168,10 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                     String st = getformatteddate(s.getCtime());
 
                     txt.setText(st);
+                    if(progressDialog!=null)
+                    {
+                        progressDialog.dismiss();
+                    }
 
                 } else {
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
@@ -182,11 +196,18 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                         // s.setStatus(3);
                         new UpdateMessageStatusTask().execute(s);
                     }
+                    if(progressDialog!=null)
+                    {
+                        progressDialog.dismiss();
+                    }
                 }
 
             }
         };
-        lv.setAdapter(myAdapter);
+
+
+
+    lv.setAdapter(myAdapter);
 
 
         final EditText msgview = (EditText) findViewById(R.id.editTextsend);

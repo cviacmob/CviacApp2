@@ -69,7 +69,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     .setContentText("Happy Birthday");
 
 
-            Intent resultIntent = new Intent(context, HomeActivity.class);
+            Intent resultIntent = new Intent(context, FireChatActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
             // Adds the back stack for the Intent (but not the Intent itself)
             stackBuilder.addParentStack(FireChatActivity.class);

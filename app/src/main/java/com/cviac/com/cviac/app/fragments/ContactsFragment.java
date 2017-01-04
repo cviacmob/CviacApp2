@@ -2,15 +2,27 @@ package com.cviac.com.cviac.app.fragments;
 
 import java.util.List;
 
+import com.cviac.activity.cviacapp.CVIACApplication;
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.adapaters.ColleguesAdapter;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.Conversation;
+import com.cviac.com.cviac.app.datamodels.PresenceInfo;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +31,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ContactsFragment extends Fragment {
     private ListView lv;
     List<Employee> emps;
-    private RecyclerView recyclerview;
+
     ColleguesAdapter adapter;
+    Employee emp;
+    String mobile;
 
 
     @Override
@@ -43,15 +59,10 @@ public class ContactsFragment extends Fragment {
                                     long pos2) {
 
 
-                Employee emp = emps.get(pos1);
-                Conversation cov = new Conversation();
-                cov.setEmpid(emp.getEmp_code());
-                cov.setName(emp.getEmp_name());
-                cov.setImageurl(emp.getImage_url());
-                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
-                i.putExtra("conversewith", cov);
+                emp = emps.get(pos1);
 
-                startActivity(i);
+                InviteorLanchByPresence(emp.getEmp_code());
+
 
                 //Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
 
@@ -74,6 +85,85 @@ public class ContactsFragment extends Fragment {
         emps.clear();
         emps.addAll(emplist);
         adapter.notifyDataSetChanged();
+    }
+
+    private void InviteorLanchByPresence(String empCode) {
+        DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
+        DatabaseReference dbRef = mfiredbref.child(empCode);
+        if (dbRef != null) {
+            dbRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot != null) {
+                        PresenceInfo presenceInfo = dataSnapshot.getValue(PresenceInfo.class);
+                        if (presenceInfo != null) {
+                            Conversation cov = new Conversation();
+                            cov.setEmpid(emp.getEmp_code());
+                            cov.setName(emp.getEmp_name());
+                            cov.setImageurl(emp.getImage_url());
+                            Context ctx = getActivity().getApplicationContext();
+                            if (ctx != null) {
+                                Intent i = new Intent(ctx, FireChatActivity.class);
+                                i.putExtra("conversewith", cov);
+                                startActivity(i);
+                            }
+                        } else {
+                            alertforivite();
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
+
+    private void alertforivite() {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+        builder1.setTitle("App Not Install");
+        builder1.setMessage("Invite " + emp.getEmp_name() + " to install CVIAC App");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Invite",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+
+                        final String MyPREFERENCES = "MyPrefs";
+                        SharedPreferences prefs = getActivity().getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                        mobile = prefs.getString("mobile", "");
+                        Employee emplogged = Employee.getemployeeByMobile(mobile);
+                        String emp_namelogged = emplogged.getEmp_name();
+                        String message = "Greeting from CVIAC MOBILITY,\nYour friend " + emp_namelogged + " will be invite you to install the CviacChat App.To install the Application click the below link";
+
+                        Context ctx = getActivity().getApplicationContext();
+                        if (ctx != null) {
+                            CVIACApplication app = (CVIACApplication) ctx;
+                            app.sendEmail("balabala.gp@gmail.com", "Install CviacChat App", message);
+                        }
+
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
     }
 
 

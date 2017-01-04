@@ -85,6 +85,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     private EventsFragment eventsFrag;
 
     TabLayout tabLayout;
+    Employee emplogged;
 
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
@@ -120,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         mobile = prefs.getString("mobile", "");
         empCode = mobile;
         if (mobile != null) {
-            Employee emplogged = Employee.getemployeeByMobile(mobile);
+            emplogged= Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
                 empCode = emplogged.getEmp_code();
                 SharedPreferences.Editor editor = prefs.edit();
@@ -275,6 +276,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             switch (position + 1) {
                 case 1:
                     empFrag = new ContactsFragment();
+
                     return empFrag;
                 case 2:
                     chatFrag = new ChatsFragment();
