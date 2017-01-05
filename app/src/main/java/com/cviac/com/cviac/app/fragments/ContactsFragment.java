@@ -105,7 +105,7 @@ public class ContactsFragment extends Fragment {
         DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
         DatabaseReference dbRef = mfiredbref.child(empCode);
         if (dbRef != null) {
-            dbRef.addValueEventListener(new ValueEventListener() {
+            dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null) {
@@ -149,7 +149,7 @@ public class ContactsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
 
 
-                        String message = "Greeting from CVIAC MOBILITY,\n\n"+"            "+emp_namelogged + " invite you to install the CviacChat App.Click the below link to insatll.\n"+"http://www.apps.cviac.com/mobileapps/cviacapp.apk";
+                        String message = "Greeting from CVIAC MOBILITY,\n\n"+"            "+emp_namelogged + " invited you to install the CviacChat App.Click the below link to insatll.\n"+"http://www.apps.cviac.com/mobileapps/cviacapp.apk";
 
                         Context ctx = getActivity().getApplicationContext();
                         if (ctx != null) {

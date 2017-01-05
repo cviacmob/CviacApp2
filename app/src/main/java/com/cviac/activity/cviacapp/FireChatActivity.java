@@ -137,6 +137,15 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
             myAdapter = new FirebaseListAdapter<ChatMsg>(this, ChatMsg.class, R.layout.fragment_chat, dbref) {
                 @Override
+                public int getCount() {
+                    if(progressDialog != null)
+                    {
+                        progressDialog.dismiss();
+                    }
+                    return super.getCount();
+                }
+
+                @Override
                 protected void populateView(View vw, ChatMsg s, int i) {
 
 
