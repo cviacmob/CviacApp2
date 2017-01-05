@@ -83,7 +83,7 @@ public class MyProfileActivity extends AppCompatActivity {
         empcoded = emplogged.getEmp_code();
         if (!empcode.equals(empcoded)) {
 
-            btnSelect.setVisibility(View.INVISIBLE);
+           btnSelect.setVisibility(View.INVISIBLE);
         }
 
 
@@ -110,7 +110,7 @@ public class MyProfileActivity extends AppCompatActivity {
         tvmobile = (TextView) findViewById(R.id.textViewmobiler);
         tvmobile.setText(emp.getMobile());
         tvdob = (TextView) findViewById(R.id.textViewdobr);
-        String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(new Date(emp.getDob().toString()));
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy").format(emp.getDob());
 
         tvdob.setText(timeStamp);
         tvgender = (TextView) findViewById(R.id.textViewgenterr);
@@ -122,22 +122,20 @@ public class MyProfileActivity extends AppCompatActivity {
         tvdesignation = (TextView) findViewById(R.id.textViewdesig);
         tvdesignation.setText(emp.getDesignation());
         tvdoj = (TextView) findViewById(R.id.tvdojr);
-        String timeStam = new SimpleDateFormat("dd-MM-yyyy").format(new Date(emp.getDoj().toString()));
+        String timeStam = new SimpleDateFormat("dd-MM-yyyy").format(emp.getDoj());
         tvdoj.setText(timeStam);
 
         String imgUrl = emp.getImage_url();
         if (imgUrl != null && imgUrl.length() > 0) {
             Picasso.with(context).load(imgUrl).resize(220, 220).transform(new CircleTransform())
-                    .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
+                    .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
         } else {
-            if(emp.getGender().equalsIgnoreCase("female"))
-            {
+            if (emp.getGender().equalsIgnoreCase("female")) {
                 Picasso.with(context).load(R.drawable.female).resize(220, 220).transform(new CircleTransform())
-                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
-            }else
-            {
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
+            } else {
                 Picasso.with(context).load(R.drawable.ic_boy).resize(220, 220).transform(new CircleTransform())
-                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
             }
 
         }
@@ -230,7 +228,7 @@ public class MyProfileActivity extends AppCompatActivity {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
             else if (requestCode == REQUEST_CAMERA)
-             onCaptureImageResult(data);
+                onCaptureImageResult(data);
         }
     }
 
@@ -252,9 +250,9 @@ public class MyProfileActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),thumbnail,"" ,null);
+        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), thumbnail, "", null);
         Picasso.with(this).load(path).resize(350, 350).transform(new CircleTransform())
-                .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
+                .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
         //ivImage.setImageBitmap(thumbnail);
 
     }
@@ -277,9 +275,9 @@ public class MyProfileActivity extends AppCompatActivity {
                 cursor.close();
 
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),bm,"" ,null);
+                String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bm, "", null);
                 Picasso.with(this).load(path).resize(350, 350).transform(new CircleTransform())
-                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(ivImage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
 
                 //ivImage.setImageBitmap(bm);
                 uploadProfileImage(targetPath);

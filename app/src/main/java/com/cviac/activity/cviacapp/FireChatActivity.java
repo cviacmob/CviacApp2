@@ -178,16 +178,13 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                         }
                         String st = getformatteddate(s.getCtime());
                         txt.setText(st);
-                        if (progressDialog != null) {
 
-                            progressDialog.dismiss();
-                        }
 
 
                     } else {
 
 
-                        setProgressDialog();
+
 
                         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -211,13 +208,8 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                             // s.setStatus(3);
                             new UpdateMessageStatusTask().execute(s);
                         }
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-                        if(myAdapter.isEmpty())
-                        {
-                            progressDialog.dismiss();
-                        }
+
+
                     }
 
                 }

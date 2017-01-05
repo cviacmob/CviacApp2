@@ -73,6 +73,7 @@ public class ContactsFragment extends Fragment {
                 }
                 if (emp_namelogged.equalsIgnoreCase(a)) {
                 //do nothing
+
                 } else {
                     InviteorLanchByPresence(emp.getEmp_code());
                 }
@@ -149,7 +150,7 @@ public class ContactsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
 
 
-                        String message = "Greeting from CVIAC MOBILITY,\n\n"+"            "+emp_namelogged + " invited you to install the CviacChat App.Click the below link to insatll.\n"+"http://www.apps.cviac.com/mobileapps/cviacapp.apk";
+                        String message = "Greeting from CVIAC MOBILITY,\n\n"+"            "+emp_namelogged + " invited you to install the CVIAC Chat App.\nClick the below link to insatll.\n"+"http://www.apps.cviac.com/mobileapps/cviacapp.apk";
 
                         Context ctx = getActivity().getApplicationContext();
                         if (ctx != null) {
