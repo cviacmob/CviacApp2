@@ -213,7 +213,11 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         if (tab.getText().toString().equalsIgnoreCase("CHATS")) {
             chatFrag.reloadFilterByChats(newText);
         } else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
-            empFrag.reloadFilterByName(newText);
+            if(empFrag!=null)
+            {
+                empFrag.reloadFilterByName(newText);
+            }
+
         } else if (tab.getText().toString().equalsIgnoreCase("EventsFragment")) {
             empFrag.reloadFilterByName(newText);
         }

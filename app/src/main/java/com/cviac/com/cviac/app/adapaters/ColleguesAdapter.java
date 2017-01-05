@@ -74,43 +74,7 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
         }
         holder.nameView.setText(emp.getEmp_name());
         holder.mobile.setText(emp.getEmail());
-     /*   holder.empimage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setPositiveButton("Get Pro", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                final AlertDialog dialog = builder.create();
-                LayoutInflater inflater =  LayoutInflater.from(getContext());
-                View dialogLayout = inflater.inflate(R.layout.customalert, null);
-                dialog.setView(dialogLayout);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                dialog.show();
-
-                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface d) {
-                        ImageView image = (ImageView) dialog.findViewById(R.id.goProDialogImage);
-                        Bitmap icon = BitmapFactory.decodeResource(mContext.getResources(), Integer.parseInt(url1));
-                        float imageWidthInPX = (float)image.getWidth();
-
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(imageWidthInPX),
-                                Math.round(imageWidthInPX * (float)icon.getHeight() / (float)icon.getWidth()));
-                        image.setLayoutParams(layoutParams);
-
-
-                    }
-                });
-            }
-        });*/
 
         return vw;
 

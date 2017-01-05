@@ -117,11 +117,11 @@ public class CVIACApplication extends MultiDexApplication {
         CVIACApi api = retrofit.create(CVIACApi.class);
         EmailInfo emailinfo = new EmailInfo(emailid, subject, msgBody);
         Call<EmailResponse> call = api.sendEmail(emailinfo);
-call.enqueue(new retrofit.Callback<EmailResponse>() {
+        call.enqueue(new retrofit.Callback<EmailResponse>() {
     @Override
     public void onResponse(retrofit.Response<EmailResponse> response, Retrofit retrofit) {
         EmailResponse rsp = response.body();
-        Toast.makeText(CVIACApplication.this, "Send Email Success", Toast.LENGTH_LONG).show();
+        //Toast.makeText(CVIACApplication.this, "Send Email Success", Toast.LENGTH_LONG).show();
 
     }
 

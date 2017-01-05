@@ -39,7 +39,9 @@ public class ContactsFragment extends Fragment {
 
     ColleguesAdapter adapter;
     Employee emp;
+    String a;
     String mobile;
+    String emp_namelogged;
 
 
     @Override
@@ -51,6 +53,11 @@ public class ContactsFragment extends Fragment {
         emps = getCollegues();
         adapter = new ColleguesAdapter(emps, getActivity().getApplicationContext());
         lv.setAdapter(adapter);
+        final String MyPREFERENCES = "MyPrefs";
+        SharedPreferences prefs = getActivity().getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        mobile = prefs.getString("mobile", "");
+        Employee emplogged = Employee.getemployeeByMobile(mobile);
+        emp_namelogged = emplogged.getEmp_name();
 
         lv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -61,7 +68,14 @@ public class ContactsFragment extends Fragment {
 
                 emp = emps.get(pos1);
 
-                InviteorLanchByPresence(emp.getEmp_code());
+                for (int i = 0; i <= emp.getEmp_name().length(); i++) {
+                    a = emp.getEmp_name();
+                }
+                if (emp_namelogged.equalsIgnoreCase(a)) {
+                //do nothing
+                } else {
+                    InviteorLanchByPresence(emp.getEmp_code());
+                }
 
 
                 //Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
@@ -103,7 +117,7 @@ public class ContactsFragment extends Fragment {
                             cov.setImageurl(emp.getImage_url());
                             Context ctx = getActivity().getApplicationContext();
                             if (ctx != null) {
-                                Intent i = new Intent(ctx, FireChatActivity.class);
+                                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
                                 i.putExtra("conversewith", cov);
                                 startActivity(i);
                             }
@@ -135,17 +149,13 @@ public class ContactsFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
 
 
-                        final String MyPREFERENCES = "MyPrefs";
-                        SharedPreferences prefs = getActivity().getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                        mobile = prefs.getString("mobile", "");
-                        Employee emplogged = Employee.getemployeeByMobile(mobile);
-                        String emp_namelogged = emplogged.getEmp_name();
-                        String message = "Greeting from CVIAC MOBILITY,\nYour friend " + emp_namelogged + " will be invite you to install the CviacChat App.To install the Application click the below link";
+                        String message = "Greeting from CVIAC MOBILITY,\n\n"+"            "+emp_namelogged + " invite you to install the CviacChat App.Click the below link to insatll.\n"+"http://www.apps.cviac.com/mobileapps/cviacapp.apk";
 
                         Context ctx = getActivity().getApplicationContext();
                         if (ctx != null) {
-                            CVIACApplication app = (CVIACApplication) ctx;
-                            app.sendEmail("balabala.gp@gmail.com", "Install CviacChat App", message);
+                            CVIACApplication app = (CVIACApplication) getActivity().getApplicationContext();
+                            String email=emp.getEmail();
+                            app.sendEmail(email, "Install CviacChat App", message);
                         }
 
                         dialog.cancel();
