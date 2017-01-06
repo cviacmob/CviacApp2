@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -69,6 +70,8 @@ public class MyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.myprofile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         //data from collegue
         Intent i = getIntent();
         empcode = i.getStringExtra("empcode");
@@ -83,7 +86,7 @@ public class MyProfileActivity extends AppCompatActivity {
         empcoded = emplogged.getEmp_code();
         if (!empcode.equals(empcoded)) {
 
-           btnSelect.setVisibility(View.INVISIBLE);
+            btnSelect.setVisibility(View.INVISIBLE);
         }
 
 
@@ -127,13 +130,18 @@ public class MyProfileActivity extends AppCompatActivity {
 
         String imgUrl = emp.getImage_url();
         if (imgUrl != null && imgUrl.length() > 0) {
+
             Picasso.with(context).load(imgUrl).resize(220, 220).transform(new CircleTransform())
                     .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
+
+
         } else {
             if (emp.getGender().equalsIgnoreCase("female")) {
+
                 Picasso.with(context).load(R.drawable.female).resize(220, 220).transform(new CircleTransform())
                         .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
             } else {
+
                 Picasso.with(context).load(R.drawable.ic_boy).resize(220, 220).transform(new CircleTransform())
                         .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(ivImage);
             }

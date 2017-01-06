@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -7,224 +8,15 @@
     android:background="#DBE1F4"
     >
 
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewname"
-        android:layout_alignLeft="@+id/textViewempcoder"
-        android:layout_alignStart="@+id/textViewempcoder"
-        android:id="@+id/textViewempnamer"
-        android:padding="5dp"
-        android:textColor="#2A51D8"/>
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewemail"
-        android:layout_alignLeft="@+id/textViewempnamer"
-        android:layout_alignStart="@+id/textViewempnamer"
-        android:id="@+id/textViewemailr"
-        android:padding="5dp"
-        android:textColor="#2A51D8"/>
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewgender"
-        android:layout_alignLeft="@+id/textViewdobr"
-        android:layout_alignStart="@+id/textViewdobr"
-        android:id="@+id/textViewgenterr"
-        android:padding="5dp"
-        android:textColor="#2A51D8"/>
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewmanager"
-        android:layout_alignLeft="@+id/textViewgenterr"
-        android:layout_alignStart="@+id/textViewgenterr"
-        android:id="@+id/mageridr"
-        android:padding="5dp"
-        android:textColor="#2A51D8"/>
-
-    <TextView
-        android:text="DOB            "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewdob"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewmobile" />
-
-    <TextView
-        android:text="Mobile         "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewmobile"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewemail"
-        android:layout_alignRight="@+id/textViewemail"
-        android:layout_alignEnd="@+id/textViewemail" />
-
-    <TextView
-        android:text="Department    "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewdept"
-        android:padding="5dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewmanager" />
-
-    <TextView
-        android:text="Designation  "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewdegin"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewdept"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewdobr"
-        android:textColor="#2A51D8"
-        android:padding="5dp"
-        android:layout_alignTop="@+id/textViewdob"
-        android:layout_alignLeft="@+id/textViewmobiler"
-        android:layout_alignStart="@+id/textViewmobiler" />
-
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewmobiler"
-        android:textColor="#2A51D8"
-        android:padding="5dp"
-        android:layout_alignBaseline="@+id/textViewmobile"
-        android:layout_alignBottom="@+id/textViewmobile"
-        android:layout_alignLeft="@+id/textViewemailr"
-        android:layout_alignStart="@+id/textViewemailr" />
-
-    <TextView
-        android:text="Email           "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewemail"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewname"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewdeptr"
-        android:textColor="#2A51D8"
-        android:padding="5dp"
-        android:layout_alignBaseline="@+id/textViewdept"
-        android:layout_alignBottom="@+id/textViewdept"
-        android:layout_alignLeft="@+id/mageridr"
-        android:layout_alignStart="@+id/mageridr" />
-
-    <TextView
-        android:text="Name             "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewname"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewempcode"
-        android:layout_alignRight="@+id/textViewempcode"
-        android:layout_alignEnd="@+id/textViewempcode" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#2A51D8"
-        android:padding="5dp"
-        android:layout_alignBottom="@+id/textViewdegin"
-        android:layout_alignLeft="@+id/textViewdeptr"
-        android:layout_alignStart="@+id/textViewdeptr"
-        android:id="@+id/textViewdesig" />
-
-    <TextView
-        android:text="Manager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:id="@+id/textViewmanager"
-        android:layout_below="@+id/textViewgender"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/tvdojl"
-        android:layout_alignEnd="@+id/tvdojl" />
-
-    <ImageView
-        android:id="@+id/imageViewprofile"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:padding="5dp"
-        android:src="@drawable/ic_boy"
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:id="@+id/relativeLayout2"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textViewdob"
-        android:layout_toEndOf="@+id/textViewdob" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewempcoder"
-        android:textColor="#2A51D8"
-        android:padding="5dp"
-        android:layout_alignBaseline="@+id/textViewempcode"
-        android:layout_alignBottom="@+id/textViewempcode"
-        android:layout_toRightOf="@+id/textViewmanager"
-        android:layout_toEndOf="@+id/textViewmanager" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvdojr"
-        android:padding="5dp"
-        android:textColor="#2A51D8"
-        android:layout_below="@+id/textViewdobr"
-        android:layout_alignLeft="@+id/textViewdobr"
-        android:layout_alignStart="@+id/textViewdobr" />
-
-    <TextView
-        android:text="DOJ"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvdojl"
-        android:padding="5dp"
-        android:layout_below="@+id/textViewdob"
-        android:layout_alignLeft="@+id/textViewgender"
-        android:layout_alignStart="@+id/textViewgender"
-        android:layout_alignRight="@+id/textViewdob"
-        android:layout_alignEnd="@+id/textViewdob" />
-
-    <TextView
-        android:text="Gender        "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewgender"
-        android:padding="5dp"
-        android:layout_below="@+id/tvdojl"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true">
 
-    <ImageView
+        <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -233,16 +25,263 @@
         android:layout_alignRight="@+id/imageViewprofile"
         android:layout_alignEnd="@+id/imageViewprofile" />
 
-    <TextView
-        android:text="Code              "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewempcode"
-        android:padding="5dp"
-        android:layout_below="@+id/imageViewprofile"
+        <ImageView
+            android:id="@+id/imageViewprofile"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_boy"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+    <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayout2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="22dp" />
+        android:layout_marginTop="18dp">
+<LinearLayout
+    android:id="@+id/liner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="404dp"
+        android:layout_below="@+id/liner"
+      >
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textViewname"
+            android:layout_alignLeft="@+id/textViewempcoder"
+            android:layout_alignStart="@+id/textViewempcoder"
+            android:id="@+id/textViewempnamer"
+            android:padding="5dp"
+            android:textColor="#2A51D8"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textViewemail"
+            android:layout_alignLeft="@+id/textViewempnamer"
+            android:layout_alignStart="@+id/textViewempnamer"
+            android:id="@+id/textViewemailr"
+            android:padding="5dp"
+            android:textColor="#2A51D8"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textViewgender"
+            android:layout_alignLeft="@+id/textViewdobr"
+            android:layout_alignStart="@+id/textViewdobr"
+            android:id="@+id/textViewgenterr"
+            android:padding="5dp"
+            android:textColor="#2A51D8"/>
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textViewmanager"
+            android:layout_alignLeft="@+id/textViewgenterr"
+            android:layout_alignStart="@+id/textViewgenterr"
+            android:id="@+id/mageridr"
+            android:padding="5dp"
+            android:textColor="#2A51D8"/>
+
+        <TextView
+            android:text="DOB            "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewdob"
+            android:padding="5dp"
+            android:layout_below="@+id/textViewmobile" />
+
+        <TextView
+            android:text="Mobile         "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewmobile"
+            android:padding="5dp"
+            android:layout_below="@+id/textViewemail"
+            android:layout_alignRight="@+id/textViewemail"
+            android:layout_alignEnd="@+id/textViewemail" />
+
+        <TextView
+            android:text="Department    "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewdept"
+            android:padding="5dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewmanager" />
+
+        <TextView
+            android:text="Designation  "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewdegin"
+            android:padding="5dp"
+            android:layout_below="@+id/textViewdept"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewdobr"
+            android:textColor="#2A51D8"
+            android:padding="5dp"
+            android:layout_alignTop="@+id/textViewdob"
+            android:layout_alignLeft="@+id/textViewmobiler"
+            android:layout_alignStart="@+id/textViewmobiler" />
+
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewmobiler"
+            android:textColor="#2A51D8"
+            android:padding="5dp"
+            android:layout_alignBaseline="@+id/textViewmobile"
+            android:layout_alignBottom="@+id/textViewmobile"
+            android:layout_alignLeft="@+id/textViewemailr"
+            android:layout_alignStart="@+id/textViewemailr" />
+
+        <TextView
+            android:text="Email           "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewemail"
+            android:padding="5dp"
+            android:layout_below="@+id/textViewname"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewdeptr"
+            android:textColor="#2A51D8"
+            android:padding="5dp"
+            android:layout_alignBaseline="@+id/textViewdept"
+            android:layout_alignBottom="@+id/textViewdept"
+            android:layout_alignLeft="@+id/mageridr"
+            android:layout_alignStart="@+id/mageridr" />
+
+        <TextView
+            android:text="Name             "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewname"
+            android:padding="5dp"
+            android:layout_below="@+id/textViewempcode"
+            android:layout_alignRight="@+id/textViewempcode"
+            android:layout_alignEnd="@+id/textViewempcode" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#2A51D8"
+            android:padding="5dp"
+            android:layout_alignBottom="@+id/textViewdegin"
+            android:layout_alignLeft="@+id/textViewdeptr"
+            android:layout_alignStart="@+id/textViewdeptr"
+            android:id="@+id/textViewdesig" />
+
+        <TextView
+            android:text="Manager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:id="@+id/textViewmanager"
+            android:layout_below="@+id/textViewgender"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/tvdojl"
+            android:layout_alignEnd="@+id/tvdojl" />
+
+
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewempcoder"
+            android:textColor="#2A51D8"
+            android:padding="5dp"
+            android:layout_alignBaseline="@+id/textViewempcode"
+            android:layout_alignBottom="@+id/textViewempcode"
+            android:layout_toRightOf="@+id/textViewmanager"
+            android:layout_toEndOf="@+id/textViewmanager" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvdojr"
+            android:padding="5dp"
+            android:textColor="#2A51D8"
+            android:layout_below="@+id/textViewdobr"
+            android:layout_alignLeft="@+id/textViewdobr"
+            android:layout_alignStart="@+id/textViewdobr" />
+
+        <TextView
+            android:text="DOJ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvdojl"
+            android:padding="5dp"
+            android:layout_below="@+id/textViewdob"
+            android:layout_alignLeft="@+id/textViewgender"
+            android:layout_alignStart="@+id/textViewgender"
+            android:layout_alignRight="@+id/textViewdob"
+            android:layout_alignEnd="@+id/textViewdob" />
+
+        <TextView
+            android:text="Gender        "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewgender"
+            android:padding="5dp"
+            android:layout_below="@+id/tvdojl"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
+
+        <TextView
+            android:text="Code              "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewempcode"
+            android:padding="5dp"
+            android:layout_below="@+id/imageViewprofile"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="22dp" />
+
+
+    </RelativeLayout>
+</LinearLayout>
+
+
+
+    </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
 
 </RelativeLayout>

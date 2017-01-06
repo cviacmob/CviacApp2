@@ -98,6 +98,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
         }
         return receverid + "_" + myid;
     }
+
     private void setProgressDialog() {
         progressDialog = new ProgressDialog(FireChatActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
@@ -105,6 +106,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,90 +137,90 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
         actionmethod();
 
 
-            myAdapter = new FirebaseListAdapter<ChatMsg>(this, ChatMsg.class, R.layout.fragment_chat, dbref) {
-                @Override
-                public int getCount() {
-                    if(progressDialog != null)
-                    {
-                        progressDialog.dismiss();
+        myAdapter = new FirebaseListAdapter<ChatMsg>(this, ChatMsg.class, R.layout.fragment_chat, dbref) {
+            @Override
+            public int getCount() {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                return super.getCount();
+            }
+
+            @Override
+            protected void populateView(View vw, ChatMsg s, int i) {
+
+
+                if (myempId.equals(s.getSenderid())) {
+
+
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+                    txt = (TextView) vw.findViewById(R.id.duration);
+                    imgvwtick = (ImageView) vw.findViewById(R.id.list_image);
+                    RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
+
+                    Resources res = getResources();
+                    Drawable drawable = res.getDrawable(R.drawable.bubble2);
+
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+                    rLayout.setBackgroundDrawable(drawable);
+
+
+                    msgview.setLayoutParams(layoutParams);
+                    //msgview.setBackgroundResource(R.drawable.bubble2);
+                    msgview.setText(s.getMsg());
+                    if (s.getStatus() == 0) {
+                        imgvwtick.setBackgroundResource(R.drawable.schedule);
                     }
-                    return super.getCount();
+                    if (s.getStatus() == 1) {
+                        imgvwtick.setBackgroundResource(R.drawable.done);
+                    } else if (s.getStatus() == 2) {
+                        imgvwtick.setBackgroundResource(R.drawable.done_all);
+                    } else if (s.getStatus() == 3) {
+                        imgvwtick.setBackgroundResource(R.drawable.done_all_colo);
+                    }
+                    String st = getformatteddate(s.getCtime());
+                    txt.setText(st);
+                    rLayout.setBackgroundColor(getResources().getColor(R.color.blue));
+
+
+                } else {
+
+
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.WRAP_CONTENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    TextView msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
+                    TextView txt = (TextView) vw.findViewById(R.id.duration);
+                    msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
+
+                    RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
+                    Resources res = getResources();
+                    Drawable drawable = res.getDrawable(R.drawable.bubble1);
+
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                    msgvieww.setLayoutParams(layoutParams);
+                    rLayout.setBackgroundDrawable(drawable);
+                    // msgview.setBackgroundResource(R.drawable.bubble1);
+                    msgvieww.setText(s.getMsg());
+                    txt.setText(getformatteddate(s.getCtime()));
+
+                    if (s.getStatus() != 3) {
+                        // s.setStatus(3);
+                        new UpdateMessageStatusTask().execute(s);
+                    }
+
+
                 }
 
-                @Override
-                protected void populateView(View vw, ChatMsg s, int i) {
+            }
+        };
 
 
-                    if (myempId.equals(s.getSenderid())) {
-
-
-                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                                RelativeLayout.LayoutParams.WRAP_CONTENT);
-                        msgview = (TextView) vw.findViewById(R.id.textchatmsg);
-                        txt = (TextView) vw.findViewById(R.id.duration);
-                        imgvwtick = (ImageView) vw.findViewById(R.id.list_image);
-                        RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
-                        Resources res = getResources();
-                        Drawable drawable = res.getDrawable(R.drawable.bubble2);
-                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                        rLayout.setBackgroundDrawable(drawable);
-                        msgview.setLayoutParams(layoutParams);
-                        //msgview.setBackgroundResource(R.drawable.bubble2);
-                        msgview.setText(s.getMsg());
-                        if (s.getStatus() == 0) {
-                            imgvwtick.setBackgroundResource(R.drawable.schedule);
-                        }
-                        if (s.getStatus() == 1) {
-                            imgvwtick.setBackgroundResource(R.drawable.done);
-                        } else if (s.getStatus() == 2) {
-                            imgvwtick.setBackgroundResource(R.drawable.done_all);
-                        } else if (s.getStatus() == 3) {
-                            imgvwtick.setBackgroundResource(R.drawable.done_all_colo);
-                        }
-                        String st = getformatteddate(s.getCtime());
-                        txt.setText(st);
-
-
-
-                    } else {
-
-
-
-
-                        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                                RelativeLayout.LayoutParams.WRAP_CONTENT);
-                        TextView msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
-                        TextView txt = (TextView) vw.findViewById(R.id.duration);
-                        msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
-
-                        RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
-                        Resources res = getResources();
-                        Drawable drawable = res.getDrawable(R.drawable.bubble1);
-
-                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                        msgvieww.setLayoutParams(layoutParams);
-                        rLayout.setBackgroundDrawable(drawable);
-                        // msgview.setBackgroundResource(R.drawable.bubble1);
-                        msgvieww.setText(s.getMsg());
-                        txt.setText(getformatteddate(s.getCtime()));
-
-                        if (s.getStatus() != 3) {
-                            // s.setStatus(3);
-                            new UpdateMessageStatusTask().execute(s);
-                        }
-
-
-                    }
-
-                }
-            };
-
-
-            lv.setAdapter(myAdapter);
-
-
+        lv.setAdapter(myAdapter);
 
 
         final EditText msgview = (EditText) findViewById(R.id.editTextsend);
@@ -464,16 +466,16 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
             String url1 = conv.getImageurl();
             if (url1 != null && url1.length() > 0) {
                 Picasso.with(this).load(conv.getImageurl()).resize(100, 100).transform(new CircleTransform())
-                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(customimage);
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
             } else {
                 Employee emp = Employee.getemployee(conv.getEmpid());
                 conv.setImageurl(emp.getImage_url());
                 if (emp.getGender().equalsIgnoreCase("female")) {
                     Picasso.with(this).load(R.drawable.female).resize(100, 100).transform(new CircleTransform())
-                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(customimage);
+                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
                 } else {
                     Picasso.with(this).load(R.drawable.ic_boy).resize(100, 100).transform(new CircleTransform())
-                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(customimage);
+                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
                 }
 
             }

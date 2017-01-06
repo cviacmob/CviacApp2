@@ -46,8 +46,7 @@ public class Employee extends Model implements Serializable {
     private Date doj;
 
 
-    public Employee() {
-        // TODO Auto-generated constructor stub
+    public Employee(){
     }
 
     public String getPush_id() {

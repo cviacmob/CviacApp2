@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.content.SharedPreferences;
 
 public class Splashscreen extends Activity {
-    private final int SPLASH_DISPLAY_LENGTH = 5000;
+    private final int SPLASH_DISPLAY_LENGTH = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
