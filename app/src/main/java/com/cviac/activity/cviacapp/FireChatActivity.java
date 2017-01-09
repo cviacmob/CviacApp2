@@ -116,7 +116,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
-        lv.setDividerHeight(10);
+        lv.setDividerHeight(14);
 
         //chats = new ArrayList<ChatMessage>();
 
@@ -184,7 +184,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                     }
                     String st = getformatteddate(s.getCtime());
                     txt.setText(st);
-                    rLayout.setBackgroundColor(getResources().getColor(R.color.blue));
+                    rLayout.setBackgroundColor(getResources().getColor(R.color.green));
 
 
                 } else {
@@ -452,7 +452,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3B5CD1")));
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF4848")));
 
             View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);

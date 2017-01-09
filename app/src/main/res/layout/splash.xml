@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="500dp"
+    android:layout_height="1000dp"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    >
+
 
   <ImageView
-        android:id="@+id/splash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/cviac"
-      android:layout_centerHorizontal="true"
-      android:layout_centerVertical="true" />
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/cviac_logo_splash"
+      android:id="@+id/imageViewsplash"
+      android:layout_gravity="center_horizontal"
+      android:layout_weight="1"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_marginLeft="88dp"
+      android:layout_marginStart="88dp"
+      android:layout_marginTop="157dp" />
 
-</LinearLayout>
+  <ImageView
+      android:layout_width="200dp"
+      android:layout_height="50dp"
+      android:background="@drawable/cviactext"
+      android:id="@+id/imageView2"
+      android:layout_below="@+id/imageViewsplash"
+      android:layout_alignLeft="@+id/imageViewsplash"
+      android:layout_alignStart="@+id/imageViewsplash" />
+
+
+</RelativeLayout>
