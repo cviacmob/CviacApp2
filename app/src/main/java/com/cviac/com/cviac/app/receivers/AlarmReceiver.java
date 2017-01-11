@@ -14,6 +14,7 @@ import android.support.v4.app.TaskStackBuilder;
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.HomeActivity;
 import com.cviac.activity.cviacapp.R;
+import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
 
@@ -70,6 +71,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
             Intent resultIntent = new Intent(context, FireChatActivity.class);
+
+            Conversation cnv = new Conversation();
+            cnv.setEmpid(e.getEmp_code());
+            cnv.setName(e.getEmp_name());
+            resultIntent.putExtra("conversewith",cnv);
+            resultIntent.putExtra("fromnotify",1);
+
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
             // Adds the back stack for the Intent (but not the Intent itself)
             stackBuilder.addParentStack(FireChatActivity.class);

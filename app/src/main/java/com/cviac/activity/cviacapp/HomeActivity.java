@@ -144,9 +144,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 6);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.MINUTE,0);
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
+
     }
 
     @Override

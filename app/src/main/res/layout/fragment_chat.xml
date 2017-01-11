@@ -12,37 +12,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:textColor="#040404"
+        android:textColor="#000000"
         android:typeface="sans"
         android:textSize="15dip"
+        android:paddingLeft="20dp"
+        android:paddingTop="0dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="0dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
 
     <ImageView
         android:id="@+id/list_image"
         android:layout_width="15dip"
         android:layout_height="15dip"
-        android:layout_below="@+id/textchatmsg"
-
-        android:layout_weight="0.00"
+        android:paddingTop="0dp"
+        android:paddingLeft="28dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="8dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_alignTop="@+id/duration" />
 
     <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textchatmsg"
         android:textSize="10dip"
         android:textColor="#818182"
         android:textStyle="bold"
+        android:paddingBottom="2dp"
         android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        android:paddingLeft="50dp"
         android:layout_weight="0.00"
-
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/list_image"
-        android:layout_toStartOf="@+id/list_image" />
+        android:layout_toStartOf="@+id/list_image"
+        android:layout_marginBottom="2dp"
+     android:layout_below="@+id/textchatmsg" />
 
 
 </RelativeLayout>

@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,7 +117,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
-        lv.setDividerHeight(14);
+       // lv.setDividerHeight(5);
 
         //chats = new ArrayList<ChatMessage>();
 
@@ -151,8 +152,6 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
 
                 if (myempId.equals(s.getSenderid())) {
-
-
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.WRAP_CONTENT,
                             RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -161,14 +160,12 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                     imgvwtick = (ImageView) vw.findViewById(R.id.list_image);
                     RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
 
+
                     Resources res = getResources();
-                    Drawable drawable = res.getDrawable(R.drawable.bubble2);
+                    Drawable drawable = res.getDrawable(R.drawable.msg_out);
 
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-
                     rLayout.setBackgroundDrawable(drawable);
-
-
                     msgview.setLayoutParams(layoutParams);
                     //msgview.setBackgroundResource(R.drawable.bubble2);
                     msgview.setText(s.getMsg());
@@ -184,7 +181,8 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                     }
                     String st = getformatteddate(s.getCtime());
                     txt.setText(st);
-                    rLayout.setBackgroundColor(getResources().getColor(R.color.green));
+
+                    // rLayout.setBackgroundColor(getResources().getColor(R.color.green));
 
 
                 } else {
@@ -199,7 +197,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
 
                     RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
                     Resources res = getResources();
-                    Drawable drawable = res.getDrawable(R.drawable.bubble1);
+                    Drawable drawable = res.getDrawable(R.drawable.msg_in);
 
                     layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                     msgvieww.setLayoutParams(layoutParams);

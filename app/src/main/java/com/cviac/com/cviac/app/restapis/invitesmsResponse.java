@@ -1,13 +1,15 @@
 package com.cviac.com.cviac.app.restapis;
 
 /**
- * Created by User on 04-Jan-17.
+ * Created by BALA on 10-01-2017.
  */
 
-public class EmailResponse {
+public class invitesmsResponse {
+
     private int code;
     private String desc;
-    public EmailResponse(int code, String desc) {
+
+    public invitesmsResponse(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }

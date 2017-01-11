@@ -40,8 +40,8 @@ public interface CVIACApi {
     @POST("/CVIACAPI/cviacdbop.php/additionalregistration")
     Call<AdditinalRegisterResponse> registeradditionalverification(@Body AdditionalRegInfo regInfor);
 
-    @POST("/CVIACAPI/cviacdbop.php/sendemail")
-    Call<EmailResponse> sendEmail(@Body EmailInfo emailInfo);
+    @POST("/CVIACAPI/cviacdbop.php/sendsms")
+    Call<invitesmsResponse> sendMobile(@Body invitesmsinfo emailInfo);
 
 
 }

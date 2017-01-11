@@ -3,7 +3,6 @@ package com.cviac.com.cviac.app.fragments;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.cviac.activity.cviacapp.CVIACApplication;
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.adapaters.ColleguesAdapter;
@@ -12,6 +11,8 @@ import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.datamodels.PresenceInfo;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.invitesmsResponse;
+import com.cviac.com.cviac.app.restapis.invitesmsinfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +28,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +52,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
     Employee emp;
     String a;
     String mobile;
+
     String emp_namelogged;
     List<EmployeeInfo> emplist;
 
@@ -86,7 +87,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                     a = emp.getEmp_name();
                 }
                 if (emp_namelogged.equalsIgnoreCase(a)) {
-                //do nothing
+                    //do nothing
 
                 } else {
                     InviteorLanchByPresence(emp.getEmp_code());
@@ -168,13 +169,16 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                     public void onClick(DialogInterface dialog, int id) {
 
 
-                        String message = "Greeting from CVIAC MOBILITY,\n\n"+"            "+emp_namelogged + " invited you to install the CVIAC Chat App.\nClick the below link to insatll.\n"+"http://www.apps.cviac.com/mobileapps/cviacapp.apk";
+                        String message = emp_namelogged + " invited you to install CVIAC Chat App.\nClick below link to install.\n" + "http://www.apps.cviac.com/mobileapps/cviacapp.apk";
 
                         Context ctx = getActivity().getApplicationContext();
                         if (ctx != null) {
-                            CVIACApplication app = (CVIACApplication) getActivity().getApplicationContext();
-                            String email=emp.getEmail();
-                            app.sendEmail(email, "Install CviacChat App", message);
+                            // CVIACApplication app = (CVIACApplication) getActivity().getApplicationContext();
+                            String mobile = emp.getMobile();
+                           // sendMobile(mobile, message);
+                            sendsms(mobile,message);
+
+
                         }
 
                         dialog.cancel();
@@ -194,6 +198,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         alert11.show();
 
     }
+
     private void getEmployees() {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
@@ -251,5 +256,34 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onRefresh() {
         getEmployees();
 
+    }
+
+    private void sendsms(String mobile, String msgBody)
+    {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        invitesmsinfo emailinfo = new invitesmsinfo(mobile, msgBody);
+        Call<invitesmsResponse> call = api.sendMobile(emailinfo);
+        call.enqueue(new retrofit.Callback<invitesmsResponse>() {
+            @Override
+            public void onResponse(retrofit.Response<invitesmsResponse> response, Retrofit retrofit) {
+                int code;
+                invitesmsResponse rsp = response.body();
+                code = rsp.getCode();
+                if (code == 0) {
+                    Toast.makeText(getActivity(), "invite Success", Toast.LENGTH_LONG).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 }
