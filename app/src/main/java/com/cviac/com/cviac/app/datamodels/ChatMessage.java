@@ -28,6 +28,10 @@ public class ChatMessage extends Model {
     @Column(name = "sendername")
     private String name;
 
+    private String receiver;
+
+    private String msgid;
+
 
     public ChatMessage() {
         super();
@@ -71,6 +75,22 @@ public class ChatMessage extends Model {
 
     public boolean isIn() {
         return isIn;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getMsgid() {
+        return msgid;
+    }
+
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
     }
 
     public static List<ChatMessage> getAll(String from) {

@@ -21,5 +21,6 @@
     <string name="hint_email">Mobile Number</string>
     <string name="hint_name">Employee Code</string>
     <string name="dob">DOB</string>
+    <string name="server">cviacmob.p1.im</string>
 
 </resources>

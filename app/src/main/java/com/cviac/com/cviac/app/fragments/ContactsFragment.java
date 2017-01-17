@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
+import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ColleguesAdapter;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.Conversation;
@@ -137,7 +138,11 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                             cov.setImageurl(emp.getImage_url());
                             Context ctx = getActivity().getApplicationContext();
                             if (ctx != null) {
-                                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
+//                                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
+//                                i.putExtra("conversewith", cov);
+//                                startActivity(i);
+
+                                Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
                                 i.putExtra("conversewith", cov);
                                 startActivity(i);
                             }
