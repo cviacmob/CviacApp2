@@ -453,7 +453,7 @@ public class XMPPClient {
 
         private void processMessage(final ChatMessage msg) {
             msg.isMine = false;
-            ConvMessage cmsg = new ConvMessage();
+            final ConvMessage cmsg = new ConvMessage();
             cmsg.setMsg(msg.body);
             cmsg.setCtime(new Date());
             cmsg.setIn(true);
@@ -462,22 +462,19 @@ public class XMPPClient {
             cmsg.setReceiver(msg.receiver);
             cmsg.setMsgid(msg.msgid);
             cmsg.save();
-            saveLastConversationMessage(msg);
-
-            CVIACApplication app = (CVIACApplication) context.getApplication();
-            if (app != null) {
-                XMPPChatActivity actv = app.getChatActivty();
-                if (actv != null) {
-                    actv.addInMessage(cmsg);
-                }
-            }
-
            // Chats.chatlist.add(chatMessage);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
 
                 @Override
                 public void run() {
-                   // Chats.chatAdapter.notifyDataSetChanged();
+                    saveLastConversationMessage(msg);
+                    CVIACApplication app = (CVIACApplication) context.getApplication();
+                    if (app != null) {
+                        XMPPChatActivity actv = app.getChatActivty();
+                        if (actv != null) {
+                            actv.addInMessage(cmsg);
+                        }
+                    }
                     Toast.makeText(context,msg.body, Toast.LENGTH_LONG).show();
                 }
             });
