@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
+import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ConversationAdapter;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 
@@ -54,7 +55,8 @@ public class ChatsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos1, long pos2) {
                 Conversation emp = emps.get(pos1);
-                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
+                //Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
+                Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
                 i.putExtra("conversewith", emp);
                 startActivity(i);
             }

@@ -4,11 +4,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +42,9 @@ import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.cviac.com.cviac.app.fragments.ContactsFragment;
 import com.cviac.com.cviac.app.fragments.EventsFragment;
+import com.cviac.com.cviac.app.xmpp.ChatMessage;
+import com.cviac.com.cviac.app.xmpp.LocalBinder;
+import com.cviac.com.cviac.app.xmpp.XMPPService;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -57,6 +64,8 @@ import retrofit.Response;
 import retrofit.Retrofit;
 
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+
+    private static final String TAG = "HomeActivity";
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -90,6 +99,28 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
 
+    private XMPPService mService;
+
+    private boolean mBounded;
+
+    private final ServiceConnection mConnection = new ServiceConnection() {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void onServiceConnected(final ComponentName name,
+                                       final IBinder service) {
+            mService = ((LocalBinder<XMPPService>) service).getService();
+            mBounded = true;
+            Log.d(TAG, "onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(final ComponentName name) {
+            mService = null;
+            mBounded = false;
+            Log.d(TAG, "onServiceDisconnected");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +159,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
                 editor.putString("empid", emplogged.getEmp_code());
                 editor.putString("empname", emplogged.getEmp_name());
                 editor.commit();
+                doBindService();
             }
         }
 
@@ -320,7 +352,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        new UpdateStatusTask().execute("offline");
+        //new UpdateStatusTask().execute("offline");
+        doUnbindService();
     }
 
     private void updatePresence(String status, String empCode) {
@@ -472,6 +505,21 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             emp.save();
 
         }
+    }
+
+    void doBindService() {
+        bindService(new Intent(this, XMPPService.class), mConnection,
+                Context.BIND_AUTO_CREATE);
+    }
+
+    void doUnbindService() {
+        if (mConnection != null) {
+            unbindService(mConnection);
+        }
+    }
+
+    public XMPPService getmService() {
+        return mService;
     }
 
 

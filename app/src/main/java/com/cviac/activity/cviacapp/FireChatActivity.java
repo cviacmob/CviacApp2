@@ -18,10 +18,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,11 +35,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cviac.com.cviac.app.adapaters.CircleTransform;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.restapis.FCMSendMessageResponse;
 import com.cviac.com.cviac.app.restapis.PushMessageInfo;
-import com.cviac.com.cviac.app.datamodels.ChatMessage;
 import com.cviac.com.cviac.app.datamodels.ChatMsg;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.PresenceInfo;
@@ -73,7 +71,7 @@ import retrofit.Retrofit;
 
 public class FireChatActivity extends Activity implements View.OnClickListener {
 
-    private List<ChatMessage> chats;
+    private List<ConvMessage> chats;
     private Conversation conv;
     private FirebaseListAdapter<ChatMsg> myAdapter;
     ActionBar actionBar;
@@ -119,7 +117,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
         lv.setDivider(null);
        // lv.setDividerHeight(5);
 
-        //chats = new ArrayList<ChatMessage>();
+        //chats = new ArrayList<ConvMessage>();
 
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);

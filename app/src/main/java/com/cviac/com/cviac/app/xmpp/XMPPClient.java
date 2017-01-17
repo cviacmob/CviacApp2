@@ -7,8 +7,12 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.cviac.activity.cviacapp.CVIACApplication;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
+import com.cviac.com.cviac.app.datamodels.Conversation;
+import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.google.gson.Gson;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -29,6 +33,7 @@ import org.jivesoftware.smackx.receipts.DeliveryReceiptManager.AutoReceiptMode;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class XMPPClient {
 
@@ -426,17 +431,54 @@ public class XMPPClient {
             }
         }
 
-        private void processMessage(final ChatMessage chatMessage) {
+        private void saveLastConversationMessage(ChatMessage msg) {
+            CVIACApplication app = (CVIACApplication) context.getApplication();
+            ChatsFragment chatFrag = app.getChatsFragment();
+            Conversation cnv = Conversation.getConversation(msg.sender);
+            boolean newconv = false;
+            if (cnv == null) {
+                cnv = new Conversation();
+                newconv = true;
+            }
+            cnv.setEmpid(msg.sender);
+           // cnv.setImageurl(conv.getImageurl());
+            cnv.setName(msg.senderName);
+            cnv.setDatetime(new Date());
+            cnv.setLastmsg(msg.body);
+            cnv.save();
+            if (chatFrag != null && chatFrag.adapter != null) {
+                chatFrag.reloadConversation();
+            }
+        }
 
-            chatMessage.isMine = false;
+        private void processMessage(final ChatMessage msg) {
+            msg.isMine = false;
+            ConvMessage cmsg = new ConvMessage();
+            cmsg.setMsg(msg.body);
+            cmsg.setCtime(new Date());
+            cmsg.setIn(true);
+            cmsg.setFrom(msg.sender);
+            cmsg.setName(msg.senderName);
+            cmsg.setReceiver(msg.receiver);
+            cmsg.setMsgid(msg.msgid);
+            cmsg.save();
+            saveLastConversationMessage(msg);
+
+            CVIACApplication app = (CVIACApplication) context.getApplication();
+            if (app != null) {
+                XMPPChatActivity actv = app.getChatActivty();
+                if (actv != null) {
+                    actv.addInMessage(cmsg);
+                }
+            }
+
            // Chats.chatlist.add(chatMessage);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
 
                 @Override
                 public void run() {
                    // Chats.chatAdapter.notifyDataSetChanged();
-
-                    Toast.makeText(context,chatMessage.body, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,msg.body, Toast.LENGTH_LONG).show();
                 }
             });
         }

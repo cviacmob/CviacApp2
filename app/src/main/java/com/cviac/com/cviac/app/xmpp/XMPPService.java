@@ -53,4 +53,10 @@ public class XMPPService extends Service {
     public static boolean isNetworkConnected() {
         return cm.getActiveNetworkInfo() != null;
     }
+
+    public static void sendMessage(ChatMessage msg) {
+        if (xmpp != null) {
+            xmpp.sendMessage(msg);
+        }
+    }
 }

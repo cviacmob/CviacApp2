@@ -3,7 +3,7 @@ package com.cviac.com.cviac.app.adapaters;
 import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
-import com.cviac.com.cviac.app.datamodels.ChatMessage;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
 
 
 import android.content.Context;
@@ -13,16 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
+public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
 
-    private List<ChatMessage> chats;
+    private List<ConvMessage> chats;
     public ArrayAdapter adapter;
 
     private int lastPostion = -1;
 
     Context mContext;
 
-    public ChatMessageAdapter(List<ChatMessage> objects, Context context) {
+    public ConvMessageAdapter(List<ConvMessage> objects, Context context) {
         super(context, R.layout.fragment_chat, objects);
         chats = objects;
         mContext = context;
@@ -36,7 +36,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vw = convertView;
         ViewHolder holder;
-        ChatMessage chat = getItem(position);
+        ConvMessage chat = getItem(position);
         if (convertView == null) {
             LayoutInflater inf = LayoutInflater.from(getContext());
             vw = inf.inflate(R.layout.fragment_chat, parent, false);

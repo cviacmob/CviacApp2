@@ -63,13 +63,15 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
                     .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
         } else {
             Employee emp = Employee.getemployee(conv.getEmpid());
-            conv.setImageurl(emp.getImage_url());
-            if (emp.getGender().equalsIgnoreCase("female")) {
-                Picasso.with(mContext).load(R.drawable.female).resize(80, 80).transform(new CircleTransform())
-                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
-            } else {
-                Picasso.with(mContext).load(R.drawable.ic_boy).resize(80, 80).transform(new CircleTransform())
-                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
+            if (emp != null) {
+                conv.setImageurl(emp.getImage_url());
+                if (emp.getGender().equalsIgnoreCase("female")) {
+                    Picasso.with(mContext).load(R.drawable.female).resize(80, 80).transform(new CircleTransform())
+                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.imgview);
+                } else {
+                    Picasso.with(mContext).load(R.drawable.ic_boy).resize(80, 80).transform(new CircleTransform())
+                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.imgview);
+                }
             }
         }
 

@@ -23,9 +23,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cviac.com.cviac.app.adapaters.ChatMessageAdapter;
+import com.cviac.com.cviac.app.adapaters.ConvMessageAdapter;
 import com.cviac.com.cviac.app.adapaters.CircleTransform;
-import com.cviac.com.cviac.app.datamodels.ChatMessage;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -42,8 +42,8 @@ public class ChatActivity extends Activity {
     ImageView customimageback, customimage;
     ActionBar actionBar;
     static ActionBar mActionBar;
-    private List<ChatMessage> chats;
-    private ChatMessageAdapter chatAdapter;
+    private List<ConvMessage> chats;
+    private ConvMessageAdapter chatAdapter;
     Context mContext;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -60,14 +60,14 @@ public class ChatActivity extends Activity {
 
 
         ListView lv = (ListView) findViewById(R.id.listViewChat);
-        //chats = new ArrayList<ChatMessage>();
+        //chats = new ArrayList<ConvMessage>();
 
         Intent i = getIntent();
         emp = (Conversation) i.getSerializableExtra("conversewith");
-        chats = ChatMessage.getAll(emp.getEmpid());
+        chats = ConvMessage.getAll(emp.getEmpid());
         //setTitle(emp.getName());
         actionmethod();
-        chatAdapter = new ChatMessageAdapter(chats, this);
+        chatAdapter = new ConvMessageAdapter(chats, this);
         lv.setDivider(null);
         lv.setAdapter(chatAdapter);
         if (savedInstanceState == null) {
@@ -96,7 +96,7 @@ public class ChatActivity extends Activity {
 
                 if (msg.length() != 0) {
 
-                    ChatMessage mgsopj = new ChatMessage();
+                    ConvMessage mgsopj = new ConvMessage();
 
                     mgsopj.setMsg(msg);
                     mgsopj.setIn(false);

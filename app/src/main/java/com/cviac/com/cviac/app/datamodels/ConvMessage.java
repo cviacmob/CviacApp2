@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 
-@Table(name = "ChatMessages")
-public class ChatMessage extends Model {
+@Table(name = "ConvMessages")
+public class ConvMessage extends Model {
 
     @Column(name = "msg")
     private String msg;
@@ -28,12 +28,14 @@ public class ChatMessage extends Model {
     @Column(name = "sendername")
     private String name;
 
+    @Column(name = "receiver")
     private String receiver;
 
+    @Column(name = "msgid")
     private String msgid;
 
 
-    public ChatMessage() {
+    public ConvMessage() {
         super();
     }
 
@@ -93,27 +95,27 @@ public class ChatMessage extends Model {
         this.msgid = msgid;
     }
 
-    public static List<ChatMessage> getAll(String from) {
+    public static List<ConvMessage> getAll(String from) {
         return new Select()
-                .from(ChatMessage.class)
+                .from(ConvMessage.class)
                 .where("sender = ?", from)
                 //.orderBy("Name ASC")
                 .execute();
     }
 
-    public static List<ChatMessage> getConversations() {
-        List<ChatMessage> conversations = SQLiteUtils.rawQuery(ChatMessage.class, "select * from (select * from ChatMessages ORDER BY ctime asc) AS x GROUP BY sender ORDER BY ctime DESC",
+    public static List<ConvMessage> getConversations() {
+        List<ConvMessage> conversations = SQLiteUtils.rawQuery(ConvMessage.class, "select * from (select * from ChatMessages ORDER BY ctime asc) AS x GROUP BY sender ORDER BY ctime DESC",
                 new String[]{});
         return conversations;
     }
 
-//	public static List<ChatMessage> getMessagesFromConversation(int userId, int teamId, String conversationId, boolean isGroupConversation) {
-//		List<ChatMessage> messages = new Select().from(ChatMessage.class).where("userId=? AND teamId=? AND conversation_id=? AND is_group_conversation=?", userId, teamId, conversationId, isGroupConversation).orderBy("created_time DESC").execute();
+//	public static List<ConvMessage> getMessagesFromConversation(int userId, int teamId, String conversationId, boolean isGroupConversation) {
+//		List<ConvMessage> messages = new Select().from(ConvMessage.class).where("userId=? AND teamId=? AND conversation_id=? AND is_group_conversation=?", userId, teamId, conversationId, isGroupConversation).orderBy("created_time DESC").execute();
 //		return messages;
 //	}
 //
 //	public static void deleteMessages(int teamId) {
-//		new Delete().from(ChatMessage.class).where("teamId=?", teamId).execute();
+//		new Delete().from(ConvMessage.class).where("teamId=?", teamId).execute();
 //	}
 
 
