@@ -58,7 +58,7 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
 
         url1 = emp.getImage_url();
         if (url1 != null && url1.length() > 0) {
-            Picasso.with(mContext).load(emp.getImage_url()).resize(80, 80).transform(new CircleTransform())
+            Picasso.with(mContext).load(url1).resize(80, 80).transform(new CircleTransform())
                     .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.empimage);
         } else {
             if(emp.getGender().equalsIgnoreCase("female"))

@@ -8,18 +8,27 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.cviac.com.cviac.app.xmpp.ChatMessage;
 import com.cviac.com.cviac.app.xmpp.LocalBinder;
 import com.cviac.com.cviac.app.xmpp.XMPPService;
 
 import java.util.List;
+import java.util.Random;
 
 public class XMPPChatActivity extends AppCompatActivity {
 
     private static final String TAG = "XMPPChatActivity";
 
     private List<ChatMessage> chats;
+    String geteditmgs;
+
+    public String msgid;
+    ImageButton img;
+    EditText edittxt;
 
     private XMPPService mService;
 
@@ -54,6 +63,18 @@ public class XMPPChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xmppchat);
         doBindService();
+
+         img=(ImageButton)findViewById(R.id.sendbutton);
+        edittxt=(EditText)findViewById(R.id.editTextsend) ;
+        geteditmgs=edittxt.getText().toString();
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               ChatMessage chat=new ChatMessage("cc0089","cc0101",geteditmgs,msgid,true);
+                sendMessage(chat);
+            }
+        });
+
     }
 
     @Override
@@ -77,5 +98,9 @@ public class XMPPChatActivity extends AppCompatActivity {
         return mService;
     }
 
+    public void setMsgID() {
 
+        msgid += "-" + String.format("%02d", new Random().nextInt(100));
+        ;
+    }
 }

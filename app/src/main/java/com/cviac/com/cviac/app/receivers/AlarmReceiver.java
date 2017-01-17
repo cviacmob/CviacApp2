@@ -56,7 +56,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         for (Employee e : emplist) {
             EventInfo evt = new EventInfo();
             evt.setEvent_title(e.getEmp_name());
-            evt.setEvent_description("Happy Birthday");
+            evt.setEvent_description("Birthday");
             evt.setEvent_date(new Date());
             evt.save();
 
@@ -67,7 +67,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     .setContentTitle(srt)
                     .setAutoCancel(true)
                     .setSound(soundUri)
-                    .setContentText("Happy Birthday");
+                    .setContentText("Birthday");
 
 
             Intent resultIntent = new Intent(context, FireChatActivity.class);
@@ -100,6 +100,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 
     }
+
+
 
     private String getDate() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

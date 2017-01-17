@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class Register extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
         e1 = (EditText) findViewById(R.id.editTextphnum);
+        e1.setInputType(InputType.TYPE_CLASS_PHONE);
+
 
         e1.setRawInputType(Configuration.KEYBOARD_12KEY);
 

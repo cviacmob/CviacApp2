@@ -47,7 +47,6 @@ public class EventsAdapter extends ArrayAdapter<EventInfo> {
         View vw = convertView;
         ViewHolder holder;
 
-        EventInfo evennn = getItem(position);
         if (convertView == null) {
 
             LayoutInflater inf = LayoutInflater.from(getContext());
