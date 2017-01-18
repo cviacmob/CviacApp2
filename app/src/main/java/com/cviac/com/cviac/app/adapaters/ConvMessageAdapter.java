@@ -7,17 +7,27 @@ import com.cviac.com.cviac.app.datamodels.ConvMessage;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.text.InputType;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
 
     private List<ConvMessage> chats;
     public ArrayAdapter adapter;
-
+    private String myempId;
     private int lastPostion = -1;
 
     Context mContext;
@@ -31,6 +41,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
     public static class ViewHolder {
         public TextView msgview;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -47,7 +58,41 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             holder = (ViewHolder) vw.getTag();
         }
 
-        holder.msgview.setText(chat.getMsg().toString());
+        if (chat.isIn() == false) {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
+            Resources res = mContext.getResources();
+            Drawable drawable = res.getDrawable(R.drawable.msg_out);
+
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            rLayout.setBackgroundDrawable(drawable);
+            holder.msgview.setLayoutParams(layoutParams);
+            //msgview.setBackgroundResource(R.drawable.bubble2);
+            holder.msgview.setText(chat.getMsg());
+            // msgview.setText(s.getMsg());
+        } else {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            TextView msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
+            TextView txt = (TextView) vw.findViewById(R.id.duration);
+            msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
+
+            RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
+            Resources res = mContext.getResources();
+            Drawable drawable = res.getDrawable(R.drawable.msg_in);
+
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            msgvieww.setLayoutParams(layoutParams);
+            rLayout.setBackgroundDrawable(drawable);
+            // msgview.setBackgroundResource(R.drawable.bubble1);
+            msgvieww.setText(chat.getMsg());
+        }
         return vw;
+
     }
+
 }

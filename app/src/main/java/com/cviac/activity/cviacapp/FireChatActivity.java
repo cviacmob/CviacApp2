@@ -75,7 +75,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
     private Conversation conv;
     private FirebaseListAdapter<ChatMsg> myAdapter;
     ActionBar actionBar;
-    static ActionBar mActionBar;
+
     private DatabaseReference dbref;
     RelativeLayout.LayoutParams relativelayout;
     ImageView customimageback, customimage, imgvwtick, cuscall;
