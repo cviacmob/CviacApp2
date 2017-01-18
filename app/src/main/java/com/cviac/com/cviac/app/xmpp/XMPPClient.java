@@ -441,10 +441,10 @@ public class XMPPClient {
                 newconv = true;
             }
             cnv.setEmpid(msg.sender);
-           // cnv.setImageurl(conv.getImageurl());
+            // cnv.setImageurl(conv.getImageurl());
             cnv.setName(msg.senderName);
             cnv.setDatetime(new Date());
-            cnv.setLastmsg(msg.body);
+            cnv.setLastmsg(msg.msg);
             cnv.save();
             if (chatFrag != null && chatFrag.adapter != null) {
                 chatFrag.reloadConversation();
@@ -452,17 +452,17 @@ public class XMPPClient {
         }
 
         private void processMessage(final ChatMessage msg) {
-            msg.isMine = false;
             final ConvMessage cmsg = new ConvMessage();
-            cmsg.setMsg(msg.body);
-            cmsg.setCtime(new Date());
-            cmsg.setIn(true);
-            cmsg.setFrom(msg.sender);
-            cmsg.setName(msg.senderName);
+            cmsg.setMsg(msg.msg);
+            cmsg.setCtime(msg.ctime);
+            cmsg.setMine(false);
+            cmsg.setSender(msg.sender);
+            cmsg.setSenderName(msg.senderName);
+            cmsg.setConverseid(msg.converseid);
             cmsg.setReceiver(msg.receiver);
             cmsg.setMsgid(msg.msgid);
             cmsg.save();
-           // Chats.chatlist.add(chatMessage);
+            // Chats.chatlist.add(chatMessage);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
 
                 @Override
@@ -475,7 +475,7 @@ public class XMPPClient {
                             actv.addInMessage(cmsg);
                         }
                     }
-                    Toast.makeText(context,msg.body, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,msg.msg, Toast.LENGTH_LONG).show();
                 }
             });
         }

@@ -5,20 +5,21 @@ import java.util.Random;
 
 public class ChatMessage {
 
-    public String body, sender, receiver, senderName;
-    public Date datetime;
+    public String msg, sender, converseid, receiver, senderName;
+    public Date ctime;
     public String msgid;
     public boolean isMine;// Did I send the message.
 
-    public ChatMessage(String Sender,  String Receiver, String messageString,
+    public ChatMessage(String converseId,String Sender,  String Receiver, String messageString,
                        String ID, boolean isMINE) {
-        body = messageString;
+        msg = messageString;
         isMine = isMINE;
         sender = Sender;
         msgid = ID;
         receiver = Receiver;
         senderName = sender;
-        datetime = new Date();
+        converseid= converseId;
+        ctime = new Date();
     }
 
     public void setSenderName(String name) {

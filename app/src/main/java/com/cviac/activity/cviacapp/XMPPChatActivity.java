@@ -85,7 +85,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         app.setChatActivty(this);
         actionmethod();
-        //final String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
+
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
@@ -96,8 +96,9 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 geteditmgs = edittxt.getText().toString();
-                ChatMessage chat = new ChatMessage(myempId, conv.getEmpid(), geteditmgs, msgid, true);
-                chat.setMsgID();
+                String converseId =  getNormalizedConverseId(myempId,conv.getEmpid());
+                msgid = getMsgID();
+                ChatMessage chat = new ChatMessage(converseId,myempId, conv.getEmpid(), geteditmgs, msgid, true);
                 chat.setSenderName(myempname);
                 XMPPService.sendMessage(chat);
                 saveChatMessage(chat);
@@ -108,7 +109,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     }
 
     private void loadConvMessages() {
-        chats = ConvMessage.getAll(conv.getEmpid());
+        String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
+        chats = ConvMessage.getAll(converseId);
         chatAdapter = new ConvMessageAdapter(chats, this);
         lv.setAdapter(chatAdapter);
     }
@@ -129,13 +131,14 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
     public void saveChatMessage(ChatMessage msg) {
         ConvMessage cmsg = new ConvMessage();
-        cmsg.setMsg(msg.body);
+        cmsg.setMsg(msg.msg);
         cmsg.setCtime(new Date());
-        cmsg.setFrom(msg.receiver);
-        cmsg.setName(msg.senderName);
-        cmsg.setReceiver(msg.sender);
+        cmsg.setConverseid(msg.converseid);
+        cmsg.setSenderName(msg.senderName);
+        cmsg.setReceiver(msg.receiver);
+        cmsg.setSender(msg.sender);
         cmsg.setMsgid(msg.msgid);
-        cmsg.setIn((msg.isMine == true) ? false : true);
+        cmsg.setMine(msg.isMine);
         cmsg.save();
         saveLastConversationMessage(msg);
         chats.add(cmsg);
@@ -155,7 +158,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         cnv.setImageurl(conv.getImageurl());
         cnv.setName(conv.getName());
         cnv.setDatetime(new Date());
-        cnv.setLastmsg(msg.body);
+        cnv.setLastmsg(msg.msg);
         cnv.save();
         if (chatFrag != null && chatFrag.adapter != null) {
             chatFrag.reloadConversation();
@@ -300,5 +303,9 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             actionBar.setCustomView(customView);
         }
 
+    }
+
+    public String getMsgID() {
+        return System.currentTimeMillis()+"";
     }
 }

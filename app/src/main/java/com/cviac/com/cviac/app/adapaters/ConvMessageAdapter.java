@@ -58,7 +58,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             holder = (ViewHolder) vw.getTag();
         }
 
-        if (chat.isIn() == false) {
+        if (chat.isMine() == true) {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT);

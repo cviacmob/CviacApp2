@@ -16,17 +16,20 @@ public class ConvMessage extends Model {
     @Column(name = "msg")
     private String msg;
 
-    @Column(name = "isIn")
-    private boolean isIn;
+    @Column(name = "isMine")
+    private boolean isMine;
 
     @Column(name = "ctime")
     private Date ctime;
 
-    @Column(name = "sender")
-    private String from;
+    @Column(name = "converseid")
+    private String converseid;
 
     @Column(name = "sendername")
-    private String name;
+    private String senderName;
+
+    @Column(name = "sender")
+    private String sender;
 
     @Column(name = "receiver")
     private String receiver;
@@ -39,22 +42,6 @@ public class ConvMessage extends Model {
         super();
     }
 
-    public Date getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getMsg() {
         return msg;
     }
@@ -63,20 +50,36 @@ public class ConvMessage extends Model {
         this.msg = msg;
     }
 
-    public void setIn(boolean isIn) {
-        this.isIn = isIn;
+    public boolean isMine() {
+        return isMine;
     }
 
-    public String getFrom() {
-        return from;
+    public void setMine(boolean mine) {
+        isMine = mine;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
+    public Date getCtime() {
+        return ctime;
     }
 
-    public boolean isIn() {
-        return isIn;
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
+    }
+
+    public String getConverseid() {
+        return converseid;
+    }
+
+    public void setConverseid(String converseid) {
+        this.converseid = converseid;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public String getReceiver() {
@@ -95,19 +98,27 @@ public class ConvMessage extends Model {
         this.msgid = msgid;
     }
 
-    public static List<ConvMessage> getAll(String from) {
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public static List<ConvMessage> getAll(String converseid) {
         return new Select()
                 .from(ConvMessage.class)
-                .where("sender = ?", from)
+                .where("converseid = ?", converseid)
                 //.orderBy("Name ASC")
                 .execute();
     }
 
-    public static List<ConvMessage> getConversations() {
-        List<ConvMessage> conversations = SQLiteUtils.rawQuery(ConvMessage.class, "select * from (select * from ChatMessages ORDER BY ctime asc) AS x GROUP BY sender ORDER BY ctime DESC",
-                new String[]{});
-        return conversations;
-    }
+//    public static List<ConvMessage> getConversations() {
+//        List<ConvMessage> conversations = SQLiteUtils.rawQuery(ConvMessage.class, "select * from (select * from ChatMessages ORDER BY ctime asc) AS x GROUP BY sender ORDER BY ctime DESC",
+//                new String[]{});
+//        return conversations;
+//    }
 
 //	public static List<ConvMessage> getMessagesFromConversation(int userId, int teamId, String conversationId, boolean isGroupConversation) {
 //		List<ConvMessage> messages = new Select().from(ConvMessage.class).where("userId=? AND teamId=? AND conversation_id=? AND is_group_conversation=?", userId, teamId, conversationId, isGroupConversation).orderBy("created_time DESC").execute();
