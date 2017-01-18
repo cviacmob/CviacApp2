@@ -454,7 +454,8 @@ public class XMPPClient {
         private void processMessage(final ChatMessage msg) {
             final ConvMessage cmsg = new ConvMessage();
             cmsg.setMsg(msg.msg);
-            cmsg.setCtime(msg.ctime);
+            cmsg.setCtime(new Date());
+          //  cmsg.setCtime(msg.ctime);
             cmsg.setMine(false);
             cmsg.setSender(msg.sender);
             cmsg.setSenderName(msg.senderName);
@@ -472,7 +473,11 @@ public class XMPPClient {
                     if (app != null) {
                         XMPPChatActivity actv = app.getChatActivty();
                         if (actv != null) {
-                            actv.addInMessage(cmsg);
+                            String convId=actv.getConverseId();
+                            if(convId.equalsIgnoreCase(msg.converseid)){
+                                actv.addInMessage(cmsg);
+                            }
+
                         }
                     }
                     Toast.makeText(context,msg.msg, Toast.LENGTH_LONG).show();

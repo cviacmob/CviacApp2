@@ -65,7 +65,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     ImageView customimageback, customimage;
     private ConvMessageAdapter chatAdapter;
     TextView txt, msgview, presenceText;
-
+    int fromNotify = 0;
+    String converseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         Intent i = getIntent();
         conv = (Conversation) i.getSerializableExtra("conversewith");
-
+        fromNotify = i.getIntExtra("fromnotify", 0);
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         myempId = prefs.getString("empid", "");
@@ -109,10 +110,14 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     }
 
     private void loadConvMessages() {
-        String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
+        converseId = getNormalizedConverseId(myempId, conv.getEmpid());
         chats = ConvMessage.getAll(converseId);
         chatAdapter = new ConvMessageAdapter(chats, this);
         lv.setAdapter(chatAdapter);
+    }
+    public String getConverseId()
+    {
+        return converseId;
     }
 
 
@@ -287,13 +292,13 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             customimageback.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-/*
+
                     if (fromNotify == 1) {
                         Intent i = new Intent(XMPPChatActivity.this, HomeActivity.class);
                         startActivity(i);
-                    }*/
-                    Intent i = new Intent(XMPPChatActivity.this, HomeActivity.class);
-                    startActivity(i);
+                    }
+               /*     Intent i = new Intent(XMPPChatActivity.this, HomeActivity.class);
+                    startActivity(i);*/
                     finish();
                 }
             });

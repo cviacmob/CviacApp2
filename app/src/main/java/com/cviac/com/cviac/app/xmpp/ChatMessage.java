@@ -6,7 +6,7 @@ import java.util.Random;
 public class ChatMessage {
 
     public String msg, sender, converseid, receiver, senderName;
-    public Date ctime;
+    public String ctime;
     public String msgid;
     public boolean isMine;// Did I send the message.
 
@@ -19,7 +19,8 @@ public class ChatMessage {
         receiver = Receiver;
         senderName = sender;
         converseid= converseId;
-        ctime = new Date();
+
+        ctime = "";
     }
 
     public void setSenderName(String name) {
