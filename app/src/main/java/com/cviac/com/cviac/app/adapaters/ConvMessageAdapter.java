@@ -1,5 +1,9 @@
 package com.cviac.com.cviac.app.adapaters;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
@@ -39,7 +43,8 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
     }
 
     public static class ViewHolder {
-        public TextView msgview;
+        public TextView msgview,txt;
+
     }
 
 
@@ -53,16 +58,16 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             vw = inf.inflate(R.layout.fragment_chat, parent, false);
             holder = new ViewHolder();
             holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+            holder.txt = (TextView) vw.findViewById(R.id.duration);
             vw.setTag(holder);
         } else {
             holder = (ViewHolder) vw.getTag();
         }
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         if (chat.isMine() == true) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-
             RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
             Resources res = mContext.getResources();
             Drawable drawable = res.getDrawable(R.drawable.msg_out);
@@ -73,25 +78,47 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             //msgview.setBackgroundResource(R.drawable.bubble2);
             holder.msgview.setText(chat.getMsg());
             // msgview.setText(s.getMsg());
+            holder.txt.setText(getformatteddate(chat.getCtime()));
         } else {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-            TextView msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
-            TextView txt = (TextView) vw.findViewById(R.id.duration);
-            msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
+
+            //holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
+            //holder.txt = (TextView) vw.findViewById(R.id.duration);
+            //msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
 
             RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
             Resources res = mContext.getResources();
             Drawable drawable = res.getDrawable(R.drawable.msg_in);
 
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            msgvieww.setLayoutParams(layoutParams);
+            holder.msgview.setLayoutParams(layoutParams);
             rLayout.setBackgroundDrawable(drawable);
             // msgview.setBackgroundResource(R.drawable.bubble1);
-            msgvieww.setText(chat.getMsg());
+            holder.msgview.setText(chat.getMsg());
+            holder.txt.setText(getformatteddate(chat.getCtime()));
         }
         return vw;
+
+    }
+    private void ismine(){
+
+    }
+    private String getformatteddate(Date dateTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "today at  " + timeFormatter.format(dateTime);
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "yesterday at " + timeFormatter.format(dateTime);
+        } else {
+            DateFormat dateform = new SimpleDateFormat("dd-MMM-yy");
+            return dateform.format(dateTime) + " " + timeFormatter.format(dateTime);
+        }
 
     }
 
