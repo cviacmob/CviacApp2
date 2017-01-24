@@ -82,7 +82,7 @@
         <activity android:name=".AdditionalVerification" />
         />
         <receiver android:name="com.cviac.com.cviac.app.receivers.AlarmReceiver">
-            <intent-filter>
+            <intent-filter >
                 <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
 
                 <category android:name="android.intent.category.DEFAULT" />

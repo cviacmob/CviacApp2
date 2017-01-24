@@ -48,7 +48,7 @@ public class Employee extends Model implements Serializable {
     private Date doj;
 
 
-    public Employee(){
+    public Employee() {
     }
 
     public String getPush_id() {
@@ -234,53 +234,36 @@ public class Employee extends Model implements Serializable {
         }
         return result;
     }
-    public static List<Employee> eventsbydatedoj() {
 
+    public static List<Employee> eventsbydatedoj() {
+        Calendar cal = Calendar.getInstance();
+        int dat = cal.get(Calendar.DAY_OF_MONTH);
+        String dformat = String.format("%02d", dat);
+        int mnth = cal.get(Calendar.MONTH) + 1;
+        String mformat = String.format("%02d", mnth);
+        int yrs = cal.get(Calendar.YEAR);
+        String myrs=String.format("%02d", yrs);
+        String wdate = "-" + mformat + "-" + dformat;
 
         List<Employee> result = new ArrayList<>();
         List<Employee> emplist = new Select()
                 .from(Employee.class)
                 .execute();
-        for(Employee emp:emplist)
-        {
-            String dt= String.valueOf(emp.getDoj());
-            int a=age(dt);
+
+        for (Employee emp : emplist) {
+            SimpleDateFormat format = new SimpleDateFormat("-MM-dd");
+            String dt = format.format(emp.getDoj());
+            if(wdate.equals(dt))
             result.add(emp);
-            
+
 
         }
         return result;
     }
 
-    public static int age(String strDate1) {
 
-        String strDate2 =getDate();
-        int years = 0;
-        String dateFormat1 = "dd-MM-yyyy";
-        String dateFormat2= "yyyy-MM-dd";
-        Date date1, date2 = null;
-        SimpleDateFormat sdf1 = new SimpleDateFormat(dateFormat1);
-        SimpleDateFormat sdf2 = new SimpleDateFormat(dateFormat2);
-        SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
 
-        try {
-            date1 = (Date)sdf1.parse(strDate1);
-            date2 = (Date)sdf2.parse(strDate2);
 
-            int year1 = Integer.parseInt(sdfYear.format(date1));
-            int year2 = Integer.parseInt(sdfYear.format(date2));
-
-            years = year2 - year1;
-        } catch (ParseException ex) {
-            System.err.println(ex.getMessage());
-        }
-
-        return years;
-    }
-    private static String getDate() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(new Date());
-    }
 
 }
 

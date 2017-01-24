@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,7 @@ import android.widget.AbsListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.receivers.AlarmReceiver;
 import com.cviac.com.cviac.app.datamodels.Employee;
@@ -50,6 +53,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.okhttp.OkHttpClient;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,11 +88,12 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
      */
     private ViewPager mViewPager;
     List<EmployeeInfo> emplist;
-
+    CoordinatorLayout coordinatorLayout;
     private String mobile;
     ProgressDialog progressDialog;
 
     private String empCode;
+    Context mcontext;
 
     private ChatsFragment chatFrag;
 
@@ -131,9 +138,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         setAlaram();
 
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        coordinatorLayout=(CoordinatorLayout)findViewById(R.id.main_content);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -152,7 +160,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         mobile = prefs.getString("mobile", "");
         empCode = mobile;
         if (mobile != null) {
-            emplogged= Employee.getemployeeByMobile(mobile);
+            emplogged = Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
                 empCode = emplogged.getEmp_code();
                 SharedPreferences.Editor editor = prefs.edit();
@@ -171,16 +179,18 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         //List<Employee> emplist = Employee.eventsbydate();
 
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 6);
-        calendar.set(Calendar.MINUTE,0);
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
-
+        for (int i = 0; i < 3; i++) {
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            alarmIntent = PendingIntent.getBroadcast(this, i, intent, 0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.HOUR_OF_DAY, 6);
+            calendar.set(Calendar.MINUTE, 0);
+            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY, alarmIntent);
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -246,8 +256,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         if (tab.getText().toString().equalsIgnoreCase("CHATS")) {
             chatFrag.reloadFilterByChats(newText);
         } else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
-            if(empFrag!=null)
-            {
+            if (empFrag != null) {
                 empFrag.reloadFilterByName(newText);
             }
 
@@ -256,8 +265,6 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         return false;
     }
-
-
 
 
     /**
@@ -521,6 +528,17 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     public XMPPService getmService() {
         return mService;
     }
+public  void getsnackbar()
+{
+    if(getApplicationContext()!=null){
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "XMPP server connected!", Snackbar.LENGTH_LONG)
+                .setAction("RETRY", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                });
+    }
 
-
+}
 }

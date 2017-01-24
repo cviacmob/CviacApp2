@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.adapaters.EventsAdapter;
+import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
 
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class EventsFragment extends Fragment {
 
 
         return events;
+
     }
 
     private List<EventInfo> getEvents() {

@@ -55,8 +55,7 @@
             android:scrollbars="vertical"
             android:scrollbarStyle="insideInset"
             android:layout_toStartOf="@+id/sendbutton"
-            android:layout_toLeftOf="@+id/sendbutton"
-            android:layout_alignTop="@+id/sendbutton">
+            android:layout_toLeftOf="@+id/sendbutton">
 
             <requestFocus />
         </EditText>

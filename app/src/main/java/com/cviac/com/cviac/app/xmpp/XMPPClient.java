@@ -4,10 +4,13 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.cviac.activity.cviacapp.CVIACApplication;
+import com.cviac.activity.cviacapp.HomeActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
@@ -79,6 +82,7 @@ public class XMPPClient {
 
     String text = "";
     String mMessage = "", mReceiver = "";
+
     static {
         try {
             Class.forName("org.jivesoftware.smack.ReconnectionManager");
@@ -402,10 +406,8 @@ public class XMPPClient {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-
                         Toast.makeText(context, "Connected!",
                                 Toast.LENGTH_SHORT).show();
-
                     }
                 });
         }
@@ -455,7 +457,7 @@ public class XMPPClient {
             final ConvMessage cmsg = new ConvMessage();
             cmsg.setMsg(msg.msg);
             cmsg.setCtime(new Date());
-          //  cmsg.setCtime(msg.ctime);
+            //  cmsg.setCtime(msg.ctime);
             cmsg.setMine(false);
             cmsg.setSender(msg.sender);
             cmsg.setSenderName(msg.senderName);
@@ -473,14 +475,14 @@ public class XMPPClient {
                     if (app != null) {
                         XMPPChatActivity actv = app.getChatActivty();
                         if (actv != null) {
-                            String convId=actv.getConverseId();
-                            if(convId.equalsIgnoreCase(msg.converseid)){
+                            String convId = actv.getConverseId();
+                            if (convId.equalsIgnoreCase(msg.converseid)) {
                                 actv.addInMessage(cmsg);
                             }
 
                         }
                     }
-                    Toast.makeText(context,msg.msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, msg.msg, Toast.LENGTH_LONG).show();
                 }
             });
         }

@@ -97,13 +97,16 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 geteditmgs = edittxt.getText().toString();
-                String converseId =  getNormalizedConverseId(myempId,conv.getEmpid());
-                msgid = getMsgID();
-                ChatMessage chat = new ChatMessage(converseId,myempId, conv.getEmpid(), geteditmgs, msgid, true);
-                chat.setSenderName(myempname);
-                XMPPService.sendMessage(chat);
-                saveChatMessage(chat);
-                edittxt.getText().clear();
+                if (!geteditmgs.equals("")) {
+                    String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
+                    msgid = getMsgID();
+                    ChatMessage chat = new ChatMessage(converseId, myempId, conv.getEmpid(), geteditmgs, msgid, true);
+                    chat.setSenderName(myempname);
+                    XMPPService.sendMessage(chat);
+                    saveChatMessage(chat);
+                    edittxt.getText().clear();
+                }
+
             }
         });
         loadConvMessages();
@@ -115,8 +118,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         chatAdapter = new ConvMessageAdapter(chats, this);
         lv.setAdapter(chatAdapter);
     }
-    public String getConverseId()
-    {
+
+    public String getConverseId() {
         return converseId;
     }
 
@@ -311,6 +314,6 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     }
 
     public String getMsgID() {
-        return System.currentTimeMillis()+"";
+        return System.currentTimeMillis() + "";
     }
 }
