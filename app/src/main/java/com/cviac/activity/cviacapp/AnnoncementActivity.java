@@ -36,14 +36,13 @@ public class AnnoncementActivity extends AppCompatActivity {
         adapter = new AnnoncementAdapter(anno, getApplicationContext());
         lv.setAdapter(adapter);
 
-       lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               //String br=(String)lv.getItemAtPosition(position);
-               Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
-                       Toast.LENGTH_SHORT).show();
-           }
-       });
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Annoncements mnotes = (Annoncements) parent.getItemAtPosition(position);
+                alertforivite(mnotes.getAnnoncemsg());
+            }
+        });
     }
 
     private List<Annoncements> getAnno() {
@@ -53,15 +52,13 @@ public class AnnoncementActivity extends AppCompatActivity {
 
     private void alertforivite(String postion) {
 
-     Annoncements emp = new Annoncements();
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        TextView tv=new TextView(this);
+        TextView tv = new TextView(this);
         builder1.setView(tv);
         tv.setText(postion);
 
-       // builder1.setMessage(ans.getAnnoncemsg());
+        // builder1.setMessage(ans.getAnnoncemsg());
         builder1.setCancelable(true);
-
 
 
         builder1.setNegativeButton(

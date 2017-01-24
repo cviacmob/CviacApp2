@@ -51,13 +51,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             String notofi=remoteMessage.getNotification().getBody();
-            Annoncements anc=new Annoncements();
-            anc.setAnnoncemsg(notofi);
-            anc.setDate(new Date());
-            anc.save();
+            annoncement(notofi);
             Log.d(TAG, "Message Annoncements Body: " + remoteMessage.getNotification().getBody());
 
         }
+    }
+    private void annoncement(String msg){
+        Annoncements anc=new Annoncements();
+        anc.setAnnoncemsg(msg);
+        anc.setDate(new Date());
+        anc.save();
     }
 
     Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

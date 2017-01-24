@@ -181,8 +181,8 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                         if (ctx != null) {
                             // CVIACApplication app = (CVIACApplication) getActivity().getApplicationContext();
                             String mobile = emp.getMobile();
-                           // sendMobile(mobile, message);
-                            sendsms(mobile,message);
+                            // sendMobile(mobile, message);
+                            sendsms(mobile, message);
 
 
                         }
@@ -264,8 +264,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     }
 
-    private void sendsms(String mobile, String msgBody)
-    {
+    private void sendsms(String mobile, String msgBody) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://apps.cviac.com")
                 .addConverterFactory(GsonConverterFactory.create())
