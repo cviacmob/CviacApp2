@@ -9,19 +9,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
+
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cviac.com.cviac.app.adapaters.AnnoncementAdapter;
-import com.cviac.com.cviac.app.adapaters.EventsAdapter;
+
 import com.cviac.com.cviac.app.datamodels.Annoncements;
-import com.cviac.com.cviac.app.datamodels.EventInfo;
+import com.cviac.com.cviac.app.datamodels.Employee;
+
 
 import java.util.List;
 
-public class AnnoncementActivity extends Activity {
+public class AnnoncementActivity extends AppCompatActivity {
     ListView lv;
     List<Annoncements> anno;
     AnnoncementAdapter adapter;
@@ -35,12 +36,14 @@ public class AnnoncementActivity extends Activity {
         adapter = new AnnoncementAdapter(anno, getApplicationContext());
         lv.setAdapter(adapter);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                alertforivite();
-            }
-        });
+       lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               //String br=(String)lv.getItemAtPosition(position);
+               Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
+                       Toast.LENGTH_SHORT).show();
+           }
+       });
     }
 
     private List<Annoncements> getAnno() {
@@ -48,22 +51,30 @@ public class AnnoncementActivity extends Activity {
     }
 
 
-    private void alertforivite() {
-        final Dialog dialog = new Dialog(getApplicationContext());
-        dialog.setContentView(R.layout.custom);
-        Annoncements ans = new Annoncements();
-        TextView text = (TextView) dialog.findViewById(R.id.text);
-        String mgs = ans.getAnnoncemsg();
-        text.setText(mgs);
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+    private void alertforivite(String postion) {
 
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+     Annoncements emp = new Annoncements();
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        TextView tv=new TextView(this);
+        builder1.setView(tv);
+        tv.setText(postion);
+
+       // builder1.setMessage(ans.getAnnoncemsg());
+        builder1.setCancelable(true);
+
+
+
+        builder1.setNegativeButton(
+                "Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
 
     }
 }
