@@ -82,7 +82,7 @@
         <activity android:name=".AdditionalVerification" />
         />
         <receiver android:name="com.cviac.com.cviac.app.receivers.AlarmReceiver">
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -93,8 +93,10 @@
             android:name="com.cviac.com.cviac.app.xmpp.XMPPService"
             android:enabled="true" />
 
-        <activity android:name=".XMPPChatActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" ></activity>
+        <activity
+            android:name=".XMPPChatActivity"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar" />
+        <activity android:name=".AnnoncementActivity"></activity>
     </application>
 
 </manifest>

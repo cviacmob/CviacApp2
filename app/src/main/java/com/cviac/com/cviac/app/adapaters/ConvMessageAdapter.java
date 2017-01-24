@@ -99,9 +99,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
         return vw;
 
     }
-    private void ismine(){
 
-    }
     private String getformatteddate(Date dateTime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);

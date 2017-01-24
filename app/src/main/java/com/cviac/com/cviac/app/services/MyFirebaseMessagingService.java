@@ -13,12 +13,17 @@ import android.util.Log;
 
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
+import com.cviac.com.cviac.app.datamodels.Annoncements;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by User on 11/24/2016.
@@ -40,13 +45,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Map<String, String> data = remoteMessage.getData();
             showNotification(data);
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            return;
         }
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            String notofi=remoteMessage.getNotification().getBody();
+            Annoncements anc=new Annoncements();
+            anc.setAnnoncemsg(notofi);
+            anc.setDate(new Date());
+            anc.save();
+            Log.d(TAG, "Message Annoncements Body: " + remoteMessage.getNotification().getBody());
+
         }
     }
+
     Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     private void showNotification(Map<String, String> data) {
         NotificationCompat.Builder mBuilder =
