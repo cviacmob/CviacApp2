@@ -43,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> data = remoteMessage.getData();
-            showNotification(data);
+            showChatNotification(data);
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             return;
         }
@@ -51,7 +51,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             String notofi=remoteMessage.getNotification().getBody();
-            annoncement(notofi);
+            showAnnouncement(notofi);
+            //annoncement(notofi);
             Log.d(TAG, "Message Annoncements Body: " + remoteMessage.getNotification().getBody());
 
         }
@@ -64,7 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-    private void showNotification(Map<String, String> data) {
+    private void showChatNotification(Map<String, String> data) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.cviac_logo)
@@ -95,6 +96,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
 
+        mNotificationManager.notify(0, mBuilder.build());
+
+
+    }
+
+    private void showAnnouncement(String msg) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.cviac_logo)
+                        .setAutoCancel(true)
+                        .setSound(soundUri)
+                        .setContentText(msg);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
         mNotificationManager.notify(0, mBuilder.build());
 
 
