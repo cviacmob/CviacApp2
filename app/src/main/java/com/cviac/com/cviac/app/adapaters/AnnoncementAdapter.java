@@ -13,9 +13,10 @@ import com.cviac.com.cviac.app.datamodels.Annoncements;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-/**
- * Created by Administrator on 1/24/2017.
- */
+
+ // Created by Administrator on 1/24/2017.
+
+
 
 public class AnnoncementAdapter extends ArrayAdapter<Annoncements> {
 

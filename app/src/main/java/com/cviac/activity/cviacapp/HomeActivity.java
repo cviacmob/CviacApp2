@@ -239,11 +239,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
             return true;
         }
-        if (id == R.id.action_Notification) {
-            Intent i = new Intent(HomeActivity.this, AnnoncementActivity.class);
-            startActivity(i);
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }

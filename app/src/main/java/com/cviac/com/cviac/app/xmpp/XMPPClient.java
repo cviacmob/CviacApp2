@@ -518,7 +518,7 @@ public class XMPPClient {
 
                         }
                     }
-                    Toast.makeText(context, msg.msg, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, msg.msg, Toast.LENGTH_LONG).show();
                 }
             });
         }
