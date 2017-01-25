@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
 
     public static class ViewHolder {
         public TextView msgview,txt;
+        public ImageView statusview;
 
     }
 
@@ -59,6 +61,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             holder = new ViewHolder();
             holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
             holder.txt = (TextView) vw.findViewById(R.id.duration);
+           holder.statusview= (ImageView)vw.findViewById(R.id.list_image) ;
             vw.setTag(holder);
         } else {
             holder = (ViewHolder) vw.getTag();
@@ -79,6 +82,18 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             holder.msgview.setText(chat.getMsg());
             // msgview.setText(s.getMsg());
             holder.txt.setText(getformatteddate(chat.getCtime()));
+            if (chat.getStatus() == 0) {
+                holder.statusview.setBackgroundResource(R.drawable.schedule);
+            }
+            if (chat.getStatus() == 1) {
+                holder.statusview.setBackgroundResource(R.drawable.done);
+            } else if (chat.getStatus() == 2) {
+                holder.statusview.setBackgroundResource(R.drawable.done_all);
+            } else if (chat.getStatus() == 3) {
+                holder.statusview.setBackgroundResource(R.drawable.done_all_colo);
+            }
+           // holder.statusview.setBackgroundResource(R.drawable.done);
+
         } else {
 
             //holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);

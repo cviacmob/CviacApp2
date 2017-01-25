@@ -148,6 +148,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         cmsg.setSender(msg.sender);
         cmsg.setMsgid(msg.msgid);
         cmsg.setMine(msg.isMine);
+        cmsg.setStatus(1);
         cmsg.save();
         saveLastConversationMessage(msg);
         chats.add(cmsg);

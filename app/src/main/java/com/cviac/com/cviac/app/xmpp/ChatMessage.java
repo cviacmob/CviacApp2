@@ -9,6 +9,7 @@ public class ChatMessage {
     public String ctime;
     public String msgid;
     public boolean isMine;// Did I send the message.
+    public int ack = 0;
 
     public ChatMessage(String converseId,String Sender,  String Receiver, String messageString,
                        String ID, boolean isMINE) {

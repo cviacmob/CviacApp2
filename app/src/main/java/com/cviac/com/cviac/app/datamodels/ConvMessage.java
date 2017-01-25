@@ -4,6 +4,7 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.activeandroid.query.Update;
 import com.activeandroid.util.SQLiteUtils;
 
 import java.util.Date;
@@ -34,8 +35,11 @@ public class ConvMessage extends Model {
     @Column(name = "receiver")
     private String receiver;
 
-    @Column(name = "msgid")
+    @Column(name = "msgid", unique = true)
     private String msgid;
+
+    @Column(name = "status")
+    private int  status;
 
 
     public ConvMessage() {
@@ -105,6 +109,23 @@ public class ConvMessage extends Model {
     public void setSender(String sender) {
         this.sender = sender;
     }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public static void updateStatus(String msgId, int status) {
+        new Update(ConvMessage.class)
+                .set("status = ?", status)
+                .where("msgid = ?", msgId)
+                .execute();
+        return;
+    }
+
 
     public static List<ConvMessage> getAll(String converseid) {
         return new Select()

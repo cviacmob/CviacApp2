@@ -268,6 +268,8 @@ public class XMPPClient {
     }
 
     public void sendAckMessage(ChatMessage chatMessage) {
+        chatMessage.ack=1;
+        chatMessage.msg="";
         String body = gson.toJson(chatMessage);
          Mychat = ChatManager.getInstanceFor(connection).createChat(
                     chatMessage.sender + "@"
@@ -452,16 +454,14 @@ public class XMPPClient {
                     && message.getBody() != null) {
                 final ChatMessage chatMessage = gson.fromJson(
                         message.getBody(), ChatMessage.class);
-
-                processMessage(chatMessage);
-                sendAckMessage(chatMessage);
-            }
-            else if (message.getType() == Message.Type.normal
-                    && message.getBody() != null) {
-                final ChatMessage chatMessage = gson.fromJson(
-                        message.getBody(), ChatMessage.class);
-                String msgId = chatMessage.msgid;
-
+                if (chatMessage.ack == 1) {
+                    String msgId = chatMessage.msgid;
+                    ConvMessage.updateStatus(msgId,2);
+                }
+                else {
+                    processMessage(chatMessage);
+                    sendAckMessage(chatMessage);
+                }
             }
         }
 
@@ -496,7 +496,11 @@ public class XMPPClient {
             cmsg.setConverseid(msg.converseid);
             cmsg.setReceiver(msg.receiver);
             cmsg.setMsgid(msg.msgid);
-            cmsg.save();
+            try {
+                cmsg.save();
+            }
+            catch(Exception e) {
+            }
             // Chats.chatlist.add(chatMessage);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
 
