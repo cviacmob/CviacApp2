@@ -242,10 +242,37 @@ public class XMPPClient {
 
     public void sendMessage(ChatMessage chatMessage) {
         String body = gson.toJson(chatMessage);
+        Mychat = ChatManager.getInstanceFor(connection).createChat(
+                chatMessage.receiver + "@"
+                        + context.getString(R.string.server),
+                mMessageListener);
+        final Message message = new Message();
+        message.setBody(body);
+        message.setStanzaId(chatMessage.msgid);
+        message.setType(Message.Type.chat);
+
+        try {
+            if (connection.isAuthenticated()) {
+                Mychat.sendMessage(message);
+            } else {
+                login();
+            }
+        } catch (NotConnectedException e) {
+            Log.e("xmpp.SendMessage()", "msg Not sent!-Not Connected!");
+
+        } catch (Exception e) {
+            Log.e("xmppException",
+                    "msg Not sent!" + e.getMessage());
+        }
+
+    }
+
+    public void sendAckMessage(ChatMessage chatMessage) {
+        String body = gson.toJson(chatMessage);
 
         if (!chat_created) {
             Mychat = ChatManager.getInstanceFor(connection).createChat(
-                    chatMessage.receiver + "@"
+                    chatMessage.sender + "@"
                             + context.getString(R.string.server),
                     mMessageListener);
             chat_created = true;
@@ -253,7 +280,7 @@ public class XMPPClient {
         final Message message = new Message();
         message.setBody(body);
         message.setStanzaId(chatMessage.msgid);
-        message.setType(Message.Type.chat);
+        message.setType(Message.Type.normal);
 
         try {
             if (connection.isAuthenticated()) {
@@ -430,6 +457,14 @@ public class XMPPClient {
                         message.getBody(), ChatMessage.class);
 
                 processMessage(chatMessage);
+                sendAckMessage(chatMessage);
+            }
+            else if (message.getType() == Message.Type.normal
+                    && message.getBody() != null) {
+                final ChatMessage chatMessage = gson.fromJson(
+                        message.getBody(), ChatMessage.class);
+                String msgId = chatMessage.msgid;
+
             }
         }
 
