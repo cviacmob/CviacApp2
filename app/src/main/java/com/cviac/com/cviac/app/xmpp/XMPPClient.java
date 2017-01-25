@@ -269,14 +269,11 @@ public class XMPPClient {
 
     public void sendAckMessage(ChatMessage chatMessage) {
         String body = gson.toJson(chatMessage);
-
-        if (!chat_created) {
-            Mychat = ChatManager.getInstanceFor(connection).createChat(
+         Mychat = ChatManager.getInstanceFor(connection).createChat(
                     chatMessage.sender + "@"
                             + context.getString(R.string.server),
                     mMessageListener);
-            chat_created = true;
-        }
+
         final Message message = new Message();
         message.setBody(body);
         message.setStanzaId(chatMessage.msgid);
