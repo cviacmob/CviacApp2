@@ -179,16 +179,16 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         //List<Employee> emplist = Employee.eventsbydate();
 
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        for (int i = 0; i < 3; i++) {
+
             Intent intent = new Intent(this, AlarmReceiver.class);
-            alarmIntent = PendingIntent.getBroadcast(this, i, intent, 0);
+            alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.HOUR_OF_DAY, 6);
             calendar.set(Calendar.MINUTE, 0);
             alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                     AlarmManager.INTERVAL_DAY, alarmIntent);
-        }
+
     }
 
 
