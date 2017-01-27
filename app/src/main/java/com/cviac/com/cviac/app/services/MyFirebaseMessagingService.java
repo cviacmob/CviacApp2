@@ -13,7 +13,7 @@ import android.util.Log;
 
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
-import com.cviac.com.cviac.app.datamodels.Annoncements;
+
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -57,12 +57,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         }
     }
-    private void annoncement(String msg){
+   /* private void annoncement(String msg){
         Annoncements anc=new Annoncements();
         anc.setAnnoncemsg(msg);
         anc.setDate(new Date());
         anc.save();
-    }
+    }*/
 
     Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     private void showChatNotification(Map<String, String> data) {
@@ -107,6 +107,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.drawable.cviac_logo)
                         .setAutoCancel(true)
                         .setSound(soundUri)
+                        .setContentTitle("CVIAC")
                         .setContentText(msg);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

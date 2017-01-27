@@ -1,3 +1,4 @@
+/*
 package com.cviac.activity.cviacapp;
 
 import android.app.Activity;
@@ -75,3 +76,4 @@ public class AnnoncementActivity extends AppCompatActivity {
 
     }
 }
+*/

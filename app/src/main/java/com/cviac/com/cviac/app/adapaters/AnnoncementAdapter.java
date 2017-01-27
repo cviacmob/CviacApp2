@@ -1,3 +1,4 @@
+/*
 package com.cviac.com.cviac.app.adapaters;
 
 import android.content.Context;
@@ -59,3 +60,4 @@ List<Annoncements> annonce;
         return vw;
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.cviac.com.cviac.app.datamodels;
 
 import com.activeandroid.Model;
@@ -8,9 +9,11 @@ import com.activeandroid.query.Select;
 import java.util.Date;
 import java.util.List;
 
+*/
 /**
  * Created by Administrator on 1/24/2017.
- */
+ *//*
+
 @Table(name = "Annoncements")
 public class Annoncements extends Model {
     @Column(name = "annoncemsg")
@@ -41,3 +44,4 @@ public class Annoncements extends Model {
                 .execute();
     }
 }
+*/

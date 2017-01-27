@@ -7,7 +7,7 @@ import android.support.multidex.MultiDexApplication;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
-import com.cviac.com.cviac.app.datamodels.Annoncements;
+
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
@@ -40,7 +40,7 @@ public class CVIACApplication extends MultiDexApplication {
         configurationBuilder.addModelClasses(Employee.class);
         configurationBuilder.addModelClasses(EventInfo.class);
         configurationBuilder.addModelClasses(Conversation.class);
-        configurationBuilder.addModelClasses(Annoncements.class);
+
         ActiveAndroid.initialize(configurationBuilder.create());
     }
 

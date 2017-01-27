@@ -84,16 +84,13 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                 emp = emps.get(pos1);
 
-//                for (int i = 0; i <= emp.getEmp_name().length(); i++) {
-//                    a = emp.getEmp_name();
-//                }
-//                if (emp_namelogged.equalsIgnoreCase(a)) {
-//                    //do nothing
-//
-//                } else
-                {
-                    InviteorLanchByPresence(emp.getEmp_code());
-                }
+              for (int i = 0; i <= emp.getEmp_name().length(); i++) {
+                   a = emp.getEmp_name();
+               }
+              if (!emp_namelogged.equalsIgnoreCase(a)) {
+                  //do nothing
+                  InviteorLanchByPresence(emp.getEmp_code());
+               }
 
 
                 //Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
