@@ -46,6 +46,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
     public static class ViewHolder {
         public TextView msgview,txt;
         public ImageView statusview;
+        public  RelativeLayout rLayout;
 
     }
 
@@ -61,7 +62,8 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             holder = new ViewHolder();
             holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
             holder.txt = (TextView) vw.findViewById(R.id.duration);
-           holder.statusview= (ImageView)vw.findViewById(R.id.list_image) ;
+            holder.statusview= (ImageView)vw.findViewById(R.id.list_image) ;
+            holder.rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
             vw.setTag(holder);
         } else {
             holder = (ViewHolder) vw.getTag();
@@ -71,12 +73,11 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         if (chat.isMine() == true) {
-            RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
+            holder.statusview.setVisibility(View.VISIBLE);
             Resources res = mContext.getResources();
             Drawable drawable = res.getDrawable(R.drawable.msg_out);
-
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            rLayout.setBackgroundDrawable(drawable);
+            holder.rLayout.setBackgroundDrawable(drawable);
             holder.msgview.setLayoutParams(layoutParams);
             //msgview.setBackgroundResource(R.drawable.bubble2);
             holder.msgview.setText(chat.getMsg());
@@ -95,21 +96,17 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
            // holder.statusview.setBackgroundResource(R.drawable.done);
 
         } else {
-
-            //holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
-            //holder.txt = (TextView) vw.findViewById(R.id.duration);
-            //msgvieww = (TextView) vw.findViewById(R.id.textchatmsg);
-
-            RelativeLayout rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
+            holder.statusview.setVisibility(View.INVISIBLE);
             Resources res = mContext.getResources();
             Drawable drawable = res.getDrawable(R.drawable.msg_in);
 
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             holder.msgview.setLayoutParams(layoutParams);
-            rLayout.setBackgroundDrawable(drawable);
+            holder.rLayout.setBackgroundDrawable(drawable);
             // msgview.setBackgroundResource(R.drawable.bubble1);
             holder.msgview.setText(chat.getMsg());
             holder.txt.setText(getformatteddate(chat.getCtime()));
+
         }
         return vw;
 

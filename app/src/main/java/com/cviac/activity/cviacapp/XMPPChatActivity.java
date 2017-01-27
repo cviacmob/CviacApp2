@@ -133,7 +133,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     }
 
     public void addInMessage(ConvMessage msg) {
-        chats.add(msg);
+        // chats.add(msg);
+        loadConvMessages();
         chatAdapter.notifyDataSetChanged();
     }
 
@@ -148,6 +149,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         cmsg.setSender(msg.sender);
         cmsg.setMsgid(msg.msgid);
         cmsg.setMine(msg.isMine);
+        cmsg.setMine(true);
         cmsg.setStatus(1);
         cmsg.save();
         saveLastConversationMessage(msg);
@@ -302,8 +304,6 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                         Intent i = new Intent(XMPPChatActivity.this, HomeActivity.class);
                         startActivity(i);
                     }
-               /*     Intent i = new Intent(XMPPChatActivity.this, HomeActivity.class);
-                    startActivity(i);*/
                     finish();
                 }
             });
@@ -317,5 +317,17 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
     public String getMsgID() {
         return System.currentTimeMillis() + "";
+    }
+
+    public void updateMessageStatus(String msgId, int status) {
+//        for (ConvMessage msg : chats) {
+//            if (msg.getMsgid().equalsIgnoreCase(msgId)) {
+//                msg.setStatus(status);
+//                break;
+//            }
+//        }
+        loadConvMessages();
+        chatAdapter.notifyDataSetChanged();
+
     }
 }

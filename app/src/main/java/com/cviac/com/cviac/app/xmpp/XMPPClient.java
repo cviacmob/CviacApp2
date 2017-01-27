@@ -457,6 +457,7 @@ public class XMPPClient {
                 if (chatMessage.ack == 1) {
                     String msgId = chatMessage.msgid;
                     ConvMessage.updateStatus(msgId,2);
+                    updateMessageStatusInUI(msgId,2);
                 }
                 else {
                     processMessage(chatMessage);
@@ -485,6 +486,21 @@ public class XMPPClient {
             }
         }
 
+        private void updateMessageStatusInUI(final String msgId, final int status) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    CVIACApplication app = (CVIACApplication) context.getApplication();
+                    if (app != null) {
+                        XMPPChatActivity actv = app.getChatActivty();
+                        if (actv != null) {
+                            actv.updateMessageStatus(msgId,status);
+                        }
+                    }
+                }
+            });
+        }
+
         private void processMessage(final ChatMessage msg) {
             final ConvMessage cmsg = new ConvMessage();
             cmsg.setMsg(msg.msg);
@@ -496,8 +512,10 @@ public class XMPPClient {
             cmsg.setConverseid(msg.converseid);
             cmsg.setReceiver(msg.receiver);
             cmsg.setMsgid(msg.msgid);
+            cmsg.setStatus(-1);
             try {
                 cmsg.save();
+                saveLastConversationMessage(msg);
             }
             catch(Exception e) {
             }
