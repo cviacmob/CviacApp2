@@ -7,9 +7,10 @@ import android.net.ConnectivityManager;
 import android.os.IBinder;
 
 public class XMPPService extends Service {
-    private static final String DOMAIN = "cviacmob.p1.im";
-    private static final String USERNAME = "guna";
-    private static final String PASSWORD = "tech@cviac";
+    //private static final String DOMAIN1 = "cviacmob.p1.im";
+    private static final String DOMAIN = "ec2-52-33-98-83.us-west-2.compute.amazonaws.com";
+//    private static final String USERNAME = "guna";
+//    private static final String PASSWORD = "tech@cviac";
     public static ConnectivityManager cm;
     public static XMPPClient xmpp;
     public static boolean ServerchatCreated = false;
