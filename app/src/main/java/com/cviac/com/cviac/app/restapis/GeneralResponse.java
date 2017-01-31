@@ -4,12 +4,12 @@ package com.cviac.com.cviac.app.restapis;
  * Created by BALA on 10-01-2017.
  */
 
-public class invitesmsResponse {
+public class GeneralResponse {
 
     private int code;
     private String desc;
 
-    public invitesmsResponse(int code, String desc) {
+    public GeneralResponse(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }

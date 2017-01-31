@@ -11,8 +11,11 @@ import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Part;
+import retrofit.http.Path;
 import retrofit.http.Query;
+
 
 /**
  * Created by Shanmugam on 30-11-2016.
@@ -29,6 +32,9 @@ public interface CVIACApi {
     @GET("/CVIACAPI/cviacdbop.php")
     Call<List<EmployeeInfo>> getEmployees();
 
+    @GET("/CVIACAPI/cviacdbop.php/{emp_code}")
+    Call<List<EmployeeInfo>> getEmployeByID(@Path("emp_code") String emp_code);
+
     @Multipart
     @POST("/CVIACAPI/upload.php")
     Call<ProfileUpdateResponse> profileUpdate(@Query("emp_code") String empcode, @Part("fileToUpload\"; filename=\"pp.png\" ") RequestBody file);
@@ -41,8 +47,9 @@ public interface CVIACApi {
     Call<AdditinalRegisterResponse> registeradditionalverification(@Body AdditionalRegInfo regInfor);
 
     @POST("/CVIACAPI/cviacdbop.php/sendsms")
-    Call<invitesmsResponse> sendMobile(@Body invitesmsinfo emailInfo);
+    Call<GeneralResponse> sendMobile(@Body SMSInfo emailInfo);
 
-
+    @PUT("/CVIACAPI/cviacdbop.php/add_push_id")
+    Call<GeneralResponse> updatePushId(@Body PushInfo pushInfo);
 }
 

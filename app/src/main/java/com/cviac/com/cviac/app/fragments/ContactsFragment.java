@@ -3,7 +3,6 @@ package com.cviac.com.cviac.app.fragments;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ColleguesAdapter;
@@ -12,8 +11,8 @@ import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.datamodels.PresenceInfo;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
-import com.cviac.com.cviac.app.restapis.invitesmsResponse;
-import com.cviac.com.cviac.app.restapis.invitesmsinfo;
+import com.cviac.com.cviac.app.restapis.GeneralResponse;
+import com.cviac.com.cviac.app.restapis.SMSInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -267,13 +266,13 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CVIACApi api = retrofit.create(CVIACApi.class);
-        invitesmsinfo emailinfo = new invitesmsinfo(mobile, msgBody);
-        Call<invitesmsResponse> call = api.sendMobile(emailinfo);
-        call.enqueue(new retrofit.Callback<invitesmsResponse>() {
+        SMSInfo emailinfo = new SMSInfo(mobile, msgBody);
+        Call<GeneralResponse> call = api.sendMobile(emailinfo);
+        call.enqueue(new retrofit.Callback<GeneralResponse>() {
             @Override
-            public void onResponse(retrofit.Response<invitesmsResponse> response, Retrofit retrofit) {
+            public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
                 int code;
-                invitesmsResponse rsp = response.body();
+                GeneralResponse rsp = response.body();
                 code = rsp.getCode();
                 if (code == 0) {
                     Toast.makeText(getActivity(), "invite Success", Toast.LENGTH_LONG).show();

@@ -4,11 +4,11 @@ package com.cviac.com.cviac.app.restapis;
  * Created by BALA on 10-01-2017.
  */
 
-public class invitesmsinfo {
+public class SMSInfo {
     private String mobile;
     private String msg;
 
-    public invitesmsinfo(String mobile, String msg) {
+    public SMSInfo(String mobile, String msg) {
         this.mobile = mobile;
         this.msg = msg;
     }

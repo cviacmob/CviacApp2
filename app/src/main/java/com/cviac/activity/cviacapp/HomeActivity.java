@@ -45,6 +45,8 @@ import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.cviac.com.cviac.app.fragments.ContactsFragment;
 import com.cviac.com.cviac.app.fragments.EventsFragment;
+import com.cviac.com.cviac.app.restapis.GeneralResponse;
+import com.cviac.com.cviac.app.restapis.PushInfo;
 import com.cviac.com.cviac.app.xmpp.ChatMessage;
 import com.cviac.com.cviac.app.xmpp.LocalBinder;
 import com.cviac.com.cviac.app.xmpp.XMPPService;
@@ -398,32 +400,70 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private void updatePushId(String empCode, String pushId) {
 
-        Map<String, Object> updateValues = new HashMap<>();
-        updateValues.put("pushId", pushId);
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit ret = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
 
-        DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
-        mfiredbref.child(empCode).updateChildren(
-                updateValues,
-                new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError firebaseError, DatabaseReference databaseReference) {
-                        if (firebaseError != null) {
-                            Toast.makeText(HomeActivity.this,
-                                    "PushID update failed: " + firebaseError.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        } else {
-                            final String MyPREFERENCES = "MyPrefs";
-                            SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("pushIdsynced", "true");
-                            editor.commit();
-//                            Toast.makeText(HomeActivity.this,
-//                                    "Presence update success", Toast.LENGTH_LONG).show();
+        CVIACApi api = ret.create(CVIACApi.class);
+        PushInfo info = new PushInfo();
+        info.setEmp_code(empCode);
+        info.setPush_id(pushId);
+        final Call<GeneralResponse> call = api.updatePushId(info);
+        call.enqueue(new Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(Response<GeneralResponse> response, Retrofit retrofit) {
+                GeneralResponse rsp = response.body();
+                if (rsp.getCode() == 0) {
+                    Toast.makeText(HomeActivity.this, "PushId Registered", Toast.LENGTH_SHORT).show();
+                    final String MyPREFERENCES = "MyPrefs";
+                    SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("pushIdsynced", "true");
+                    editor.commit();
+                }
+            }
 
-                        }
-                    }
-                });
+            @Override
+            public void onFailure(Throwable throwable) {
+            }
+        });
+
     }
+
+
+//    private void updatePushId(String empCode, String pushId) {
+//
+//        Map<String, Object> updateValues = new HashMap<>();
+//        updateValues.put("pushId", pushId);
+//
+//        DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
+//        mfiredbref.child(empCode).updateChildren(
+//                updateValues,
+//                new DatabaseReference.CompletionListener() {
+//                    @Override
+//                    public void onComplete(DatabaseError firebaseError, DatabaseReference databaseReference) {
+//                        if (firebaseError != null) {
+//                            Toast.makeText(HomeActivity.this,
+//                                    "PushID update failed: " + firebaseError.getMessage(),
+//                                    Toast.LENGTH_LONG).show();
+//                        } else {
+//                            final String MyPREFERENCES = "MyPrefs";
+//                            SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+//                            SharedPreferences.Editor editor = prefs.edit();
+//                            editor.putString("pushIdsynced", "true");
+//                            editor.commit();
+////                            Toast.makeText(HomeActivity.this,
+////                                    "Presence update success", Toast.LENGTH_LONG).show();
+//
+//                        }
+//                    }
+//                });
+//    }
 
     private class UpdatePushIDTask extends AsyncTask<String, Integer, Long> {
 
