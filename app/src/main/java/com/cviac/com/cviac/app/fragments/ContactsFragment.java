@@ -72,7 +72,10 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         SharedPreferences prefs = getActivity().getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         mobile = prefs.getString("mobile", "");
         Employee emplogged = Employee.getemployeeByMobile(mobile);
-        emp_namelogged = emplogged.getEmp_name();
+        if(emp_namelogged!=null){
+            emp_namelogged = emplogged.getEmp_name();
+        }
+
 
         lv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -249,6 +252,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             emp.setImage_url(empinfo.getImage_url());
             emp.setPush_id(empinfo.getPush_id());
             emp.setDoj(empinfo.getDoj());
+            emp.setStatus(empinfo.getStatus());
             emp.save();
 
         }

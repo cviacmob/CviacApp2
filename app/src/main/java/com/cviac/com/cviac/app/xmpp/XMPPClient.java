@@ -1,6 +1,7 @@
 package com.cviac.com.cviac.app.xmpp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,7 +16,12 @@ import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
+import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.GeneralResponse;
+import com.cviac.com.cviac.app.restapis.SMSInfo;
+import com.cviac.com.cviac.app.restapis.StatusInfo;
 import com.google.gson.Gson;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -38,6 +44,12 @@ import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 import java.io.IOException;
 import java.util.Date;
 
+import retrofit.Call;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class XMPPClient {
 
     public static boolean connected = false;
@@ -53,6 +65,10 @@ public class XMPPClient {
     XMPPService context;
     public static XMPPClient instance = null;
     public static boolean instanceCreated = false;
+    String onlinestatus="online";
+    String mobile,emp_namelogged;
+
+
 
     public XMPPClient(XMPPService context, String serverAdress, String logiUser,
                       String passwordser) {
@@ -74,6 +90,7 @@ public class XMPPClient {
         return instance;
 
     }
+
 
     public org.jivesoftware.smack.chat.Chat Mychat;
 
@@ -431,9 +448,16 @@ public class XMPPClient {
 
                     @Override
                     public void run() {
+                        final String MyPREFERENCES = "MyPrefs";
+                        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                        mobile = prefs.getString("mobile", "");
+                        Employee emplogged = Employee.getemployeeByMobile(mobile);
+                        emp_namelogged = emplogged.getEmp_code();
+
                         // TODO Auto-generated method stub
                         Toast.makeText(context, "Connected!",
                                 Toast.LENGTH_SHORT).show();
+                        updatestatus(emp_namelogged,onlinestatus);
                     }
                 });
         }
@@ -541,5 +565,34 @@ public class XMPPClient {
             });
         }
 
+    }
+    private void updatestatus(String empcode,String status)
+    {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        StatusInfo statusinfo = new StatusInfo(empcode,status);
+        Call<GeneralResponse> call = api.updatestatus(statusinfo);
+        call.enqueue(new retrofit.Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
+                int code;
+                GeneralResponse rsp = response.body();
+             /*   code = rsp.getCode();
+                if (code == 0) {
+                   // Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+
+                }*/
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 }
