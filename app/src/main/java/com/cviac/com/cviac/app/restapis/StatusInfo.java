@@ -9,9 +9,8 @@ public class StatusInfo {
     private String status;
 
     private String emp_code;
-    public StatusInfo(String empcode, String status) {
-        this.emp_code=empcode;
-        this.status=status;
+    public StatusInfo() {
+
     }
 
     public String getStatus() {

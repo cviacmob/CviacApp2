@@ -448,16 +448,12 @@ public class XMPPClient {
 
                     @Override
                     public void run() {
-                        final String MyPREFERENCES = "MyPrefs";
-                        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                        mobile = prefs.getString("mobile", "");
-                        Employee emplogged = Employee.getemployeeByMobile(mobile);
-                        emp_namelogged = emplogged.getEmp_code();
+
 
                         // TODO Auto-generated method stub
                         Toast.makeText(context, "Connected!",
                                 Toast.LENGTH_SHORT).show();
-                        updatestatus(emp_namelogged,onlinestatus);
+                        updatestatus();
                     }
                 });
         }
@@ -566,27 +562,35 @@ public class XMPPClient {
         }
 
     }
-    private void updatestatus(String empcode,String status)
+    private void updatestatus()
     {
+        final String MyPREFERENCES = "MyPrefs";
+        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        mobile = prefs.getString("mobile", "");
+        Employee emplogged = Employee.getemployeeByMobile(mobile);
+        emp_namelogged = emplogged.getEmp_code();
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://apps.cviac.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CVIACApi api = retrofit.create(CVIACApi.class);
-        StatusInfo statusinfo = new StatusInfo(empcode,status);
-        Call<GeneralResponse> call = api.updatestatus(statusinfo);
+        StatusInfo info=new StatusInfo();
+        info.setEmp_code(emp_namelogged);
+        info.setStatus(onlinestatus);
+        Call<GeneralResponse> call = api.updatestatus(info);
         call.enqueue(new retrofit.Callback<GeneralResponse>() {
             @Override
             public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
                 int code;
                 GeneralResponse rsp = response.body();
-             /*   code = rsp.getCode();
-                if (code == 0) {
-                   // Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+               code = rsp.getCode();
+              /*  if (code == 0) {
+                    Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
 
                 }*/
-
+                Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
             }
 
             @Override
