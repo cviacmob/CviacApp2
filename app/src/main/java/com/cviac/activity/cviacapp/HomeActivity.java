@@ -549,6 +549,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             emp.setImage_url(empinfo.getImage_url());
             emp.setPush_id(empinfo.getPush_id());
             emp.setDoj(empinfo.getDoj());
+
             emp.save();
 
         }

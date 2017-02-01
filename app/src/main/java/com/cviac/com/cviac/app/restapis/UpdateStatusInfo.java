@@ -3,13 +3,13 @@ package com.cviac.com.cviac.app.restapis;
 /**
  * Created by Administrator on 1/31/2017.
  */
-public class StatusInfo {
+public class UpdateStatusInfo {
 
 
     private String status;
 
     private String emp_code;
-    public StatusInfo() {
+    public UpdateStatusInfo() {
 
     }
 

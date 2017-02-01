@@ -63,7 +63,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "XMPPChatActivity";
 
     private Conversation conv;
-    private List<GetStatus> emplist;
+
     private List<ConvMessage> chats;
     String geteditmgs;
     private static final int MY_PERMISSION_CALL_PHONE = 10;
@@ -269,7 +269,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
-
+            lastseen();
             String url1 = conv.getImageurl();
             if (url1 != null && url1.length() > 0) {
                 Picasso.with(this).load(conv.getImageurl()).resize(100, 100).transform(new CircleTransform())
@@ -343,6 +343,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
     }
     private void lastseen() {
+        Employee callemp = Employee.getemployee(conv.getEmpid());
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
@@ -353,16 +354,16 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                 .build();
 
         CVIACApi api = ret.create(CVIACApi.class);
-        final Call<List<GetStatus>> call = api.getstatus(conv.getEmpid());
+        final Call<List<GetStatus>> call = api.getstatus(callemp.getEmp_code());
         call.enqueue(new Callback<List<GetStatus>>() {
             @Override
             public void onResponse(Response<List<GetStatus>> response, Retrofit retrofit) {
-                emplist = response.body();
+               /* emplist = response.body();
                 for(GetStatus empli:emplist){
-                    empli.getStatus();
+                    String status=empli.getStatus();
                     lastactivity(empli.getLastseen());
 
-                }
+                }*/
 
             }
 
@@ -373,6 +374,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
             }
         });
+
     }
     private Date lastactivity(Date lasttime){
 

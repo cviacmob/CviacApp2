@@ -48,6 +48,7 @@ public class Employee extends Model implements Serializable {
     private Date doj;
 
 
+
     public Employee() {
     }
 
@@ -154,6 +155,7 @@ public class Employee extends Model implements Serializable {
     public void setDoj(Date doj) {
         this.doj = doj;
     }
+
 
     public static List<Employee> getemployees() {
         return new Select()

@@ -5,13 +5,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.cviac.activity.cviacapp.CVIACApplication;
-import com.cviac.activity.cviacapp.HomeActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
@@ -20,8 +17,7 @@ import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.restapis.GeneralResponse;
-import com.cviac.com.cviac.app.restapis.SMSInfo;
-import com.cviac.com.cviac.app.restapis.StatusInfo;
+import com.cviac.com.cviac.app.restapis.UpdateStatusInfo;
 import com.google.gson.Gson;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -585,7 +581,7 @@ public class XMPPClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CVIACApi api = retrofit.create(CVIACApi.class);
-        StatusInfo statusinfo = new StatusInfo();
+        UpdateStatusInfo statusinfo = new UpdateStatusInfo();
         statusinfo.setEmp_code(emp_namelogged);
         statusinfo.setStatus(new Date().toString());
         Call<GeneralResponse> call = api.updatestatus(statusinfo);
@@ -620,7 +616,7 @@ public class XMPPClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CVIACApi api = retrofit.create(CVIACApi.class);
-        StatusInfo statusinfo = new StatusInfo();
+        UpdateStatusInfo statusinfo = new UpdateStatusInfo();
         statusinfo.setEmp_code(emp_namelogged);
         statusinfo.setStatus(new Date().toString());
         Call<GeneralResponse> call = api.updatestatus(statusinfo);

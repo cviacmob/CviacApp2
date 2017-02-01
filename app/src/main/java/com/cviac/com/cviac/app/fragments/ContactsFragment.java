@@ -254,6 +254,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             emp.setPush_id(empinfo.getPush_id());
             emp.setDoj(empinfo.getDoj());
             emp.setStatus(empinfo.getStatus());
+
             emp.save();
 
         }

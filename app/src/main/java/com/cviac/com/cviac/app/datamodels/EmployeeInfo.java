@@ -37,6 +37,7 @@ public class EmployeeInfo {
     private String image_url;
 
 
+
     public EmployeeInfo() {
         // TODO Auto-generated constructor stub
     }
@@ -144,5 +145,6 @@ public class EmployeeInfo {
     public void setDoj(Date doj) {
         this.doj = doj;
     }
+
 
 }
