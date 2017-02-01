@@ -50,7 +50,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
     SwipeRefreshLayout mSwipeRefreshLayout;
     ColleguesAdapter adapter;
     Employee emp;
-    String a;
+    String receiverempname, receiverempcode, GetStatusByID;
     String mobile;
 
     String emp_namelogged;
@@ -72,9 +72,8 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         SharedPreferences prefs = getActivity().getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         mobile = prefs.getString("mobile", "");
         Employee emplogged = Employee.getemployeeByMobile(mobile);
-        if(emp_namelogged!=null){
-            emp_namelogged = emplogged.getEmp_name();
-        }
+
+        emp_namelogged = emplogged.getEmp_name();
 
 
         lv.setOnItemClickListener(new OnItemClickListener() {
@@ -86,13 +85,15 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                 emp = emps.get(pos1);
 
-              for (int i = 0; i <= emp.getEmp_name().length(); i++) {
-                   a = emp.getEmp_name();
-               }
-              if (!emp_namelogged.equalsIgnoreCase(a)) {
-                  //do nothing
-                  InviteorLanchByPresence(emp.getEmp_code());
-               }
+                for (int i = 0; i <= emp.getEmp_name().length() && i <= emp.getEmp_code().length(); i++) {
+                    receiverempname = emp.getEmp_name();
+                    receiverempcode = emp.getEmp_code();
+                }
+                if (!emp_namelogged.equalsIgnoreCase(receiverempname)) {
+                    // Toast.makeText(lv.getContext(), "clicked:" + receiverempname, Toast.LENGTH_SHORT).show();
+                    // InviteorLanchByPresence(emp.getEmp_code());
+                    converseORinvite();
+                }
 
 
                 //Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
@@ -122,7 +123,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         adapter.notifyDataSetChanged();
     }
 
-    private void InviteorLanchByPresence(String empCode) {
+ /*   private void InviteorLanchByPresence(String empCode) {
         DatabaseReference mfiredbref = FirebaseDatabase.getInstance().getReference().child("presence");
         DatabaseReference dbRef = mfiredbref.child(empCode);
         if (dbRef != null) {
@@ -160,9 +161,9 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             });
         }
 
-    }
+    }*/
 
-    private void alertforivite() {
+    private void Smsinvite() {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
         builder1.setTitle("App Not Install");
         builder1.setMessage("Invite " + emp.getEmp_name() + " to install CVIAC App");
@@ -290,5 +291,56 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             }
         });
+    }
+
+    private void converseORinvite() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit ret = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+
+        CVIACApi api = ret.create(CVIACApi.class);
+        final Call<List<EmployeeInfo>> call = api.getEmployeByID(receiverempcode);
+        call.enqueue(new Callback<List<EmployeeInfo>>() {
+            @Override
+            public void onResponse(Response<List<EmployeeInfo>> response, Retrofit retrofit) {
+                emplist = response.body();
+                for (EmployeeInfo emp : emplist) {
+                    GetStatusByID = emp.getStatus();
+                }
+                if (GetStatusByID.equalsIgnoreCase("null")) {
+                    Smsinvite();
+                } else {
+                    OpenConversation();
+                }}
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+                Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    private void OpenConversation() {
+        Conversation cov = new Conversation();
+        cov.setEmpid(emp.getEmp_code());
+        cov.setName(emp.getEmp_name());
+        cov.setImageurl(emp.getImage_url());
+        Context ctx = getActivity().getApplicationContext();
+        if (ctx != null) {
+//                                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
+//                                i.putExtra("conversewith", cov);
+//                                startActivity(i);
+
+            Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
+            i.putExtra("conversewith", cov);
+            startActivity(i);
+        }
     }
 }

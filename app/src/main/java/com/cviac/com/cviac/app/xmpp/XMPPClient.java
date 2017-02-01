@@ -65,7 +65,11 @@ public class XMPPClient {
     XMPPService context;
     public static XMPPClient instance = null;
     public static boolean instanceCreated = false;
-    String onlinestatus="online";
+    //String onlinestatus="online";
+
+    Date onlinestatusdate=new Date();
+    String onlinestatus=onlinestatusdate.toString();
+    String offline=onlinestatusdate.toString();
     String mobile,emp_namelogged;
 
 
@@ -288,10 +292,10 @@ public class XMPPClient {
         chatMessage.ack=1;
         chatMessage.msg="";
         String body = gson.toJson(chatMessage);
-         Mychat = ChatManager.getInstanceFor(connection).createChat(
-                    chatMessage.sender + "@"
-                            + context.getString(R.string.server),
-                    mMessageListener);
+        Mychat = ChatManager.getInstanceFor(connection).createChat(
+                chatMessage.sender + "@"
+                        + context.getString(R.string.server),
+                mMessageListener);
 
         final Message message = new Message();
         message.setBody(body);
@@ -337,6 +341,13 @@ public class XMPPClient {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
+                        final String MyPREFERENCES = "MyPrefs";
+                        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+                        mobile = prefs.getString("mobile", "");
+                        Employee emplogged = Employee.getemployeeByMobile(mobile);
+                        emp_namelogged = emplogged.getEmp_code();
+
+                        updateofflinestatus(emp_namelogged);
 
                         Toast.makeText(context, "ConnectionCLosed!",
                                 Toast.LENGTH_SHORT).show();
@@ -453,7 +464,7 @@ public class XMPPClient {
                         // TODO Auto-generated method stub
                         Toast.makeText(context, "Connected!",
                                 Toast.LENGTH_SHORT).show();
-                        updatestatus();
+                        updateonlinestatus(emp_namelogged);
                     }
                 });
         }
@@ -562,35 +573,68 @@ public class XMPPClient {
         }
 
     }
-    private void updatestatus()
+    private void updateonlinestatus(String empcode)
     {
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         mobile = prefs.getString("mobile", "");
         Employee emplogged = Employee.getemployeeByMobile(mobile);
         emp_namelogged = emplogged.getEmp_code();
-
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://apps.cviac.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         CVIACApi api = retrofit.create(CVIACApi.class);
-        StatusInfo info=new StatusInfo();
-        info.setEmp_code(emp_namelogged);
-        info.setStatus(onlinestatus);
-        Call<GeneralResponse> call = api.updatestatus(info);
+        StatusInfo statusinfo = new StatusInfo();
+        statusinfo.setEmp_code(emp_namelogged);
+        statusinfo.setStatus(new Date().toString());
+        Call<GeneralResponse> call = api.updatestatus(statusinfo);
         call.enqueue(new retrofit.Callback<GeneralResponse>() {
             @Override
             public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
                 int code;
                 GeneralResponse rsp = response.body();
-               code = rsp.getCode();
-              /*  if (code == 0) {
-                    Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+             /*   code = rsp.getCode();
+                if (code == 0) {
+                   // Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
 
                 }*/
-                Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
+    }
+    private void updateofflinestatus(String empcode)
+    {
+        final String MyPREFERENCES = "MyPrefs";
+        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        mobile = prefs.getString("mobile", "");
+        Employee emplogged = Employee.getemployeeByMobile(mobile);
+        emp_namelogged = emplogged.getEmp_code();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        StatusInfo statusinfo = new StatusInfo();
+        statusinfo.setEmp_code(emp_namelogged);
+        statusinfo.setStatus(new Date().toString());
+        Call<GeneralResponse> call = api.updatestatus(statusinfo);
+        call.enqueue(new retrofit.Callback<GeneralResponse>() {
+            @Override
+            public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
+                int code;
+                GeneralResponse rsp = response.body();
+             /*   code = rsp.getCode();
+                if (code == 0) {
+                   // Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+
+                }*/
+                //Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
             }
 
             @Override

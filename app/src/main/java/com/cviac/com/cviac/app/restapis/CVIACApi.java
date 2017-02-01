@@ -52,9 +52,9 @@ public interface CVIACApi {
     @PUT("/CVIACAPI/cviacdbop.php/add_push_id")
     Call<GeneralResponse> updatePushId(@Body PushInfo pushInfo);
 
-    @POST("/CVIACAPI/cviacdbop.php/update_status")
+    @PUT("/CVIACAPI/cviacdbop.php/update_status")
     Call<GeneralResponse> updatestatus(@Body StatusInfo statusInfo);
     @GET("/CVIACAPI/cviacdbop.php/status/{emp_code}")
-    Call<List<EmployeeInfo>> getstatus(@Path("emp_code") String emp_code);
+    Call<List<GetStatus>> getstatus(@Path("emp_code") String emp_code);
 }
 

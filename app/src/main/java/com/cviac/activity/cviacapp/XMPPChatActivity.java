@@ -28,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cviac.com.cviac.app.adapaters.CircleTransform;
 import com.cviac.com.cviac.app.adapaters.ConvMessageAdapter;
@@ -35,23 +36,34 @@ import com.cviac.com.cviac.app.datamodels.ChatMsg;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.GetStatus;
 import com.cviac.com.cviac.app.xmpp.ChatMessage;
 import com.cviac.com.cviac.app.xmpp.LocalBinder;
 import com.cviac.com.cviac.app.xmpp.XMPPService;
+import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "XMPPChatActivity";
 
     private Conversation conv;
-
+    private List<GetStatus> emplist;
     private List<ConvMessage> chats;
     String geteditmgs;
     private static final int MY_PERMISSION_CALL_PHONE = 10;
@@ -71,7 +83,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_xmppchat);
+        // setContentView(R.layout.activity_xmppchat);
         setContentView(R.layout.activity_xmppchat);
 
 
@@ -329,5 +341,41 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         loadConvMessages();
         chatAdapter.notifyDataSetChanged();
 
+    }
+    private void lastseen() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit ret = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+
+        CVIACApi api = ret.create(CVIACApi.class);
+        final Call<List<GetStatus>> call = api.getstatus(conv.getEmpid());
+        call.enqueue(new Callback<List<GetStatus>>() {
+            @Override
+            public void onResponse(Response<List<GetStatus>> response, Retrofit retrofit) {
+                emplist = response.body();
+                for(GetStatus empli:emplist){
+                    empli.getStatus();
+                    lastactivity(empli.getLastseen());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+                Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+    private Date lastactivity(Date lasttime){
+
+        return lastactivity(lasttime);
     }
 }
