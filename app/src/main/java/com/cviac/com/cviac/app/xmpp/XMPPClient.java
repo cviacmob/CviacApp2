@@ -48,9 +48,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class XMPPClient {
 
-    public static boolean connected = false;
+    public boolean connected = false;
     public boolean loggedin = false;
-    public static boolean isconnecting = false;
+    public boolean isconnecting = false;
     public static boolean isToasted = true;
     private boolean chat_created = false;
     private String serverAddress;
@@ -89,6 +89,10 @@ public class XMPPClient {
         }
         return instance;
 
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
 
@@ -337,12 +341,8 @@ public class XMPPClient {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-
-                        updateofflinestatus();
-
-                        Toast.makeText(context, "ConnectionCLosed!",
-                                Toast.LENGTH_SHORT).show();
-
+                        updateStatus(offlinestatus);
+                        Toast.makeText(context, "ConnectionCLosed!",Toast.LENGTH_SHORT).show();
                     }
                 });
             Log.d("xmpp", "ConnectionCLosed!");
@@ -455,7 +455,7 @@ public class XMPPClient {
                         // TODO Auto-generated method stub
                         Toast.makeText(context, "Connected!",
                                 Toast.LENGTH_SHORT).show();
-                        updateonlinestatus();
+                        updateStatus(onlinestatus);
                     }
                 });
         }
@@ -564,8 +564,9 @@ public class XMPPClient {
         }
 
     }
-    private void updateonlinestatus()
-    {
+
+
+    public void updateStatus(String status) {
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         mobile = prefs.getString("mobile", "");
@@ -578,57 +579,22 @@ public class XMPPClient {
         CVIACApi api = retrofit.create(CVIACApi.class);
         UpdateStatusInfo statusinfo = new UpdateStatusInfo();
         statusinfo.setEmp_code(emp_namelogged);
-       // statusinfo.setStatus(new Date().toString());
-        statusinfo.setStatus(onlinestatus);
+        // statusinfo.setStatus(new Date().toString());
+        statusinfo.setStatus(status);
 
         Call<GeneralResponse> call = api.updatestatus(statusinfo);
         call.enqueue(new retrofit.Callback<GeneralResponse>() {
             @Override
             public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
                 GeneralResponse rsp = response.body();
-             /*   code = rsp.getCode();
-                if (code == 0) {
-                   // Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
-
-                }*/
-                //Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
-                Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "update status Success", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(Throwable t) {
-
+                Toast.makeText(context, "update status failed", Toast.LENGTH_LONG).show();
             }
         });
-    }
-    private void updateofflinestatus()
-    {
-        final String MyPREFERENCES = "MyPrefs";
-        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-        mobile = prefs.getString("mobile", "");
-        Employee emplogged = Employee.getemployeeByMobile(mobile);
-        emp_namelogged = emplogged.getEmp_code();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://apps.cviac.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        CVIACApi api = retrofit.create(CVIACApi.class);
-        UpdateStatusInfo statusinfo = new UpdateStatusInfo();
-        statusinfo.setEmp_code(emp_namelogged);
-        statusinfo.setStatus(offlinestatus);
 
-        Call<GeneralResponse> call = api.updatestatus(statusinfo);
-        call.enqueue(new retrofit.Callback<GeneralResponse>() {
-            @Override
-            public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
-                GeneralResponse rsp = response.body();
-
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-
-            }
-        });
     }
 }

@@ -50,9 +50,12 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.Call;
@@ -82,9 +85,13 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     TextView txt, msgview, presenceText;
     int fromNotify = 0;
     String converseId;
-    String status,pushid;
     Date lastseen;
     TextView customTitle,customduration;
+    GetStatus empstatus;
+
+    Timer timer;
+    MyTimerTask myTimerTask;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +102,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         Intent i = getIntent();
         conv = (Conversation) i.getSerializableExtra("conversewith");
+        empstatus = (GetStatus) i.getSerializableExtra("status");
+
         fromNotify = i.getIntExtra("fromnotify", 0);
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
@@ -124,11 +133,40 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                     XMPPService.sendMessage(chat);
                     saveChatMessage(chat);
                     edittxt.getText().clear();
+
+                    ChatMsg msg = new ChatMsg();
+                    msg.setSenderid(myempId);
+                    msg.setSendername(myempname);
+                    msg.setMsg(geteditmgs);
+                    msg.setMsgid(msgid);
+                    msg.setReceiverid(conv.getEmpid());
+                    checkAndSendPushNotfication(conv.getEmpid(),msg);
                 }
 
             }
         });
         loadConvMessages();
+
+        timer = new Timer();
+        myTimerTask = new MyTimerTask();
+        timer.schedule(myTimerTask, 1000, 1 * 60 *  1000);
+    }
+
+    class MyTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat =
+                    new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
+            final String strDate = simpleDateFormat.format(calendar.getTime());
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    XMPPService.updateSatus();
+                    Toast.makeText(getApplicationContext(), "Timer Event", Toast.LENGTH_SHORT).show();
+                }});
+        }
     }
 
     private void loadConvMessages() {
@@ -200,6 +238,9 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         CVIACApplication app = (CVIACApplication) getApplication();
         super.onDestroy();
         app.setChatActivty(null);
+        if (timer != null)
+        timer.cancel();
+        timer = null;
     }
 
 
@@ -277,7 +318,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
             customduration = (TextView) customView.findViewById(R.id.duration);
-            lastseen();
+            //lastseen();
             String url1 = conv.getImageurl();
             if (url1 != null && url1.length() > 0) {
                 Picasso.with(this).load(conv.getImageurl()).resize(100, 100).transform(new CircleTransform())
@@ -303,6 +344,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
          ;
 
             customTitle.setText(conv.getName());
+
+            customduration.setText(empstatus.getStatus());
 
             // Change the font family (optional)
 
@@ -352,41 +395,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
     }
 
-    private void lastseen() {
-        Employee callemp = Employee.getemployee(conv.getEmpid());
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
-        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
-        Retrofit ret = new Retrofit.Builder()
-                .baseUrl("http://apps.cviac.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
-                .build();
 
-        CVIACApi api = ret.create(CVIACApi.class);
-        final Call<List<GetStatus>> call = api.getstatus(callemp.getEmp_code());
-        call.enqueue(new Callback<List<GetStatus>>() {
-            @Override
-            public void onResponse(Response<List<GetStatus>> response, Retrofit retrofit) {
-                getstatuslist = response.body();
-                for (GetStatus statuslist : getstatuslist) {
-                    status = statuslist.getStatus();
-                    lastseen = lastactivity(statuslist.getLastseen());
-                    pushid=statuslist.getPushid();
-
-                }
-                lastactivity(lastseen);
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-
-                Toast.makeText(getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-     }
 
     private Date lastactivity(Date lasttime) {
 
@@ -425,6 +434,33 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             @Override
             public void onFailure(Throwable t) {
 
+            }
+        });
+    }
+
+    private void checkAndSendPushNotfication(String empCode,final ChatMsg msg) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit ret = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+
+        CVIACApi api = ret.create(CVIACApi.class);
+        final Call<GetStatus> call = api.getstatus(empCode);
+        call.enqueue(new Callback<GetStatus>() {
+            @Override
+            public void onResponse(Response<GetStatus> response, Retrofit retrofit) {
+                GetStatus status = response.body();
+                if (status.getStatus() != null && status.getStatus().equalsIgnoreCase("offline")) {
+                    SendPushNotification(msg,status.getPush_id());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
             }
         });
     }

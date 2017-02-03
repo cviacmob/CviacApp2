@@ -30,7 +30,7 @@ public class EmployeeInfo {
 
     private String designation;
 
-    private String availability;
+    private String status;
 
     private String image_url;
 
@@ -119,12 +119,12 @@ public class EmployeeInfo {
         this.designation = designation;
     }
 
-    public String getavailability() {
-        return availability;
+    public String getStatus() {
+        return status;
     }
 
-    public void setavailability(String availability) {
-        this.availability = availability;
+    public void setSatus(String status) {
+        this.status = status;
     }
 
     public String getImage_url() {

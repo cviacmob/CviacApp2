@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
 
+import org.jivesoftware.smack.XMPPConnection;
+
 public class XMPPService extends Service {
     //private static final String DOMAIN1 = "cviacmob.p1.im";
     private static final String DOMAIN = "ec2-52-33-98-83.us-west-2.compute.amazonaws.com";
@@ -58,6 +60,17 @@ public class XMPPService extends Service {
     public static void sendMessage(ChatMessage msg) {
         if (xmpp != null) {
             xmpp.sendMessage(msg);
+        }
+    }
+
+    public static void updateSatus() {
+        if (xmpp != null) {
+            if (xmpp.isConnected()) {
+                xmpp.updateStatus("online");
+            }
+            else {
+                xmpp.updateStatus("offline");
+            }
         }
     }
 }

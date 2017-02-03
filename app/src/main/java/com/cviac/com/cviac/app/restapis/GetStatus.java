@@ -1,18 +1,19 @@
 package com.cviac.com.cviac.app.restapis;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by BALA on 10-01-2017.
  */
 
-public class GetStatus {
+public class GetStatus implements Serializable{
 
     private int code;
     private String desc;
     private String status;
-    private Date lastseen;
-    private String pushid;
+    private Date last_activity;
+    private String push_id;
 
     public GetStatus() {
     }
@@ -41,19 +42,19 @@ public class GetStatus {
         this.status = status;
     }
 
-    public Date getLastseen() {
-        return lastseen;
+    public Date getLast_activity() {
+        return last_activity;
     }
 
-    public void setLastseen(Date lastseen) {
-        this.lastseen = lastseen;
+    public void setLast_activity(Date last_activity) {
+        this.last_activity = last_activity;
     }
 
-    public String getPushid() {
-        return pushid;
+    public String getPush_id() {
+        return push_id;
     }
 
-    public void setPushid(String pushid) {
-        this.pushid = pushid;
+    public void setPush_id(String push_id) {
+        this.push_id = push_id;
     }
 }

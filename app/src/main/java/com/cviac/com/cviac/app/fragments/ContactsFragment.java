@@ -12,6 +12,7 @@ import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.datamodels.PresenceInfo;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.restapis.GeneralResponse;
+import com.cviac.com.cviac.app.restapis.GetStatus;
 import com.cviac.com.cviac.app.restapis.SMSInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -253,7 +254,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             emp.setImage_url(empinfo.getImage_url());
             emp.setPush_id(empinfo.getPush_id());
             emp.setDoj(empinfo.getDoj());
-            emp.setavailability(empinfo.getavailability());
+            emp.setStatus(empinfo.getStatus());
             emp.save();
 
         }
@@ -304,19 +305,18 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 .build();
 
         CVIACApi api = ret.create(CVIACApi.class);
-        final Call<List<EmployeeInfo>> call = api.getEmployeByID(receiverempcode);
-        call.enqueue(new Callback<List<EmployeeInfo>>() {
+        final Call<GetStatus> call = api.getstatus(receiverempcode);
+        call.enqueue(new Callback<GetStatus>() {
             @Override
-            public void onResponse(Response<List<EmployeeInfo>> response, Retrofit retrofit) {
-                emplist = response.body();
-                for (EmployeeInfo emp : emplist) {
-                    GetStatusByID = emp.getavailability();
-                }
-                if (GetStatusByID.equalsIgnoreCase(null)) {
+            public void onResponse(Response<GetStatus> response, Retrofit retrofit) {
+                GetStatus status = response.body();
+                if (status.getStatus() == null || status.getStatus().isEmpty()  ) {
                     Smsinvite();
                 } else {
-                    OpenConversation();
-                }}
+                    OpenConversation(status);
+                }
+
+            }
 
             @Override
             public void onFailure(Throwable throwable) {
@@ -327,7 +327,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private void OpenConversation() {
+    private void OpenConversation(GetStatus status) {
         Conversation cov = new Conversation();
         cov.setEmpid(emp.getEmp_code());
         cov.setName(emp.getEmp_name());
@@ -340,6 +340,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
             i.putExtra("conversewith", cov);
+            i.putExtra("status",status);
             startActivity(i);
         }
     }

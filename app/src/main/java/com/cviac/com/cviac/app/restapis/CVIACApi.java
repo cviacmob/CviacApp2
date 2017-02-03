@@ -55,6 +55,6 @@ public interface CVIACApi {
     @PUT("/CVIACAPI/cviacdbop.php/update_status")
     Call<GeneralResponse> updatestatus(@Body UpdateStatusInfo statusInfo);
     @GET("/CVIACAPI/cviacdbop.php/status/{emp_code}")
-    Call<List<GetStatus>> getstatus(@Path("emp_code") String emp_code);
+    Call<GetStatus> getstatus(@Path("emp_code") String emp_code);
 }
 
