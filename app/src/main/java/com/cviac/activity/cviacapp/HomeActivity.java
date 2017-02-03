@@ -189,15 +189,11 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         @Override
         public void run() {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
-            final String strDate = simpleDateFormat.format(calendar.getTime());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     XMPPService.updateSatus();
-                    Toast.makeText(getApplicationContext(), "Timer Event", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(), "Timer Event", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -586,6 +582,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     void doBindService() {
+
         bindService(new Intent(this, XMPPService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
     }

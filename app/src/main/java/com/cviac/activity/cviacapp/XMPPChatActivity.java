@@ -67,7 +67,6 @@ import retrofit.Retrofit;
 public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "XMPPChatActivity";
-
     private Conversation conv;
     private List<GetStatus> getstatuslist;
     private List<ConvMessage> chats;
@@ -92,6 +91,28 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     Timer timer;
     MyTimerTask myTimerTask;
 
+    private XMPPService mService;
+    private boolean mBounded;
+
+    private final ServiceConnection mConnection = new ServiceConnection() {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void onServiceConnected(final ComponentName name,
+                                       final IBinder service) {
+            mService = ((LocalBinder<XMPPService>) service).getService();
+            mBounded = true;
+            Log.d(TAG, "onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(final ComponentName name) {
+            mService = null;
+            mBounded = false;
+            Log.d(TAG, "onServiceDisconnected");
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +123,6 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         Intent i = getIntent();
         conv = (Conversation) i.getSerializableExtra("conversewith");
-        empstatus = (GetStatus) i.getSerializableExtra("status");
 
         fromNotify = i.getIntExtra("fromnotify", 0);
         final String MyPREFERENCES = "MyPrefs";
@@ -114,7 +134,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         app.setChatActivty(this);
         actionmethod();
-
+        doBindService();
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
@@ -156,20 +176,36 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void run() {
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
-            final String strDate = simpleDateFormat.format(calendar.getTime());
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    OkHttpClient okHttpClient = new OkHttpClient();
+                    okHttpClient.setConnectTimeout(30000, TimeUnit.MILLISECONDS);
+                    okHttpClient.setReadTimeout(30000, TimeUnit.MILLISECONDS);
+                    Retrofit ret = new Retrofit.Builder()
+                            .baseUrl("http://apps.cviac.com")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .client(okHttpClient)
+                            .build();
 
+                    CVIACApi api = ret.create(CVIACApi.class);
+                    final Call<GetStatus> call = api.getstatus(conv.getEmpid());
+                    call.enqueue(new Callback<GetStatus>() {
+                        @Override
+                        public void onResponse(Response<GetStatus> response, Retrofit retrofit) {
+                            empstatus = response.body();
+                            if (empstatus != null && empstatus.getStatus() != null) {
+                                if (customduration != null) {
+                                    customduration.setText(empstatus.getStatus());
+                                }
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                        }
+                    });
 
-
-
-                   // XMPPService.updateSatus();
-                   // Toast.makeText(getApplicationContext(), "Timer Event", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -243,6 +279,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     protected void onDestroy() {
         CVIACApplication app = (CVIACApplication) getApplication();
         super.onDestroy();
+        doUnbindService();
         app.setChatActivty(null);
         if (timer != null)
             timer.cancel();
@@ -350,9 +387,9 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             ;
 
             customTitle.setText(conv.getName());
-            if(empstatus.getStatus() !=null){
-    customduration.setText(empstatus.getStatus());
-                }
+            if (empstatus != null && empstatus.getStatus() != null) {
+                customduration.setText(empstatus.getStatus());
+            }
 
 
             // Change the font family (optional)
@@ -438,29 +475,21 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     }
 
     private void checkAndSendPushNotfication(String empCode, final ChatMsg msg) {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
-        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
-        Retrofit ret = new Retrofit.Builder()
-                .baseUrl("http://apps.cviac.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
-                .build();
+        if (empstatus != null && empstatus.getStatus() != null && empstatus.getStatus().equalsIgnoreCase("offline")) {
+            if (empstatus.getPush_id() != null && empstatus.getPush_id().length()>0)
+            SendPushNotification(msg, empstatus.getPush_id());
+        }
+    }
 
-        CVIACApi api = ret.create(CVIACApi.class);
-        final Call<GetStatus> call = api.getstatus(empCode);
-        call.enqueue(new Callback<GetStatus>() {
-            @Override
-            public void onResponse(Response<GetStatus> response, Retrofit retrofit) {
-                GetStatus status = response.body();
-                if (status.getStatus() != null && status.getStatus().equalsIgnoreCase("offline")) {
-                    SendPushNotification(msg, status.getPush_id());
-                }
-            }
+    void doBindService() {
 
-            @Override
-            public void onFailure(Throwable throwable) {
-            }
-        });
+        bindService(new Intent(this, XMPPService.class), mConnection,
+                Context.BIND_AUTO_CREATE);
+    }
+
+    void doUnbindService() {
+        if (mConnection != null) {
+            unbindService(mConnection);
+        }
     }
 }

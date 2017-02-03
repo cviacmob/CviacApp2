@@ -1,10 +1,14 @@
 package com.cviac.com.cviac.app.xmpp;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -503,9 +507,7 @@ public class XMPPClient {
             cnv.setDatetime(new Date());
             cnv.setLastmsg(msg.msg);
             cnv.save();
-            if (chatFrag != null && chatFrag.adapter != null) {
-                chatFrag.reloadConversation();
-            }
+
         }
 
         private void updateMessageStatusInUI(final String msgId, final int status) {
@@ -535,6 +537,7 @@ public class XMPPClient {
             cmsg.setReceiver(msg.receiver);
             cmsg.setMsgid(msg.msgid);
             cmsg.setStatus(-1);
+
             try {
                 cmsg.save();
                 saveLastConversationMessage(msg);
@@ -546,25 +549,45 @@ public class XMPPClient {
 
                 @Override
                 public void run() {
-                    saveLastConversationMessage(msg);
                     CVIACApplication app = (CVIACApplication) context.getApplication();
+                    ChatsFragment chatFrag = app.getChatsFragment();
+                    if (chatFrag != null && chatFrag.adapter != null) {
+                        chatFrag.reloadConversation();
+                    }
+
                     if (app != null) {
                         XMPPChatActivity actv = app.getChatActivty();
                         if (actv != null) {
                             String convId = actv.getConverseId();
                             if (convId.equalsIgnoreCase(msg.converseid)) {
                                 actv.addInMessage(cmsg);
+                                return;
                             }
-
                         }
                     }
-                    //Toast.makeText(context, msg.msg, Toast.LENGTH_LONG).show();
+                    showMsgNotification(cmsg);
+
                 }
             });
         }
 
     }
 
+    private void showMsgNotification(ConvMessage cmsg) {
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.cviac_logo)
+                        .setContentTitle(cmsg.getSenderName())
+                        .setAutoCancel(true)
+                        .setSound(soundUri)
+                        .setContentText(cmsg.getMsg());
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+
+        mNotificationManager.notify(0, mBuilder.build());
+    }
 
     public void updateStatus(String status) {
         final String MyPREFERENCES = "MyPrefs";
