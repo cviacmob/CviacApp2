@@ -26,16 +26,13 @@ public class EmployeeInfo {
 
     private String gender;
     private Date doj;
-
-
     private String department;
 
     private String designation;
 
-    private String status;
+    private String availability;
 
     private String image_url;
-
 
 
     public EmployeeInfo() {
@@ -122,12 +119,12 @@ public class EmployeeInfo {
         this.designation = designation;
     }
 
-    public String getStatus() {
-        return status;
+    public String getavailability() {
+        return availability;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setavailability(String availability) {
+        this.availability = availability;
     }
 
     public String getImage_url() {

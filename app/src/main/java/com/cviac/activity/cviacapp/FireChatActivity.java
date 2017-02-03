@@ -454,7 +454,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
 
-            presenceText = (TextView) customView.findViewById(R.id.textView5);
+            presenceText = (TextView) customView.findViewById(R.id.duration);
             setPresence(conv.getEmpid());
            /* Picasso.with(this).load(R.drawable.ic_call).resize(120, 100).transform(new CircleTransform())
                     .into(cuscall);*/

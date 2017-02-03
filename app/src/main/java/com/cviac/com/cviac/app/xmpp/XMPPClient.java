@@ -61,11 +61,11 @@ public class XMPPClient {
     XMPPService context;
     public static XMPPClient instance = null;
     public static boolean instanceCreated = false;
-    //String onlinestatus="online";
-
+    String onlinestatus="online";
+    String offlinestatus="offline";
     Date onlinestatusdate=new Date();
-    String onlinestatus=onlinestatusdate.toString();
-    String offline=onlinestatusdate.toString();
+    //String onlinestatus=onlinestatusdate.toString();
+   // String offline=onlinestatusdate.toString();
     String mobile,emp_namelogged;
 
 
@@ -337,13 +337,8 @@ public class XMPPClient {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-                        final String MyPREFERENCES = "MyPrefs";
-                        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-                        mobile = prefs.getString("mobile", "");
-                        Employee emplogged = Employee.getemployeeByMobile(mobile);
-                        emp_namelogged = emplogged.getEmp_code();
 
-                        updateofflinestatus(emp_namelogged);
+                        updateofflinestatus();
 
                         Toast.makeText(context, "ConnectionCLosed!",
                                 Toast.LENGTH_SHORT).show();
@@ -460,7 +455,7 @@ public class XMPPClient {
                         // TODO Auto-generated method stub
                         Toast.makeText(context, "Connected!",
                                 Toast.LENGTH_SHORT).show();
-                        updateonlinestatus(emp_namelogged);
+                        updateonlinestatus();
                     }
                 });
         }
@@ -569,7 +564,7 @@ public class XMPPClient {
         }
 
     }
-    private void updateonlinestatus(String empcode)
+    private void updateonlinestatus()
     {
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
@@ -583,12 +578,13 @@ public class XMPPClient {
         CVIACApi api = retrofit.create(CVIACApi.class);
         UpdateStatusInfo statusinfo = new UpdateStatusInfo();
         statusinfo.setEmp_code(emp_namelogged);
-        statusinfo.setStatus(new Date().toString());
+       // statusinfo.setStatus(new Date().toString());
+        statusinfo.setStatus(onlinestatus);
+
         Call<GeneralResponse> call = api.updatestatus(statusinfo);
         call.enqueue(new retrofit.Callback<GeneralResponse>() {
             @Override
             public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
-                int code;
                 GeneralResponse rsp = response.body();
              /*   code = rsp.getCode();
                 if (code == 0) {
@@ -596,6 +592,7 @@ public class XMPPClient {
 
                 }*/
                 //Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -604,7 +601,7 @@ public class XMPPClient {
             }
         });
     }
-    private void updateofflinestatus(String empcode)
+    private void updateofflinestatus()
     {
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
@@ -618,19 +615,14 @@ public class XMPPClient {
         CVIACApi api = retrofit.create(CVIACApi.class);
         UpdateStatusInfo statusinfo = new UpdateStatusInfo();
         statusinfo.setEmp_code(emp_namelogged);
-        statusinfo.setStatus(new Date().toString());
+        statusinfo.setStatus(offlinestatus);
+
         Call<GeneralResponse> call = api.updatestatus(statusinfo);
         call.enqueue(new retrofit.Callback<GeneralResponse>() {
             @Override
             public void onResponse(retrofit.Response<GeneralResponse> response, Retrofit retrofit) {
-                int code;
                 GeneralResponse rsp = response.body();
-             /*   code = rsp.getCode();
-                if (code == 0) {
-                   // Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
 
-                }*/
-                //Toast.makeText(context, "invite Success", Toast.LENGTH_LONG).show();
             }
 
             @Override

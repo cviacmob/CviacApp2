@@ -1,5 +1,7 @@
 package com.cviac.com.cviac.app.restapis;
 
+import java.util.Date;
+
 /**
  * Created by Administrator on 1/31/2017.
  */
@@ -28,4 +30,6 @@ public class UpdateStatusInfo {
     public void setEmp_code(String emp_code) {
         this.emp_code = emp_code;
     }
+
+
 }

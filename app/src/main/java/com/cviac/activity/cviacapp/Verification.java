@@ -229,7 +229,7 @@ public class Verification extends Activity {
             emp.setImage_url(empinfo.getImage_url());
             emp.setPush_id(empinfo.getPush_id());
             emp.setDoj(empinfo.getDoj());
-            emp.setStatus(empinfo.getStatus());
+            emp.setavailability(empinfo.getavailability());
 
             emp.save();
         }

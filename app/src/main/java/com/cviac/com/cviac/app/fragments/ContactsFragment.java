@@ -253,8 +253,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             emp.setImage_url(empinfo.getImage_url());
             emp.setPush_id(empinfo.getPush_id());
             emp.setDoj(empinfo.getDoj());
-            emp.setStatus(empinfo.getStatus());
-
+            emp.setavailability(empinfo.getavailability());
             emp.save();
 
         }
@@ -311,9 +310,9 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             public void onResponse(Response<List<EmployeeInfo>> response, Retrofit retrofit) {
                 emplist = response.body();
                 for (EmployeeInfo emp : emplist) {
-                    GetStatusByID = emp.getStatus();
+                    GetStatusByID = emp.getavailability();
                 }
-                if (GetStatusByID.equalsIgnoreCase("null")) {
+                if (GetStatusByID.equalsIgnoreCase(null)) {
                     Smsinvite();
                 } else {
                     OpenConversation();

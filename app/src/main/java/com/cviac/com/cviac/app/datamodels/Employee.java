@@ -40,8 +40,8 @@ public class Employee extends Model implements Serializable {
     private String department;
     @Column(name = "designation")
     private String designation;
-    @Column(name = "status")
-    private String status;
+    @Column(name = "availability")
+    private String availability;
     @Column(name = "image_url")
     private String image_url;
     @Column(name = "doj")
@@ -132,12 +132,12 @@ public class Employee extends Model implements Serializable {
         this.designation = designation;
     }
 
-    public String getStatus() {
-        return status;
+    public String getavailability() {
+        return availability;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setavailability(String availability) {
+        this.availability = availability;
     }
 
     public String getImage_url() {

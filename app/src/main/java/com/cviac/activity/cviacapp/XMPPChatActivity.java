@@ -39,7 +39,9 @@ import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.FCMSendMessageResponse;
 import com.cviac.com.cviac.app.restapis.GetStatus;
+import com.cviac.com.cviac.app.restapis.PushMessageInfo;
 import com.cviac.com.cviac.app.xmpp.ChatMessage;
 import com.cviac.com.cviac.app.xmpp.LocalBinder;
 import com.cviac.com.cviac.app.xmpp.XMPPService;
@@ -47,6 +49,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -63,7 +66,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "XMPPChatActivity";
 
     private Conversation conv;
-
+    private List<GetStatus> getstatuslist;
     private List<ConvMessage> chats;
     String geteditmgs;
     private static final int MY_PERMISSION_CALL_PHONE = 10;
@@ -79,6 +82,9 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     TextView txt, msgview, presenceText;
     int fromNotify = 0;
     String converseId;
+    String status,pushid;
+    Date lastseen;
+    TextView customTitle,customduration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,8 +273,10 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF4848")));
 
             View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+            customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
+            customduration = (TextView) customView.findViewById(R.id.duration);
             lastseen();
             String url1 = conv.getImageurl();
             if (url1 != null && url1.length() > 0) {
@@ -292,9 +300,10 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
 
             // Get the textview of the title
-            TextView customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
+         ;
 
             customTitle.setText(conv.getName());
+
             // Change the font family (optional)
 
             // Set the on click listener for the title
@@ -342,6 +351,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         chatAdapter.notifyDataSetChanged();
 
     }
+
     private void lastseen() {
         Employee callemp = Employee.getemployee(conv.getEmpid());
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -358,13 +368,14 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         call.enqueue(new Callback<List<GetStatus>>() {
             @Override
             public void onResponse(Response<List<GetStatus>> response, Retrofit retrofit) {
-               /* emplist = response.body();
-                for(GetStatus empli:emplist){
-                    String status=empli.getStatus();
-                    lastactivity(empli.getLastseen());
+                getstatuslist = response.body();
+                for (GetStatus statuslist : getstatuslist) {
+                    status = statuslist.getStatus();
+                    lastseen = lastactivity(statuslist.getLastseen());
+                    pushid=statuslist.getPushid();
 
-                }*/
-
+                }
+                lastactivity(lastseen);
             }
 
             @Override
@@ -375,9 +386,46 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             }
         });
 
-    }
-    private Date lastactivity(Date lasttime){
+     }
+
+    private Date lastactivity(Date lasttime) {
+
+        Date getdate=lasttime;
+        String timeStam = new SimpleDateFormat("dd-MM-yy").format(getdate);
 
         return lastactivity(lasttime);
+    }
+
+    private void SendPushNotification(ChatMsg cmsg,String pushid) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://fcm.googleapis.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
+        CVIACApi api = retrofit.create(CVIACApi.class);
+        String key = "key=AAAA_01YtJE:APA91bEUGI2jvP6PqBQXuV35rN6yHjUkCYshgQGHvuZkPaYwkRqSmSuukmxnaAbunLQgb_ALrd6ZonqteEjaZ34AD7quSa4-1NZdpzA4fvvfGSYwVLNR-FzvnJlVvA2h-TnGLKka3vO_eAr52shm29VA0XHvFm9SWQ";
+        PushMessageInfo pinfo = new PushMessageInfo();
+        pinfo.setTo(pushid);
+        PushMessageInfo.DataInfo dinfo = new PushMessageInfo.DataInfo();
+        dinfo.setMsg(cmsg.getMsg());
+        dinfo.setSendername(cmsg.getSendername());
+        dinfo.setSenderid(cmsg.getSenderid());
+        dinfo.setMsgId(cmsg.getMsgid());
+        pinfo.setData(dinfo);
+        final Call<FCMSendMessageResponse> call = api.sendPushMessage(key, pinfo);
+        call.enqueue(new Callback<FCMSendMessageResponse>() {
+            @Override
+            public void onResponse(Response<FCMSendMessageResponse> response, Retrofit retrofit) {
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+            }
+        });
     }
 }
