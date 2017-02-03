@@ -23,60 +23,63 @@
             android:layout_y="510dp">
 
 
-            <EditText
-                android:id="@+id/editTextphnum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="72dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginRight="14dp"
-                android:layout_weight="200"
-                android:ems="10"
-                android:hint="@string/hint_mobile"
-                android:inputType="textPersonName"
-                android:textColor="@android:color/black"
-                android:textColorHint="#6281EF" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/textView1"
-            android:layout_marginLeft="50dp"
+            android:gravity="center"
             android:layout_marginTop="58dp"
             android:padding="1dp"
             android:text="@string/content_text"
-            android:textColor="#3B3D3C" />
+            android:textColor="#3B3D3C"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:id="@+id/textView1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textView2"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/textView2"
             android:layout_weight="1"
             android:padding="5dp"
             android:text="Verify phone number"
+            android:gravity="center"
             android:textColor="#3B3D3C"
-            android:textSize="25dp" />
+            android:textSize="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="65dp" />
+
+        <EditText
+            android:id="@+id/editTextphnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+
+            android:hint="@string/hint_mobile"
+            android:inputType="textPersonName"
+            android:textColor="@android:color/black"
+            android:textColorHint="#6281EF"
+            android:layout_alignTop="@+id/input_layout_name"
+            android:layout_centerHorizontal="true" />
 
         <Button
             android:id="@+id/buttonext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="62dp"
-            android:layout_marginStart="62dp"
             android:background="@drawable/roundshapebtn"
             android:text="Next"
             android:textSize="18dp"
             android:textColor="#FFFFFF"
-            android:layout_below="@+id/input_layout_name"
-            android:layout_alignLeft="@+id/input_layout_name"
-            android:layout_alignStart="@+id/input_layout_name" />
+            android:layout_marginTop="33dp"
+            android:layout_below="@+id/editTextphnum"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 
