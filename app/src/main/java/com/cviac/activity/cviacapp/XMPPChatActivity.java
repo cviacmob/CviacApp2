@@ -86,7 +86,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     int fromNotify = 0;
     String converseId;
     Date lastseen;
-    TextView customTitle,customduration;
+    TextView customTitle, customduration;
     GetStatus empstatus;
 
     Timer timer;
@@ -140,7 +140,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                     msg.setMsg(geteditmgs);
                     msg.setMsgid(msgid);
                     msg.setReceiverid(conv.getEmpid());
-                    checkAndSendPushNotfication(conv.getEmpid(),msg);
+                    checkAndSendPushNotfication(conv.getEmpid(), msg);
                 }
 
             }
@@ -149,7 +149,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         timer = new Timer();
         myTimerTask = new MyTimerTask();
-        timer.schedule(myTimerTask, 1000, 1 * 60 *  1000);
+        timer.schedule(myTimerTask, 1000, 1 * 60 * 1000);
     }
 
     class MyTimerTask extends TimerTask {
@@ -160,12 +160,18 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             SimpleDateFormat simpleDateFormat =
                     new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
             final String strDate = simpleDateFormat.format(calendar.getTime());
-            runOnUiThread(new Runnable(){
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    XMPPService.updateSatus();
-                    Toast.makeText(getApplicationContext(), "Timer Event", Toast.LENGTH_SHORT).show();
-                }});
+
+
+
+
+
+                   // XMPPService.updateSatus();
+                   // Toast.makeText(getApplicationContext(), "Timer Event", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
@@ -239,7 +245,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         super.onDestroy();
         app.setChatActivty(null);
         if (timer != null)
-        timer.cancel();
+            timer.cancel();
         timer = null;
     }
 
@@ -341,11 +347,13 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
 
             // Get the textview of the title
-         ;
+            ;
 
             customTitle.setText(conv.getName());
+            if(empstatus.getStatus() !=null){
+    customduration.setText(empstatus.getStatus());
+                }
 
-            customduration.setText(empstatus.getStatus());
 
             // Change the font family (optional)
 
@@ -396,16 +404,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     }
 
 
-
-    private Date lastactivity(Date lasttime) {
-
-        Date getdate=lasttime;
-        String timeStam = new SimpleDateFormat("dd-MM-yy").format(getdate);
-
-        return lastactivity(lasttime);
-    }
-
-    private void SendPushNotification(ChatMsg cmsg,String pushid) {
+    private void SendPushNotification(ChatMsg cmsg, String pushid) {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
@@ -438,7 +437,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    private void checkAndSendPushNotfication(String empCode,final ChatMsg msg) {
+    private void checkAndSendPushNotfication(String empCode, final ChatMsg msg) {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
@@ -455,7 +454,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             public void onResponse(Response<GetStatus> response, Retrofit retrofit) {
                 GetStatus status = response.body();
                 if (status.getStatus() != null && status.getStatus().equalsIgnoreCase("offline")) {
-                    SendPushNotification(msg,status.getPush_id());
+                    SendPushNotification(msg, status.getPush_id());
                 }
             }
 

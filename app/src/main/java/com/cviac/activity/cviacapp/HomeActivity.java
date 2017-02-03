@@ -63,6 +63,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import retrofit.Call;
@@ -111,6 +113,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     private XMPPService mService;
 
     private boolean mBounded;
+    Timer timer;
+   MyTimerTask myTimerTask;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
 
@@ -143,7 +147,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        coordinatorLayout=(CoordinatorLayout)findViewById(R.id.main_content);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -175,6 +179,28 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         new UpdateStatusTask().execute("online");
         new UpdatePushIDTask().execute();
+
+
+        timer = new Timer();
+        myTimerTask = new MyTimerTask();
+        timer.schedule(myTimerTask, 1000, 1 * 60 * 1000);
+    }
+    class MyTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat =
+                    new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
+            final String strDate = simpleDateFormat.format(calendar.getTime());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    XMPPService.updateSatus();
+                    Toast.makeText(getApplicationContext(), "Timer Event", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void setAlaram() {
@@ -182,14 +208,14 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-            Intent intent = new Intent(this, AlarmReceiver.class);
-            alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, 6);
-            calendar.set(Calendar.MINUTE, 0);
-            alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, alarmIntent);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 6);
+        calendar.set(Calendar.MINUTE, 0);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
 
     }
 
@@ -363,6 +389,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onDestroy();
         //new UpdateStatusTask().execute("offline");
         doUnbindService();
+
+        if (timer != null)
+            timer.cancel();
+        timer = null;
     }
 
     private void updatePresence(String status, String empCode) {
@@ -569,17 +599,17 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     public XMPPService getmService() {
         return mService;
     }
-public  void getsnackbar()
-{
-    if(getApplicationContext()!=null){
-        Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "XMPP server connected!", Snackbar.LENGTH_LONG)
-                .setAction("RETRY", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    }
-                });
-    }
 
-}
+    public void getsnackbar() {
+        if (getApplicationContext() != null) {
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, "XMPP server connected!", Snackbar.LENGTH_LONG)
+                    .setAction("RETRY", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                        }
+                    });
+        }
+
+    }
 }

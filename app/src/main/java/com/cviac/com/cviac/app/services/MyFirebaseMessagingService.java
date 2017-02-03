@@ -14,6 +14,7 @@ import android.util.Log;
 import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
 
+import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -74,7 +75,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSound(soundUri)
                         .setContentText(data.get("msg"));
 
-        Intent resultIntent = new Intent(this, FireChatActivity.class);
+        Intent resultIntent = new Intent(this, XMPPChatActivity.class);
         Conversation conv = new Conversation();
         conv.setName(data.get("sendername"));
         conv.setEmpid(data.get("senderid"));

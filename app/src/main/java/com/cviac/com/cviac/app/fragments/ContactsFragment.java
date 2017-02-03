@@ -310,7 +310,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             @Override
             public void onResponse(Response<GetStatus> response, Retrofit retrofit) {
                 GetStatus status = response.body();
-                if (status.getStatus() == null || status.getStatus().isEmpty()  ) {
+                if (status.getStatus() == null || status.getStatus().isEmpty()) {
                     Smsinvite();
                 } else {
                     OpenConversation(status);
@@ -340,7 +340,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
 
             Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
             i.putExtra("conversewith", cov);
-            i.putExtra("status",status);
+            i.putExtra("status", status);
             startActivity(i);
         }
     }
