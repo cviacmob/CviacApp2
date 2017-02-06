@@ -4,9 +4,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -115,6 +117,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     private boolean mBounded;
     Timer timer;
    MyTimerTask myTimerTask;
+
+    private BroadcastReceiver xmppConnReciver;
 
     private final ServiceConnection mConnection = new ServiceConnection() {
 
@@ -581,32 +585,35 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    void doBindService() {
+    private void doBindService() {
 
-        bindService(new Intent(this, XMPPService.class), mConnection,
-                Context.BIND_AUTO_CREATE);
+    xmppConnReciver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String status = intent.getStringExtra("status");
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, "Chat Server:  " + status , Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+    };
+
+    bindService(new Intent(this, XMPPService.class), mConnection,
+            Context.BIND_AUTO_CREATE);
+        registerReceiver(xmppConnReciver,new IntentFilter("XMPPConnection"));
     }
+
+
 
     void doUnbindService() {
         if (mConnection != null) {
             unbindService(mConnection);
+            unregisterReceiver(xmppConnReciver);
         }
+
     }
 
     public XMPPService getmService() {
         return mService;
     }
 
-    public void getsnackbar() {
-        if (getApplicationContext() != null) {
-            Snackbar snackbar = Snackbar
-                    .make(coordinatorLayout, "XMPP server connected!", Snackbar.LENGTH_LONG)
-                    .setAction("RETRY", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                        }
-                    });
-        }
-
-    }
 }

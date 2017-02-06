@@ -2,6 +2,7 @@ package com.cviac.com.cviac.app.xmpp;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -111,6 +112,7 @@ public class XMPPClient {
     static {
         try {
             Class.forName("org.jivesoftware.smack.ReconnectionManager");
+
         } catch (ClassNotFoundException ex) {
             // problem loading reconnection manager
         }
@@ -163,9 +165,9 @@ public class XMPPClient {
                         @Override
                         public void run() {
 
-                            Toast.makeText(context,
-                                    caller + "=>connecting....",
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(context,
+//                                    caller + "=>connecting....",
+//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                 Log.d("Connect() Function", caller + "=>connecting....");
@@ -208,9 +210,9 @@ public class XMPPClient {
 
                         @Override
                         public void run() {
-                            Toast.makeText(context,
-                                    "(" + caller + ")" + "SMACKException::: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(context,
+//                                    "(" + caller + ")" + "SMACKException::: " + e.getMessage(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                     Log.e("(" + caller + ")",
@@ -346,7 +348,12 @@ public class XMPPClient {
                     public void run() {
                         // TODO Auto-generated method stub
                         updateStatus(offlinestatus);
-                        Toast.makeText(context, "ConnectionCLosed!",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "ConnectionCLosed!",Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent();
+                        intent.setAction("XMPPConnection");
+                        intent.putExtra("status", "Disconnected");
+                        context.sendBroadcast(intent);
                     }
                 });
             Log.d("xmpp", "ConnectionCLosed!");
@@ -363,8 +370,12 @@ public class XMPPClient {
 
                     @Override
                     public void run() {
-                        Toast.makeText(context, "ConnectionClosedOn Error!!",
-                                Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "ConnectionClosedOn Error!!",
+                        //        Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        intent.setAction("XMPPConnection");
+                        intent.putExtra("status", "DisConnected");
+                        context.sendBroadcast(intent);
 
                     }
                 });
@@ -392,8 +403,8 @@ public class XMPPClient {
                     @Override
                     public void run() {
 
-                        Toast.makeText(context, "ReconnectionFailed!",
-                                Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "ReconnectionFailed!",
+                        //        Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -414,8 +425,8 @@ public class XMPPClient {
                     public void run() {
                         // TODO Auto-generated method stub
 
-                        Toast.makeText(context, "REConnected!",
-                                Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "REConnected!",
+                        //        Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -457,9 +468,14 @@ public class XMPPClient {
 
 
                         // TODO Auto-generated method stub
-                        Toast.makeText(context, "Connected!",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Connected!",
+//                                Toast.LENGTH_SHORT).show();
                         updateStatus(onlinestatus);
+
+                        Intent intent = new Intent();
+                        intent.setAction("XMPPConnection");
+                        intent.putExtra("status", "Connected");
+                        context.sendBroadcast(intent);
                     }
                 });
         }
