@@ -66,13 +66,12 @@ public class XMPPClient {
     XMPPService context;
     public static XMPPClient instance = null;
     public static boolean instanceCreated = false;
-    String onlinestatus="online";
-    String offlinestatus="offline";
-    Date onlinestatusdate=new Date();
+    String onlinestatus = "online";
+    String offlinestatus = "offline";
+    Date onlinestatusdate = new Date();
     //String onlinestatus=onlinestatusdate.toString();
-   // String offline=onlinestatusdate.toString();
-    String mobile,emp_namelogged;
-
+    // String offline=onlinestatusdate.toString();
+    String mobile, emp_namelogged;
 
 
     public XMPPClient(XMPPService context, String serverAdress, String logiUser,
@@ -295,8 +294,8 @@ public class XMPPClient {
     }
 
     public void sendAckMessage(ChatMessage chatMessage) {
-        chatMessage.ack=1;
-        chatMessage.msg="";
+        chatMessage.ack = 1;
+        chatMessage.msg = "";
         String body = gson.toJson(chatMessage);
         Mychat = ChatManager.getInstanceFor(connection).createChat(
                 chatMessage.sender + "@"
@@ -352,7 +351,7 @@ public class XMPPClient {
 
                         Intent intent = new Intent();
                         intent.setAction("XMPPConnection");
-                        intent.putExtra("status", "Disconnected");
+                        intent.putExtra("status", "DisConnected");
                         context.sendBroadcast(intent);
                     }
                 });
@@ -498,10 +497,9 @@ public class XMPPClient {
                         message.getBody(), ChatMessage.class);
                 if (chatMessage.ack == 1) {
                     String msgId = chatMessage.msgid;
-                    ConvMessage.updateStatus(msgId,2);
-                    updateMessageStatusInUI(msgId,2);
-                }
-                else {
+                    ConvMessage.updateStatus(msgId, 2);
+                    updateMessageStatusInUI(msgId, 2);
+                } else {
                     processMessage(chatMessage);
                     sendAckMessage(chatMessage);
                 }
@@ -534,7 +532,7 @@ public class XMPPClient {
                     if (app != null) {
                         XMPPChatActivity actv = app.getChatActivty();
                         if (actv != null) {
-                            actv.updateMessageStatus(msgId,status);
+                            actv.updateMessageStatus(msgId, status);
                         }
                     }
                 }
@@ -557,8 +555,7 @@ public class XMPPClient {
             try {
                 cmsg.save();
                 saveLastConversationMessage(msg);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
             }
             // Chats.chatlist.add(chatMessage);
             new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -631,7 +628,7 @@ public class XMPPClient {
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(context, "update status failed", Toast.LENGTH_LONG).show();
+                // Toast.makeText(context, "update status failed", Toast.LENGTH_LONG).show();
             }
         });
 

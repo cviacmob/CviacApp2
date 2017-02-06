@@ -4,9 +4,11 @@ import android.*;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -79,6 +82,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     ActionBar actionBar;
     private String myempId;
     private String myempname;
+    String status;
     ImageView customimageback, customimage;
     private ConvMessageAdapter chatAdapter;
     TextView txt, msgview, presenceText;
@@ -87,10 +91,11 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     Date lastseen;
     TextView customTitle, customduration;
     GetStatus empstatus;
-
+    CVIACApplication app;
     Timer timer;
     MyTimerTask myTimerTask;
-
+    private BroadcastReceiver xmppConnReciver;
+Context mcontext;
     private XMPPService mService;
     private boolean mBounded;
 
@@ -130,7 +135,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         myempId = prefs.getString("empid", "");
         myempname = prefs.getString("empname", "");
 
-        CVIACApplication app = (CVIACApplication) getApplication();
+         app = (CVIACApplication) getApplication();
 
         app.setChatActivty(this);
         actionmethod();
@@ -145,23 +150,32 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 geteditmgs = edittxt.getText().toString();
-                if (!geteditmgs.equals("")) {
-                    String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
-                    msgid = getMsgID();
-                    ChatMessage chat = new ChatMessage(converseId, myempId, conv.getEmpid(), geteditmgs, msgid, true);
-                    chat.setSenderName(myempname);
-                    XMPPService.sendMessage(chat);
-                    saveChatMessage(chat);
-                    edittxt.getText().clear();
 
-                    ChatMsg msg = new ChatMsg();
-                    msg.setSenderid(myempId);
-                    msg.setSendername(myempname);
-                    msg.setMsg(geteditmgs);
-                    msg.setMsgid(msgid);
-                    msg.setReceiverid(conv.getEmpid());
-                    checkAndSendPushNotfication(conv.getEmpid(), msg);
+                if(app.isNetworkStatus() && status!=null &&status.equals("Connected")){
+                    if (!geteditmgs.equals("")) {
+                            String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
+                            msgid = getMsgID();
+                            ChatMessage chat = new ChatMessage(converseId, myempId, conv.getEmpid(), geteditmgs, msgid, true);
+                            chat.setSenderName(myempname);
+                            XMPPService.sendMessage(chat);
+                            saveChatMessage(chat);
+                            edittxt.getText().clear();
+
+                            ChatMsg msg = new ChatMsg();
+                            msg.setSenderid(myempId);
+                            msg.setSendername(myempname);
+                            msg.setMsg(geteditmgs);
+                            msg.setMsgid(msgid);
+                            msg.setReceiverid(conv.getEmpid());
+                            checkAndSendPushNotfication(conv.getEmpid(), msg);
+                        }
+
+                }else{
+                    Toast.makeText(XMPPChatActivity.this,
+                       "Check your internet connection", Toast.LENGTH_LONG).show();
                 }
+
+
 
             }
         });
@@ -482,14 +496,22 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     }
 
     void doBindService() {
+        xmppConnReciver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                status = intent.getStringExtra("status");
 
+            }
+        };
         bindService(new Intent(this, XMPPService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
+        registerReceiver(xmppConnReciver,new IntentFilter("XMPPConnection"));
     }
 
     void doUnbindService() {
         if (mConnection != null) {
             unbindService(mConnection);
+            unregisterReceiver(xmppConnReciver);
         }
     }
 }
