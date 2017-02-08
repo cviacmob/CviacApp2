@@ -23,7 +23,8 @@
     <string name="hint_name">Employee Code</string>
     <string name="dob">DOB</string>
     <string name="server1">cviacmob.p1.im</string>
-    <string name="server">ec2-52-33-98-83.us-west-2.compute.amazonaws.com</string>
+    <string name="server">ec2-35-162-147-104.us-west-2.compute.amazonaws.com</string>
+
 
 
 </resources>
