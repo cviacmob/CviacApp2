@@ -151,13 +151,16 @@ Context mcontext;
             public void onClick(View view) {
                 geteditmgs = edittxt.getText().toString();
 
-                if(app.isNetworkStatus() && status!=null &&status.equals("Connected")){
+
+
+                if(XMPPService.isNetworkConnected()  && XMPPService.xmpp.isConnected()){
                     if (!geteditmgs.equals("")) {
                             String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
                             msgid = getMsgID();
                             ChatMessage chat = new ChatMessage(converseId, myempId, conv.getEmpid(), geteditmgs, msgid, true);
                             chat.setSenderName(myempname);
                             XMPPService.sendMessage(chat);
+
                             saveChatMessage(chat);
                             edittxt.getText().clear();
 
