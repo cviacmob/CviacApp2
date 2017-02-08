@@ -25,7 +25,7 @@ public class ChatsFragment extends Fragment {
     public ArrayAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View chatsfrgs = inflater.inflate(R.layout.chats_frgs, container, false);
         // ((TextView)chats.findViewById(R.id.chat)).setText("chats");

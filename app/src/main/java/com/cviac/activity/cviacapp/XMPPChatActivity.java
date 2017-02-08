@@ -95,7 +95,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     Timer timer;
     MyTimerTask myTimerTask;
     private BroadcastReceiver xmppConnReciver;
-Context mcontext;
+    Context mcontext;
     private XMPPService mService;
     private boolean mBounded;
 
@@ -150,9 +150,6 @@ Context mcontext;
             @Override
             public void onClick(View view) {
                 geteditmgs = edittxt.getText().toString();
-
-
-
                 if(XMPPService.isNetworkConnected()  && XMPPService.xmpp.isConnected()){
                     if (!geteditmgs.equals("")) {
                             String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
@@ -503,6 +500,8 @@ Context mcontext;
             @Override
             public void onReceive(Context context, Intent intent) {
                 status = intent.getStringExtra("status");
+             
+
 
             }
         };
