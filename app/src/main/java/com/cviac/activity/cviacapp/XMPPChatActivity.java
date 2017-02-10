@@ -1,6 +1,5 @@
 package com.cviac.activity.cviacapp;
 
-import android.*;
 import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -17,10 +16,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,7 +36,6 @@ import com.cviac.com.cviac.app.datamodels.ChatMsg;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
-import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.restapis.FCMSendMessageResponse;
@@ -52,8 +48,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -149,6 +143,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 geteditmgs = edittxt.getText().toString();
                 if(XMPPService.isNetworkConnected()  && XMPPService.xmpp.isConnected()){
                     if (!geteditmgs.equals("")) {
@@ -180,6 +175,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             }
         });
         loadConvMessages();
+
 
         timer = new Timer();
         myTimerTask = new MyTimerTask();
@@ -500,10 +496,13 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             @Override
             public void onReceive(Context context, Intent intent) {
                 status = intent.getStringExtra("status");
-             
+                if(status !=null && status.equalsIgnoreCase("connected")){
+                    img.setBackgroundResource(R.drawable.send);
+                }else if(status !=null && status.equalsIgnoreCase("Disconnected")){
+                    img.setBackgroundResource(R.drawable.send_red);
+                }
 
-
-            }
+             }
         };
         bindService(new Intent(this, XMPPService.class), mConnection,
                 Context.BIND_AUTO_CREATE);

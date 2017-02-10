@@ -591,9 +591,9 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         @Override
         public void onReceive(Context context, Intent intent) {
             String status = intent.getStringExtra("status");
-            Snackbar snackbar = Snackbar
+           /* Snackbar snackbar = Snackbar
                     .make(coordinatorLayout, "Chat Server:  " + status , Snackbar.LENGTH_LONG);
-            snackbar.show();
+            snackbar.show();*/
         }
     };
 
