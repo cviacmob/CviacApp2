@@ -1,5 +1,6 @@
 package com.cviac.com.cviac.app.xmpp;
 
+import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -27,23 +28,36 @@ import com.google.gson.Gson;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
+import org.jivesoftware.smack.StanzaListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
+import org.jivesoftware.smack.filter.StanzaFilter;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Stanza;
+import org.jivesoftware.smack.parsing.ExceptionLoggingCallback;
+import org.jivesoftware.smack.roster.Roster;
+import org.jivesoftware.smack.sasl.provided.SASLPlainMechanism;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smack.util.TLSUtils;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager.AutoReceiptMode;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.X509TrustManager;
 
 import retrofit.Call;
 import retrofit.GsonConverterFactory;
@@ -51,7 +65,7 @@ import retrofit.Retrofit;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class XMPPClient {
+public class XMPPClient implements StanzaListener {
 
     public boolean connected = false;
     public boolean loggedin = false;
@@ -134,11 +148,102 @@ public class XMPPClient {
         config.setHost(serverAddress);
         config.setPort(5222);
         config.setDebuggerEnabled(true);
+
+        onReady(config);
+
         XMPPTCPConnection.setUseStreamManagementResumptiodDefault(true);
         XMPPTCPConnection.setUseStreamManagementDefault(true);
         connection = new XMPPTCPConnection(config.build());
+        connection.setPacketReplyTimeout(10000);
         XMPPConnectionListener connectionListener = new XMPPConnectionListener();
         connection.addConnectionListener(connectionListener);
+    }
+
+    @Override
+    public void processPacket(Stanza packet) throws NotConnectedException {
+
+    }
+
+    static class AcceptAll implements StanzaFilter {
+        @Override
+        public boolean accept(Stanza packet) {
+            return true;
+        }
+    }
+
+    private void onReady(XMPPTCPConnectionConfiguration.Builder builder) {
+        builder.setSecurityMode(ConnectionConfiguration.SecurityMode.ifpossible);
+        builder.setCompressionEnabled(false);
+        builder.setSendPresence(false);
+
+        try {
+            if (SettingsManager.securityCheckCertificate()) {
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                MemorizingTrustManager mtm = new MemorizingTrustManager(context);
+                sslContext.init(null, new X509TrustManager[]{mtm}, new java.security.SecureRandom());
+                builder.setCustomSSLContext(sslContext);
+                builder.setHostnameVerifier(
+                        mtm.wrapHostnameVerifier(new org.apache.http.conn.ssl.StrictHostnameVerifier()));
+            } else {
+                TLSUtils.acceptAllCertificates(builder);
+                TLSUtils.disableHostnameVerificationForTlsCertificicates(builder);
+            }
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+
+        setUpSASL();
+
+        connection = new XMPPTCPConnection(builder.build());
+        connection.addAsyncStanzaListener(this, new AcceptAll());
+        XMPPConnectionListener connectionListener = new XMPPConnectionListener();
+        connection.addConnectionListener(connectionListener);
+
+        // by default Smack disconnects in case of parsing errors
+        connection.setParsingExceptionCallback(new ExceptionLoggingCallback());
+
+//        AccountRosterListener rosterListener = new AccountRosterListener(((AccountItem)connectionItem).getAccount());
+//        final Roster roster = Roster.getInstanceFor(xmppConnection);
+//        roster.addRosterListener(rosterListener);
+//        roster.addRosterLoadedListener(rosterListener);
+//        roster.setSubscriptionMode(Roster.SubscriptionMode.manual);
+//
+//        org.jivesoftware.smackx.ping.PingManager.getInstanceFor(xmppConnection).registerPingFailedListener(this);
+
+//        connectionItem.onSRVResolved(this);
+//        final String password = OAuthManager.getInstance().getPassword(protocol, token);
+//        if (password != null) {
+//            runOnConnectionThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    connect(password);
+//                }
+//            });
+//        } else {
+//            runOnConnectionThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    passwordRequest();
+//                }
+//            });
+//        }
+    }
+
+    private void setUpSASL() {
+        if (SettingsManager.connectionUsePlainTextAuth()) {
+            final Map<String, String> registeredSASLMechanisms = SASLAuthentication.getRegisterdSASLMechanisms();
+            for (String mechanism : registeredSASLMechanisms.values()) {
+                SASLAuthentication.blacklistSASLMechanism(mechanism);
+            }
+
+            SASLAuthentication.unBlacklistSASLMechanism(SASLPlainMechanism.NAME);
+
+        } else {
+            final Map<String, String> registeredSASLMechanisms = SASLAuthentication.getRegisterdSASLMechanisms();
+            for (String mechanism : registeredSASLMechanisms.values()) {
+                SASLAuthentication.unBlacklistSASLMechanism(mechanism);
+            }
+        }
     }
 
     public void disconnect() {
@@ -209,9 +314,9 @@ public class XMPPClient {
 
                         @Override
                         public void run() {
-//                            Toast.makeText(context,
-//                                    "(" + caller + ")" + "SMACKException::: " + e.getMessage(),
-//                                    Toast.LENGTH_LONG).show();
+                            Toast.makeText(context,
+                                    "(" + caller + ")" + "SMACKException::: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
                     Log.e("(" + caller + ")",
@@ -249,7 +354,18 @@ public class XMPPClient {
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
-            e.printStackTrace();
+
+            new Handler(Looper.getMainLooper())
+                    .post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(
+                                    context,
+                                    "LOGIN FAILED: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        }
+                    });
         } catch (Exception e) {
         }
 
@@ -467,8 +583,8 @@ public class XMPPClient {
 
 
                         // TODO Auto-generated method stub
-//                        Toast.makeText(context, "Connected!",
-//                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Connected!",
+                                Toast.LENGTH_SHORT).show();
                         updateStatus(onlinestatus);
 
                         Intent intent = new Intent();

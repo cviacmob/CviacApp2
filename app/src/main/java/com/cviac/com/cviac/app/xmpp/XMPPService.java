@@ -9,8 +9,10 @@ import android.os.IBinder;
 import org.jivesoftware.smack.XMPPConnection;
 
 public class XMPPService extends Service {
-    //private static final String DOMAIN1 = "cviacmob.p1.im";
-    private static final String DOMAIN = "ec2-35-162-147-104.us-west-2.compute.amazonaws.com";
+    //private static final String DOMAIN = "cviacmob.p1.im";
+    //private static final String DOMAIN = "ec2-35-162-147-104.us-west-2.compute.amazonaws.com";
+    private static final String DOMAIN = "apps.cviac.com";
+
 //    private static final String USERNAME = "guna";
 //    private static final String PASSWORD = "tech@cviac";
     public static ConnectivityManager cm;
@@ -32,7 +34,7 @@ public class XMPPService extends Service {
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String userid = prefs.getString("empid", "");
-        xmpp = XMPPClient.getInstance(XMPPService.this, DOMAIN, userid, "1234");
+        xmpp = XMPPClient.getInstance(XMPPService.this, DOMAIN, userid, "tech@cviac");
         xmpp.connect("onCreate");
     }
 
