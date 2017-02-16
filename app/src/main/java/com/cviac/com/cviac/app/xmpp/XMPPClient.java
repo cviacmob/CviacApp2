@@ -149,7 +149,7 @@ public class XMPPClient implements StanzaListener {
         config.setPort(5222);
         config.setDebuggerEnabled(true);
 
-        onReady(config);
+        //onReady(config);
 
         XMPPTCPConnection.setUseStreamManagementResumptiodDefault(true);
         XMPPTCPConnection.setUseStreamManagementDefault(true);

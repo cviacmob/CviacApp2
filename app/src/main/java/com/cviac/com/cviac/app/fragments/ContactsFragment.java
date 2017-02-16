@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.cviac.activity.cviacapp.R;
+import com.cviac.activity.cviacapp.Verification;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ColleguesAdapter;
 import com.cviac.com.cviac.app.datamodels.Employee;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.okhttp.OkHttpClient;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -53,7 +55,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
     Employee emp;
     String receiverempname, receiverempcode, GetStatusByID;
     String mobile;
-
+    ProgressDialog progressDialog;
     String emp_namelogged;
     List<EmployeeInfo> emplist;
 
@@ -93,6 +95,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if (!emp_namelogged.equalsIgnoreCase(receiverempname)) {
                     // Toast.makeText(lv.getContext(), "clicked:" + receiverempname, Toast.LENGTH_SHORT).show();
                     // InviteorLanchByPresence(emp.getEmp_code());
+
                     converseORinvite();
                 }
 
@@ -343,5 +346,12 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             i.putExtra("status", status);
             startActivity(i);
         }
+    }
+    private void setProgressDialog() {
+        progressDialog = new ProgressDialog(getActivity(), R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Verifying...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 }

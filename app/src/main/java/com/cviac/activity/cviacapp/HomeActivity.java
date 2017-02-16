@@ -251,7 +251,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             String mobile = prefs.getString("mobile", "");
             Employee emplogged = Employee.getemployeeByMobile(mobile);
             if (emplogged != null) {
-                Intent i = new Intent(HomeActivity.this, MyProfileActivity.class);
+                Intent i = new Intent(HomeActivity.this, MyProfile.class);
                 i.putExtra("empcode", emplogged.getEmp_code());
                 startActivity(i);
             }

@@ -102,6 +102,10 @@
         <activity
             android:name=".XMPPChatActivity"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar" />
+        <activity
+            android:name=".MyProfile"
+          />
+
 
     </application>
 

@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -34,11 +35,12 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
     public ArrayAdapter adapter;
     private String myempId;
     private int lastPostion = -1;
+    private static final int MY_MESSAGE = 0, OTHER_MESSAGE = 1, MY_IMAGE = 2, OTHER_IMAGE = 3;
 
     Context mContext;
 
     public ConvMessageAdapter(List<ConvMessage> objects, Context context) {
-        super(context, R.layout.fragment_chat, objects);
+        super(context, R.layout.item_mine_message, objects);
         chats = objects;
         mContext = context;
     }
@@ -49,9 +51,64 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
         public  RelativeLayout rLayout;
 
     }
-
-
     @Override
+    public int getViewTypeCount() {
+        // my message, other message, my image, other image
+        return 4;
+    }
+    @Override
+    public int getItemViewType(int position) {
+        ConvMessage item = getItem(position);
+        if (item.isMine()) return MY_MESSAGE;
+        else if (!item.isMine() ) return OTHER_MESSAGE;
+        else if (item.isMine()) return MY_IMAGE;
+        else return OTHER_IMAGE;
+    }
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        int viewType = getItemViewType(position);
+        ConvMessage chat=getItem(position);
+        if (viewType == MY_MESSAGE) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_message, parent, false);
+            TextView textView = (TextView) convertView.findViewById(R.id.text);
+            TextView textView1 = (TextView) convertView.findViewById(R.id.text1);
+            ImageView textView2 = (ImageView) convertView.findViewById(R.id.imageView2);
+            textView.setText(getItem(position).getMsg());
+
+            textView1.setText(getformatteddate(chat.getCtime()));
+            if (chat.getStatus() == 0) {
+                textView2.setBackgroundResource(R.drawable.schedule);
+            }
+            if (chat.getStatus() == 1) {
+                textView2.setBackgroundResource(R.drawable.done);
+            } else if (chat.getStatus() == 2) {
+                textView2.setBackgroundResource(R.drawable.done_all);
+            } else if (chat.getStatus() == 3) {
+                textView2.setBackgroundResource(R.drawable.done_all_colo);
+            }
+
+        } else if (viewType == OTHER_MESSAGE) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_message, parent, false);
+            TextView textView = (TextView) convertView.findViewById(R.id.text);
+            textView.setText(getItem(position).getMsg());
+            TextView textView1 = (TextView) convertView.findViewById(R.id.text1);
+            textView1.setText(getformatteddate(chat.getCtime()));
+        } else if (viewType == MY_IMAGE) {
+            //convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_image, parent, false);
+        } else {
+            // convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_image, parent, false);
+        }
+        convertView.findViewById(R.id.chatMessageView).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "onClick", Toast.LENGTH_LONG).show();
+            }
+        });
+        return convertView;
+    }
+
+
+/*    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vw = convertView;
         ViewHolder holder;
@@ -110,7 +167,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
         }
         return vw;
 
-    }
+    }*/
 
     private String getformatteddate(Date dateTime) {
         Calendar calendar = Calendar.getInstance();

@@ -1,6 +1,10 @@
 package com.cviac.activity.cviacapp;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -12,6 +16,8 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.IBinder;
@@ -23,6 +29,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -77,7 +84,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     private String myempId;
     private String myempname;
     String status;
-    ImageView customimageback, customimage;
+    ImageView customimageback;
+   ImageView customimage;
     private ConvMessageAdapter chatAdapter;
     TextView txt, msgview, presenceText;
     int fromNotify = 0;
@@ -92,6 +100,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     Context mcontext;
     private XMPPService mService;
     private boolean mBounded;
+
 
     private final ServiceConnection mConnection = new ServiceConnection() {
 
@@ -360,13 +369,14 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         actionBar = getActionBar();
         if (actionBar != null) {
+            // in=Integer.parseInt(conv.getImageurl());
             // Disable the default and enable the custom
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF4848")));
 
-            View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+           final  View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
@@ -409,7 +419,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onClick(View v) {
                     //Log.w("MainActivity", "ActionBar's title clicked.");
-                    Intent i = new Intent(XMPPChatActivity.this, MyProfileActivity.class);
+                    Intent i = new Intent(XMPPChatActivity.this, MyProfile.class);
                     i.putExtra("empcode", conv.getEmpid());
                     startActivity(i);
                     finish();
@@ -515,4 +525,5 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             unregisterReceiver(xmppConnReciver);
         }
     }
+
 }
