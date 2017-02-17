@@ -2,18 +2,23 @@ package com.cviac.com.cviac.app.adapaters;
 
 import java.util.List;
 
+import com.cviac.activity.cviacapp.HomeActivity;
+import com.cviac.activity.cviacapp.MyProfile;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.fragments.ContactsFragment;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static com.cviac.activity.cviacapp.R.id.empimage;
 
@@ -23,6 +28,8 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
 
     private int lastPostion = -1;
     String url1;
+    String receiverempcode;
+    Employee emp;
 
     Context mContext;
 
@@ -39,10 +46,11 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View vw = convertView;
         ViewHolder holder;
-        Employee emp = getItem(position);
+       emp = getItem(position);
+
         if (convertView == null) {
             LayoutInflater inf = LayoutInflater.from(getContext());
             vw = inf.inflate(R.layout.collegues_item, parent, false);
@@ -74,6 +82,19 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
         }
         holder.nameView.setText(emp.getEmp_name());
         holder.mobile.setText(emp.getEmail());
+        holder.empimage.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            emp = emps.get(position);
+            receiverempcode= emp.getEmp_code();
+            Intent i = new Intent(getContext(), MyProfile.class);
+            i.putExtra("empcode", receiverempcode);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(i);
+        }
+    });
+
 
 
         return vw;

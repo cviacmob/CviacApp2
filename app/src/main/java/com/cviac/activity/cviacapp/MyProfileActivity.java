@@ -75,6 +75,7 @@ public class MyProfileActivity extends AppCompatActivity {
         //data from collegue
         Intent i = getIntent();
         empcode = i.getStringExtra("empcode");
+        empcode = i.getStringExtra("empcodee");
         Employee emp = Employee.getemployee(empcode);
         //title set
         setTitle(emp.getEmp_name());

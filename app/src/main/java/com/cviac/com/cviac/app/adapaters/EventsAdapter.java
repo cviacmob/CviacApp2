@@ -60,9 +60,14 @@ public class EventsAdapter extends ArrayAdapter<EventInfo> {
         } else {
             holder = (ViewHolder) vw.getTag();
         }
+
         String st = holder.imgview.toString();
         if (st != null) {
-            Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
+            if(even.getEvent_description().equalsIgnoreCase("Birthday")) {
+                Picasso.with(mContext).load(R.drawable.birthday).resize(130, 130).transform(new CircleTransform()).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.imgview);
+            }else{
+                Picasso.with(mContext).load(R.drawable.employee_img).resize(130, 130).transform(new CircleTransform()).centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.imgview);
+            }
         }
         holder.nameView.setText(even.getEvent_title());
         String timeStam = new SimpleDateFormat("dd-MM-yy").format(even.getEvent_date());

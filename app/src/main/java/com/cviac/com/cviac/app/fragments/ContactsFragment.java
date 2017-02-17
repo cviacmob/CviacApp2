@@ -3,6 +3,7 @@ package com.cviac.com.cviac.app.fragments;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.cviac.activity.cviacapp.MyProfile;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.Verification;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
@@ -58,6 +59,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
     ProgressDialog progressDialog;
     String emp_namelogged;
     List<EmployeeInfo> emplist;
+    String code;
 
 
     @Override
@@ -100,7 +102,6 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
 
 
-                //Toast.makeText(lv.getContext(), "clicked:"+ emp.getName(), Toast.LENGTH_SHORT).show();
 
 
             }
@@ -166,6 +167,8 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
 
     }*/
+
+
 
     private void Smsinvite() {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());

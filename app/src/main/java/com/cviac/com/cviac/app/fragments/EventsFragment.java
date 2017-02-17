@@ -36,21 +36,6 @@ public class EventsFragment extends Fragment {
         empss = getEvents();
         adapter = new EventsAdapter(empss, getActivity().getApplicationContext());
         lv1.setAdapter(adapter);
-        lv1.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int pos1,
-                                    long pos2) {
-
-                EventInfo emp = empss.get(pos1);
-
-                // Toast.makeText(lv1.getContext(), "clicked:" + emp.getEvent_title(), Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
-
-
         return events;
 
     }

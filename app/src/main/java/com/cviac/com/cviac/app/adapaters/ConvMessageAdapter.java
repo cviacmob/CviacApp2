@@ -93,17 +93,8 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             textView.setText(getItem(position).getMsg());
             TextView textView1 = (TextView) convertView.findViewById(R.id.text1);
             textView1.setText(getformatteddate(chat.getCtime()));
-        } else if (viewType == MY_IMAGE) {
-            //convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_image, parent, false);
-        } else {
-            // convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_image, parent, false);
         }
-        convertView.findViewById(R.id.chatMessageView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "onClick", Toast.LENGTH_LONG).show();
-            }
-        });
+
         return convertView;
     }
 

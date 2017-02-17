@@ -122,7 +122,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             int yrs=getyears(doj);
             EventInfo evt = new EventInfo();
             evt.setEvent_title(ee.getEmp_name());
-            evt.setEvent_description(yrs + " year Completed");
+            evt.setEvent_description(yrs + " year Completed in CVIAC");
             evt.setEvent_date(new Date());
             evt.save();
             srt1 = ee.getEmp_name();
