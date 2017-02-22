@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.sasl.provided.SASLPlainMechanism;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smack.util.TLSUtils;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager.AutoReceiptMode;
@@ -63,6 +65,7 @@ import retrofit.Call;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
+import static android.R.attr.resource;
 import static android.content.Context.MODE_PRIVATE;
 
 public class XMPPClient implements StanzaListener {
@@ -86,6 +89,7 @@ public class XMPPClient implements StanzaListener {
     //String onlinestatus=onlinestatusdate.toString();
     // String offline=onlinestatusdate.toString();
     String mobile, emp_namelogged;
+    CVIACApplication application;
 
 
     public XMPPClient(XMPPService context, String serverAdress, String logiUser,
@@ -97,6 +101,7 @@ public class XMPPClient implements StanzaListener {
         init();
 
     }
+
 
     public static XMPPClient getInstance(XMPPService context, String server,
                                          String user, String pass) {
@@ -149,7 +154,8 @@ public class XMPPClient implements StanzaListener {
         config.setPort(5222);
         config.setDebuggerEnabled(true);
 
-        //onReady(config);
+
+      //  onReady(config);
 
         XMPPTCPConnection.setUseStreamManagementResumptiodDefault(true);
         XMPPTCPConnection.setUseStreamManagementDefault(true);
@@ -172,7 +178,7 @@ public class XMPPClient implements StanzaListener {
     }
 
     private void onReady(XMPPTCPConnectionConfiguration.Builder builder) {
-        builder.setSecurityMode(ConnectionConfiguration.SecurityMode.ifpossible);
+        builder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
         builder.setCompressionEnabled(false);
         builder.setSendPresence(false);
 
@@ -392,6 +398,7 @@ public class XMPPClient implements StanzaListener {
         message.setBody(body);
         message.setStanzaId(chatMessage.msgid);
         message.setType(Message.Type.chat);
+
 
         try {
             if (connection.isAuthenticated()) {

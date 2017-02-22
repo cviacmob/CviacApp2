@@ -41,5 +41,7 @@
     <string name="mtm_decision_abort">Abort</string>
 
     <string name="mtm_notification">Certificate Verification</string>
+    <string name="client_name">XMPPClient</string>
+    <string name="account_resource_default">@string/client_name</string>
 
 </resources>

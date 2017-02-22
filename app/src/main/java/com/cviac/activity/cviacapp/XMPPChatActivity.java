@@ -374,7 +374,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             actionBar.setDisplayShowHomeEnabled(false);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FF4848")));
+            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#BB1924")));
 
            final  View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);

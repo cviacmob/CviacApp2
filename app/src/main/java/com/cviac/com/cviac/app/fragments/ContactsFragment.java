@@ -94,7 +94,8 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                     receiverempname = emp.getEmp_name();
                     receiverempcode = emp.getEmp_code();
                 }
-                if (!emp_namelogged.equalsIgnoreCase(receiverempname)) {
+               // if (!emp_namelogged.equalsIgnoreCase(receiverempname))
+                {
                     // Toast.makeText(lv.getContext(), "clicked:" + receiverempname, Toast.LENGTH_SHORT).show();
                     // InviteorLanchByPresence(emp.getEmp_code());
 
