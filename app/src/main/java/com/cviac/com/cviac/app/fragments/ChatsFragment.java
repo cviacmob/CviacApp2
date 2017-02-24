@@ -14,9 +14,14 @@ import android.widget.ListView;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ConversationAdapter;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ChatsFragment extends Fragment {
@@ -24,11 +29,13 @@ public class ChatsFragment extends Fragment {
     List<Conversation> emps;
     public ArrayAdapter adapter;
 
+
     @Override
     public  View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View chatsfrgs = inflater.inflate(R.layout.chats_frgs, container, false);
         // ((TextView)chats.findViewById(R.id.chat)).setText("chats");
+
 
         lv = (ListView) chatsfrgs.findViewById(R.id.chatlist);
         lv.setDivider(null);
@@ -48,6 +55,8 @@ public class ChatsFragment extends Fragment {
                 Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
                 i.putExtra("conversewith", emp);
                 startActivity(i);
+                Conversation.resetReadCount(emp.getEmpid());
+                reloadConversation();
             }
         });
         return chatsfrgs;
@@ -64,9 +73,10 @@ public class ChatsFragment extends Fragment {
     }
 
     public void reloadFilterByChats(String searchName) {
-        List<Conversation> chatlist = Conversation.getmessage(searchName);
+        List<Conversation> chatlist = Conversation.getfiltername(searchName);
         emps.clear();
         emps.addAll(chatlist);
         adapter.notifyDataSetChanged();
     }
+
 }

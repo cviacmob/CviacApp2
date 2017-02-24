@@ -3,12 +3,21 @@ package com.cviac.com.cviac.app.datamodels;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.activeandroid.query.Update;
 import com.activeandroid.util.SQLiteUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static android.icu.text.DateFormat.DAY;
+import static android.icu.text.DateFormat.HOUR24;
+import static android.icu.text.DateFormat.getDateInstance;
+import static android.icu.text.DateFormat.getDateTimeInstance;
 
 
 @Table(name = "ConvMessages")
@@ -39,7 +48,7 @@ public class ConvMessage extends Model {
     private String msgid;
 
     @Column(name = "status")
-    private int  status;
+    private int status;
 
 
     public ConvMessage() {

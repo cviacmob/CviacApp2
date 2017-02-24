@@ -34,6 +34,7 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
         public TextView nameView;
         public TextView msgview;
         public TextView datetime;
+        public TextView readcount;
         public ImageView imgview;
     }
 
@@ -51,7 +52,9 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
             holder.nameView = (TextView) vw.findViewById(R.id.textViewName);
             holder.msgview = (TextView) vw.findViewById(R.id.textViewLastmsg);
             holder.datetime = (TextView) vw.findViewById(R.id.textViewdatetime);
+            holder.readcount = (TextView) vw.findViewById(R.id.textreadcount);
             holder.imgview = (ImageView) vw.findViewById(R.id.imageViewurl);
+            holder.readcount.setVisibility(View.VISIBLE);
             vw.setTag(holder);
         } else {
             holder = (ViewHolder) vw.getTag();
@@ -78,6 +81,13 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
         holder.nameView.setText(conv.getName());
         holder.msgview.setText(conv.getLastmsg());
         holder.datetime.setText(conv.getformatteddate());
+        if (conv.getReadcount() == 0 ) {
+            holder.readcount.setVisibility(View.INVISIBLE);
+        }else {
+
+            holder.readcount.setVisibility(View.VISIBLE);
+            holder.readcount.setText(conv.getReadcount() + "");
+        }
         return vw;
     }
 

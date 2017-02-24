@@ -24,6 +24,7 @@
         android:layout_alignBottom="@+id/textViewName"
         android:layout_alignParentRight="true"
         android:text="TextView"
+        android:textSize="13dp"
          />
 
     <TextView
@@ -48,5 +49,19 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageViewurl"
         android:layout_toEndOf="@+id/imageViewurl" />
+
+    <TextView
+        android:id="@+id/textreadcount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_count"
+
+        android:textStyle="bold"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="0"
+        android:layout_below="@+id/textViewdatetime"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

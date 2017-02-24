@@ -6,6 +6,16 @@
     android:orientation="vertical"
     android:padding="3dp">
 
+    <TextView
+        android:id="@+id/textheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:visibility="invisible"
+       />
+
+
     <me.himanshusoni.chatmessageview.ChatMessageView
         android:id="@+id/chatMessageView"
         android:layout_width="match_parent"

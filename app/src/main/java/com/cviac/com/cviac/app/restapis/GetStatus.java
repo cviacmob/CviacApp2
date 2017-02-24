@@ -12,7 +12,7 @@ public class GetStatus implements Serializable{
     private int code;
     private String desc;
     private String status;
-    private Date last_activity;
+    private String last_activity;
     private String push_id;
 
     public GetStatus() {
@@ -42,11 +42,11 @@ public class GetStatus implements Serializable{
         this.status = status;
     }
 
-    public Date getLast_activity() {
+    public String getLast_activity() {
         return last_activity;
     }
 
-    public void setLast_activity(Date last_activity) {
+    public void setLast_activity(String last_activity) {
         this.last_activity = last_activity;
     }
 

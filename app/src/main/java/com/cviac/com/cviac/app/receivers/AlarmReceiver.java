@@ -15,6 +15,7 @@ import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.HomeActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
@@ -178,6 +179,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         int year2 = cal.get(Calendar.YEAR);
         years = year2 - year1;
         return years;
+    }
+    public void deletemessage(){
+
     }
 
 }

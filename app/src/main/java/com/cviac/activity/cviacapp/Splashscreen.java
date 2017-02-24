@@ -2,9 +2,13 @@ package com.cviac.activity.cviacapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.content.SharedPreferences;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 
 public class Splashscreen extends Activity {
     private final int SPLASH_DISPLAY_LENGTH = 3000;
@@ -38,6 +42,7 @@ public class Splashscreen extends Activity {
 
         }, SPLASH_DISPLAY_LENGTH);
     }
+
 
 
 }

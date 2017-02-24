@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -40,6 +41,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
+import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.receivers.AlarmReceiver;
 import com.cviac.com.cviac.app.datamodels.Employee;
@@ -74,6 +77,7 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
 
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -147,8 +151,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         getCollegues();
 
         setAlaram();
-
-
+       // Alarmformsg();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
@@ -188,6 +191,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         timer = new Timer();
         myTimerTask = new MyTimerTask();
         timer.schedule(myTimerTask, 1000, 1 * 60 * 1000);
+
     }
     class MyTimerTask extends TimerTask {
 
@@ -205,7 +209,6 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private void setAlaram() {
         //List<Employee> emplist = Employee.eventsbydate();
-
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(this, AlarmReceiver.class);
@@ -217,6 +220,22 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
 
+    }
+    private void Alarmformsg() {
+        //List<Employee> emplist = Employee.eventsbydate();
+
+        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 22);
+//        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+//                AlarmManager.INTERVAL_DAY, alarmIntent);
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 10, alarmIntent);
     }
 
 
@@ -232,8 +251,6 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(this);
-
-
         return true;
     }
 
@@ -283,6 +300,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         TabLayout.Tab tab = tabLayout.getTabAt(pos);
         if (tab.getText().toString().equalsIgnoreCase("CHATS")) {
             chatFrag.reloadFilterByChats(newText);
+
         } else if (tab.getText().toString().equalsIgnoreCase("CONTACTS")) {
             if (empFrag != null) {
                 empFrag.reloadFilterByName(newText);

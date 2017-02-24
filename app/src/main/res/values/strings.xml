@@ -23,8 +23,8 @@
     <string name="hint_name">Employee Code</string>
     <string name="dob">DOB</string>
     <string name="server1">cviacmob.p1.im</string>
-    <string name="server">ec2-35-162-147-104.us-west-2.compute.amazonaws.com</string>
-    <string name="server2">apps.cviac.com</string>
+    <string name="server2">ec2-35-162-147-104.us-west-2.compute.amazonaws.com</string>
+    <string name="server">apps.cviac.com</string>
 
 
     <string name="mtm_accept_cert">Accept Unknown Certificate?</string>

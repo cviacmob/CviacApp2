@@ -44,6 +44,7 @@ import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
+import com.cviac.com.cviac.app.fragments.ContactsFragment;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.restapis.FCMSendMessageResponse;
 import com.cviac.com.cviac.app.restapis.GetStatus;
@@ -55,9 +56,15 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -85,7 +92,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     private String myempname;
     String status;
     ImageView customimageback;
-   ImageView customimage;
+    ImageView customimage;
     private ConvMessageAdapter chatAdapter;
     TextView txt, msgview, presenceText;
     int fromNotify = 0;
@@ -101,7 +108,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     private XMPPService mService;
     private boolean mBounded;
 
-
+    static Date date = null;
     private final ServiceConnection mConnection = new ServiceConnection() {
 
         @SuppressWarnings("unchecked")
@@ -138,7 +145,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         myempId = prefs.getString("empid", "");
         myempname = prefs.getString("empname", "");
 
-         app = (CVIACApplication) getApplication();
+        app = (CVIACApplication) getApplication();
 
         app.setChatActivty(this);
         actionmethod();
@@ -146,7 +153,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
-        lv.setDividerHeight(5);
+        // lv.setDividerHeight(5);
         img = (ImageButton) findViewById(R.id.sendbutton);
         edittxt = (EditText) findViewById(R.id.editTextsend);
         img.setOnClickListener(new View.OnClickListener() {
@@ -154,31 +161,30 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             public void onClick(View view) {
 
                 geteditmgs = edittxt.getText().toString();
-                if(XMPPService.isNetworkConnected()  && XMPPService.xmpp.isConnected()){
+                if (XMPPService.isNetworkConnected() && XMPPService.xmpp.isConnected()) {
                     if (!geteditmgs.equals("")) {
-                            String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
-                            msgid = getMsgID();
-                            ChatMessage chat = new ChatMessage(converseId, myempId, conv.getEmpid(), geteditmgs, msgid, true);
-                            chat.setSenderName(myempname);
-                            XMPPService.sendMessage(chat);
+                        String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
+                        msgid = getMsgID();
+                        ChatMessage chat = new ChatMessage(converseId, myempId, conv.getEmpid(), geteditmgs, msgid, true);
+                        chat.setSenderName(myempname);
+                        XMPPService.sendMessage(chat);
 
-                            saveChatMessage(chat);
-                            edittxt.getText().clear();
+                        saveChatMessage(chat);
+                        edittxt.getText().clear();
 
-                            ChatMsg msg = new ChatMsg();
-                            msg.setSenderid(myempId);
-                            msg.setSendername(myempname);
-                            msg.setMsg(geteditmgs);
-                            msg.setMsgid(msgid);
-                            msg.setReceiverid(conv.getEmpid());
-                            checkAndSendPushNotfication(conv.getEmpid(), msg);
-                        }
+                        ChatMsg msg = new ChatMsg();
+                        msg.setSenderid(myempId);
+                        msg.setSendername(myempname);
+                        msg.setMsg(geteditmgs);
+                        msg.setMsgid(msgid);
+                        msg.setReceiverid(conv.getEmpid());
+                        checkAndSendPushNotfication(conv.getEmpid(), msg);
+                    }
 
-                }else{
+                } else {
                     Toast.makeText(XMPPChatActivity.this,
-                       "Check your internet connection", Toast.LENGTH_LONG).show();
+                            "Check your internet connection", Toast.LENGTH_LONG).show();
                 }
-
 
 
             }
@@ -215,7 +221,14 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                             empstatus = response.body();
                             if (empstatus != null && empstatus.getStatus() != null) {
                                 if (customduration != null) {
-                                    customduration.setText(empstatus.getStatus());
+                                    if (empstatus.getStatus().equalsIgnoreCase("offline")) {
+                                        String dateStr = empstatus.getLast_activity();
+                                        String formateddate = getformatteddate(new Date());
+                                        customduration.setText(formateddate + getDate(dateStr));
+                                    } else {
+                                        customduration.setText(empstatus.getStatus());
+                                    }
+
                                 }
                             }
                         }
@@ -230,9 +243,63 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private String getDate(String OurDate) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            formatter.setTimeZone(TimeZone.getTimeZone("PST"));
+            Date value = formatter.parse(OurDate);
+
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm"); //this format changeable
+            dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT+13:30"));
+            OurDate = dateFormatter.format(value);
+
+        } catch (Exception e) {
+            OurDate = "00-00-0000 00:00";
+        }
+        return OurDate;
+    }
+
+    public String getformatteddate(Date dateTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateTime);
+
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "last seen today at ";
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "last seen yesterday at ";
+        } else {
+            DateFormat dateform = new SimpleDateFormat("dd-MMM-yy");
+            return dateform.format(dateTime);
+        }
+
+    }
+
     private void loadConvMessages() {
         converseId = getNormalizedConverseId(myempId, conv.getEmpid());
         chats = ConvMessage.getAll(converseId);
+
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(new Date());
+//        Calendar yesterday = Calendar.getInstance();
+//        yesterday.add(Calendar.DATE, -1);
+//
+//        ConvMessage msg1 = new ConvMessage();
+//        msg1.setMine(true);
+//        msg1.setMsg("Test Message");
+//        msg1.setCtime(yesterday.getTime());
+//
+//        chats.add(msg1);
+//
+//        ConvMessage msg2 = new ConvMessage();
+//        msg2.setMine(true);
+//        msg2.setMsg("Test Message2");
+//        msg2.setCtime(yesterday.getTime());
+//
+//        chats.add(msg2);
+
         chatAdapter = new ConvMessageAdapter(chats, this);
         lv.setAdapter(chatAdapter);
     }
@@ -376,7 +443,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#BB1924")));
 
-           final  View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
+            final View customView = getLayoutInflater().inflate(R.layout.actionbar_title, null);
             customTitle = (TextView) customView.findViewById(R.id.actionbarTitle);
             customimage = (ImageView) customView.findViewById(R.id.imageViewcustom);
             customimageback = (ImageView) customView.findViewById(R.id.imageViewback);
@@ -407,11 +474,19 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             ;
 
             customTitle.setText(conv.getName());
-            if (empstatus != null && empstatus.getStatus() != null) {
-                customduration.setText(empstatus.getStatus());
-            }
-
-
+//            if (empstatus != null && empstatus.getStatus() != null) {
+//                if (empstatus.getStatus().equalsIgnoreCase("offline")) {
+//                    Date date = null;
+//                    String dt = empstatus.getLast_activity();
+//                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+//                    try {
+//                        date = dateFormat.parse(dt);
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                    customduration.setText(chatAdapter.getformatteddate(date));
+//                }
+//            }
             // Change the font family (optional)
 
             // Set the on click listener for the title
@@ -496,8 +571,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
     private void checkAndSendPushNotfication(String empCode, final ChatMsg msg) {
         if (empstatus != null && empstatus.getStatus() != null && empstatus.getStatus().equalsIgnoreCase("offline")) {
-            if (empstatus.getPush_id() != null && empstatus.getPush_id().length()>0)
-            SendPushNotification(msg, empstatus.getPush_id());
+            if (empstatus.getPush_id() != null && empstatus.getPush_id().length() > 0)
+                SendPushNotification(msg, empstatus.getPush_id());
         }
     }
 
@@ -506,17 +581,17 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             @Override
             public void onReceive(Context context, Intent intent) {
                 status = intent.getStringExtra("status");
-                if(status !=null && status.equalsIgnoreCase("connected")){
+                if (status != null && status.equalsIgnoreCase("connected")) {
                     img.setBackgroundResource(R.drawable.send);
-                }else if(status !=null && status.equalsIgnoreCase("Disconnected")){
+                } else if (status != null && status.equalsIgnoreCase("Disconnected")) {
                     img.setBackgroundResource(R.drawable.send_red);
                 }
 
-             }
+            }
         };
         bindService(new Intent(this, XMPPService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
-        registerReceiver(xmppConnReciver,new IntentFilter("XMPPConnection"));
+        registerReceiver(xmppConnReciver, new IntentFilter("XMPPConnection"));
     }
 
     void doUnbindService() {

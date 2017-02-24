@@ -155,14 +155,14 @@ public class XMPPClient implements StanzaListener {
         config.setDebuggerEnabled(true);
 
 
-      //  onReady(config);
+        onReady(config);
 
-        XMPPTCPConnection.setUseStreamManagementResumptiodDefault(true);
-        XMPPTCPConnection.setUseStreamManagementDefault(true);
-        connection = new XMPPTCPConnection(config.build());
-        connection.setPacketReplyTimeout(10000);
-        XMPPConnectionListener connectionListener = new XMPPConnectionListener();
-        connection.addConnectionListener(connectionListener);
+//        XMPPTCPConnection.setUseStreamManagementResumptiodDefault(true);
+//        XMPPTCPConnection.setUseStreamManagementDefault(true);
+//        connection = new XMPPTCPConnection(config.build());
+//        connection.setPacketReplyTimeout(10000);
+//        XMPPConnectionListener connectionListener = new XMPPConnectionListener();
+//        connection.addConnectionListener(connectionListener);
     }
 
     @Override
@@ -178,9 +178,9 @@ public class XMPPClient implements StanzaListener {
     }
 
     private void onReady(XMPPTCPConnectionConfiguration.Builder builder) {
-        builder.setSecurityMode(ConnectionConfiguration.SecurityMode.disabled);
+        builder.setSecurityMode(ConnectionConfiguration.SecurityMode.ifpossible);
         builder.setCompressionEnabled(false);
-        builder.setSendPresence(false);
+        builder.setSendPresence(true);
 
         try {
             if (SettingsManager.securityCheckCertificate()) {
@@ -204,35 +204,14 @@ public class XMPPClient implements StanzaListener {
         connection.addAsyncStanzaListener(this, new AcceptAll());
         XMPPConnectionListener connectionListener = new XMPPConnectionListener();
         connection.addConnectionListener(connectionListener);
-
         // by default Smack disconnects in case of parsing errors
         connection.setParsingExceptionCallback(new ExceptionLoggingCallback());
-
 //        AccountRosterListener rosterListener = new AccountRosterListener(((AccountItem)connectionItem).getAccount());
 //        final Roster roster = Roster.getInstanceFor(xmppConnection);
 //        roster.addRosterListener(rosterListener);
 //        roster.addRosterLoadedListener(rosterListener);
 //        roster.setSubscriptionMode(Roster.SubscriptionMode.manual);
-//
 //        org.jivesoftware.smackx.ping.PingManager.getInstanceFor(xmppConnection).registerPingFailedListener(this);
-
-//        connectionItem.onSRVResolved(this);
-//        final String password = OAuthManager.getInstance().getPassword(protocol, token);
-//        if (password != null) {
-//            runOnConnectionThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    connect(password);
-//                }
-//            });
-//        } else {
-//            runOnConnectionThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    passwordRequest();
-//                }
-//            });
-//        }
     }
 
     private void setUpSASL() {
@@ -320,9 +299,9 @@ public class XMPPClient implements StanzaListener {
 
                         @Override
                         public void run() {
-                            Toast.makeText(context,
-                                    "(" + caller + ")" + "SMACKException::: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+//                            Toast.makeText(context,
+//                                    "(" + caller + ")" + "SMACKException::: " + e.getMessage(),
+//                                    Toast.LENGTH_LONG).show();
                         }
                     });
                     Log.e("(" + caller + ")",
@@ -353,10 +332,23 @@ public class XMPPClient implements StanzaListener {
         connectionThread.execute();
     }
 
+    private String generateResource() {
+
+        final String MyPREFERENCES = "MyPrefs";
+        SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        String resource = prefs.getString("resource", "");
+        if (resource.isEmpty()) {
+            resource = context.getString(R.string.account_resource_default) + "_" + StringUtils.randomString(8);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("resource", resource);
+            editor.commit();
+        }
+        return resource;
+    }
     public void login() {
 
         try {
-            connection.login(loginUser, passwordUser);
+            connection.login(loginUser, passwordUser,generateResource());
             Log.i("LOGIN", "Yey! We're connected to the Xmpp server!");
 
         } catch (XMPPException | SmackException | IOException e) {
@@ -590,8 +582,8 @@ public class XMPPClient implements StanzaListener {
 
 
                         // TODO Auto-generated method stub
-                        Toast.makeText(context, "Connected!",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Connected!",
+//                                Toast.LENGTH_SHORT).show();
                         updateStatus(onlinestatus);
 
                         Intent intent = new Intent();
@@ -636,7 +628,23 @@ public class XMPPClient implements StanzaListener {
             boolean newconv = false;
             if (cnv == null) {
                 cnv = new Conversation();
+                cnv.setReadcount(1);
                 newconv = true;
+            }else {
+               // CVIACApplication app = (CVIACApplication) context.getApplication();
+                XMPPChatActivity actv = app.getChatActivty();
+                if (actv != null) {
+                    String convId = actv.getConverseId();
+                    if (convId.equalsIgnoreCase(msg.converseid)) {
+                        cnv.setReadcount(0);
+                    }
+                    else {
+                        cnv.setReadcount(cnv.getReadcount()+1);
+                    }
+                }
+                else {
+                    cnv.setReadcount(cnv.getReadcount()+1);
+                }
             }
             cnv.setEmpid(msg.sender);
             // cnv.setImageurl(conv.getImageurl());

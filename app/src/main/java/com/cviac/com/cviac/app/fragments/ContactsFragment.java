@@ -1,5 +1,6 @@
 package com.cviac.com.cviac.app.fragments;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -8,6 +9,7 @@ import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.Verification;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ColleguesAdapter;
+import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
@@ -94,17 +96,12 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                     receiverempname = emp.getEmp_name();
                     receiverempcode = emp.getEmp_code();
                 }
-               // if (!emp_namelogged.equalsIgnoreCase(receiverempname))
-                {
+                if (!emp_namelogged.equalsIgnoreCase(receiverempname)) {
                     // Toast.makeText(lv.getContext(), "clicked:" + receiverempname, Toast.LENGTH_SHORT).show();
                     // InviteorLanchByPresence(emp.getEmp_code());
 
                     converseORinvite();
                 }
-
-
-
-
             }
         });
 
@@ -113,6 +110,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         {
             mSwipeRefreshLayout.setColorSchemeResources(R.color.bluerefersh);
         }
+
         return vw;
     }
 
@@ -170,7 +168,6 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
     }*/
 
 
-
     private void Smsinvite() {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
         builder1.setTitle("App Not Install");
@@ -181,15 +178,14 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 "Invite",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-
                         String message = emp_namelogged + " invited you to install CVIAC Chat App.\nClick below link to install.\n" + "http://www.apps.cviac.com/mobileapps/cviacapp.apk";
-
                         Context ctx = getActivity().getApplicationContext();
                         if (ctx != null) {
                             // CVIACApplication app = (CVIACApplication) getActivity().getApplicationContext();
                             String mobile = emp.getMobile();
+
                             // sendMobile(mobile, message);
+                            setProgressDialog();
                             sendsms(mobile, message);
 
 
@@ -288,10 +284,12 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 GeneralResponse rsp = response.body();
                 code = rsp.getCode();
                 if (code == 0) {
+                    if (progressDialog != null) {
+                        progressDialog.dismiss();
+                    }
                     Toast.makeText(getActivity(), "invite Success", Toast.LENGTH_LONG).show();
 
                 }
-
             }
 
             @Override
@@ -301,7 +299,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private void converseORinvite() {
+    private  void converseORinvite() {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
@@ -322,13 +320,13 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
                 } else {
                     OpenConversation(status);
                 }
-
             }
 
             @Override
             public void onFailure(Throwable throwable) {
 
-                Toast.makeText(getActivity().getApplicationContext(), "Network Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), throwable.getMessage() + "Network Error", Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -351,10 +349,11 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
             startActivity(i);
         }
     }
+
     private void setProgressDialog() {
         progressDialog = new ProgressDialog(getActivity(), R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Verifying...");
+        progressDialog.setMessage("Inviting.....");
         progressDialog.setCancelable(false);
         progressDialog.show();
     }

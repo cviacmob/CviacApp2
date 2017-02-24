@@ -4,10 +4,12 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+import com.activeandroid.query.Update;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +27,13 @@ public class Conversation extends Model implements Serializable {
     private Date datetime;
     @Column(name = "empid", index = true)
     private String empid;
+    @Column(name = "readcount")
+    private int readcount;
+
 
     public Conversation() {
+        readcount=0;
+
     }
 
     public String getImageurl() {
@@ -69,6 +76,14 @@ public class Conversation extends Model implements Serializable {
         this.empid = empid;
     }
 
+    public int getReadcount() {
+        return readcount;
+    }
+
+    public void setReadcount(int readcount) {
+        this.readcount = readcount;
+    }
+
     public String getformatteddate() {
         if (datetime == null) {
             return "";
@@ -105,7 +120,7 @@ public class Conversation extends Model implements Serializable {
                 .executeSingle();
     }
 
-    public static List<Conversation> getmessage(String filterByName) {
+    public static List<Conversation> getfiltername(String filterByName) {
         return new Select().from(Conversation.class)
                 .where("name LIKE ?", new String[]{'%' + filterByName + '%'})
                 .orderBy("timestmp DESC")
@@ -119,14 +134,26 @@ public class Conversation extends Model implements Serializable {
         Conversation oldconv = new Select().from(Conversation.class)
                 .where("empid = ?", conv.getEmpid())
                 .executeSingle();
+
         if (oldconv == null) {
+            conv.setReadcount(1);
             conv.save();
         } else {
             oldconv.setLastmsg(conv.getLastmsg());
             oldconv.setDatetime(new Date());
+            oldconv.setReadcount(oldconv.getReadcount()+1);
             oldconv.save();
 
         }
     }
+
+    public static void resetReadCount(String empcode) {
+        new Update(Conversation.class)
+                .set("readcount = ?", 0)
+                .where("empid = ?", empcode)
+                .execute();
+        return;
+    }
+
 
 }
