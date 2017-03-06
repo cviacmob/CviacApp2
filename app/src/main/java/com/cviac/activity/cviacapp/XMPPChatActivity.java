@@ -132,7 +132,6 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_xmppchat);
         setContentView(R.layout.activity_xmppchat);
 
 
@@ -153,7 +152,6 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
 
         lv = (ListView) findViewById(R.id.listViewChat);
         lv.setDivider(null);
-        // lv.setDividerHeight(5);
         img = (ImageButton) findViewById(R.id.sendbutton);
         edittxt = (EditText) findViewById(R.id.editTextsend);
         img.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +176,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                         msg.setMsg(geteditmgs);
                         msg.setMsgid(msgid);
                         msg.setReceiverid(conv.getEmpid());
-                        checkAndSendPushNotfication(conv.getEmpid(), msg);
+
+                        checkAndSendPushNotfication(msg);
                     }
 
                 } else {
@@ -223,8 +222,20 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                                 if (customduration != null) {
                                     if (empstatus.getStatus().equalsIgnoreCase("offline")) {
                                         String dateStr = empstatus.getLast_activity();
-                                        String formateddate = getformatteddate(new Date());
-                                        customduration.setText(formateddate + getDate(dateStr));
+                                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        formatter.setTimeZone(TimeZone.getTimeZone("PST"));
+                                        Date value = null;
+                                        try {
+                                            value = formatter.parse(dateStr);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");//this format changeable
+                                        dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT+13:30"));
+                                       String OurDate = dateFormatter.format(value);
+
+                                        customduration.setText(getDate(dateStr)+" "+OurDate);
                                     } else {
                                         customduration.setText(empstatus.getStatus());
                                     }
@@ -243,15 +254,29 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         }
     }
 
+
     private String getDate(String OurDate) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             formatter.setTimeZone(TimeZone.getTimeZone("PST"));
             Date value = formatter.parse(OurDate);
-
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm"); //this format changeable
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");//this format changeable
             dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT+13:30"));
-            OurDate = dateFormatter.format(value);
+            SimpleDateFormat dateFormatter1 = new SimpleDateFormat("yyyy-MM-dd");
+            OurDate = dateFormatter1.format(value);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(value);
+            Calendar today = Calendar.getInstance();
+            Calendar yesterday = Calendar.getInstance();
+             yesterday.add(Calendar.DATE, -1);
+
+            if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+                return "last seen today at ";
+            } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+                return "last seen yesterday at ";
+            }else {
+                return OurDate;
+            }
 
         } catch (Exception e) {
             OurDate = "00-00-0000 00:00";
@@ -259,7 +284,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         return OurDate;
     }
 
-    public String getformatteddate(Date dateTime) {
+    public String getformatteddate(Date dateTime) throws ParseException {
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateTime);
 
@@ -569,8 +595,8 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    private void checkAndSendPushNotfication(String empCode, final ChatMsg msg) {
-        if (empstatus != null && empstatus.getStatus() != null && empstatus.getStatus().equalsIgnoreCase("offline")) {
+    private void checkAndSendPushNotfication(final ChatMsg msg) {
+        if (empstatus != null && empstatus.getStatus() != null && empstatus.getStatus().equalsIgnoreCase("Offline")) {
             if (empstatus.getPush_id() != null && empstatus.getPush_id().length() > 0)
                 SendPushNotification(msg, empstatus.getPush_id());
         }

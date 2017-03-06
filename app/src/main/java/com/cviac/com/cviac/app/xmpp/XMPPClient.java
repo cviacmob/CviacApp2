@@ -2,6 +2,7 @@ package com.cviac.com.cviac.app.xmpp;
 
 import android.app.Application;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,11 +13,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.cviac.activity.cviacapp.CVIACApplication;
+import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
+import com.cviac.activity.cviacapp.Verification;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
@@ -90,7 +94,9 @@ public class XMPPClient implements StanzaListener {
     // String offline=onlinestatusdate.toString();
     String mobile, emp_namelogged;
     CVIACApplication application;
-
+    private int msgcounter = 0;
+    Employee emplogged;
+    int counter = 0;
 
     public XMPPClient(XMPPService context, String serverAdress, String logiUser,
                       String passwordser) {
@@ -357,11 +363,8 @@ public class XMPPClient implements StanzaListener {
                     .post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(
-                                    context,
-                                    "LOGIN FAILED: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
+                            Toast.makeText(context,"LOGIN FAILED: " + e.getMessage(),Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
                         }
                     });
         } catch (Exception e) {
@@ -730,14 +733,33 @@ public class XMPPClient implements StanzaListener {
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         // mId allows you to update the notification later on.
 
-        mNotificationManager.notify(0, mBuilder.build());
+        Intent resultIntent = new Intent(context, XMPPChatActivity.class);
+
+        Conversation cnv = new Conversation();
+        cnv.setEmpid(cmsg.getSender());
+        cnv.setName(cmsg.getSenderName());
+        Employee code= Employee.getemployee(cmsg.getSender());
+         cnv.setImageurl(code.getImage_url());
+        resultIntent.putExtra("conversewith",cnv);
+        resultIntent.putExtra("fromnotify",1);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(FireChatActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        mNotificationManager.notify(msgcounter, mBuilder.build());
+        msgcounter++;
     }
 
     public void updateStatus(String status) {
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = context.getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         mobile = prefs.getString("mobile", "");
-        Employee emplogged = Employee.getemployeeByMobile(mobile);
+        emplogged = Employee.getemployeeByMobile(mobile);
         emp_namelogged = emplogged.getEmp_code();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://apps.cviac.com")

@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,13 +83,12 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
     }
 
     private String getGroupHeaderName(int position) {
-        ConvMessage curr=getItem(position);
+        ConvMessage curr = getItem(position);
         if (position == 0) {
-            String gname =  getGroupHeaderText(curr.getCtime());
+            String gname = getGroupHeaderText(curr.getCtime());
             return gname;
-        }
-        else {
-              String gname = getGroupHeaderText(curr.getCtime());
+        } else {
+            String gname = getGroupHeaderText(curr.getCtime());
             if (checkGroupName(gname)) {
                 return gname;
             }
@@ -98,70 +98,84 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
 
 
     public static class ViewHolder {
-        public TextView msgview,txt;
-        public ImageView statusview;
-        public  RelativeLayout rLayout;
+        public TextView textView;
+        public TextView textViewother, textviewduration, textviewdurationmine;
+        public  ImageView imagetick;
 
     }
+
     @Override
     public int getViewTypeCount() {
         // my message, other message, my image, other image
         return 4;
     }
+
     @Override
     public int getItemViewType(int position) {
         ConvMessage item = getItem(position);
         if (item.isMine()) return MY_MESSAGE;
-        else if (!item.isMine() ) return OTHER_MESSAGE;
+        else if (!item.isMine()) return OTHER_MESSAGE;
         else if (item.isMine()) return MY_IMAGE;
         else return OTHER_IMAGE;
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        View vw = convertView;
         int viewType = getItemViewType(position);
-        ConvMessage chat=getItem(position);
+        ViewHolder holder;
+        ConvMessage chat = getItem(position);
 
-        if (viewType == MY_MESSAGE) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_message, parent, false);
-            TextView textView = (TextView) convertView.findViewById(R.id.text);
-            TextView textView1 = (TextView) convertView.findViewById(R.id.text1);
-            TextView textView3 = (TextView) convertView.findViewById(R.id.textheader);
-            ImageView textView2 = (ImageView) convertView.findViewById(R.id.imageView2);
+        String groupName = getGroupHeaderName(position);
+        if (convertView == null) {
+            holder = new ViewHolder();
+            if (viewType == MY_MESSAGE) {
 
-            textView.setText( getItem(position).getMsg());
+                vw = LayoutInflater.from(getContext()).inflate(R.layout.item_mine_message, parent, false);
+                holder.textView = (TextView) vw.findViewById(R.id.text);
+                holder.textviewdurationmine = (TextView) vw.findViewById(R.id.text1);
+                TextView textView3 = (TextView) vw.findViewById(R.id.textheader);
+                holder.imagetick= (ImageView) vw.findViewById(R.id.imageView2);
 
-            textView1.setText(getformatteddate(chat.getCtime()));
+
+            } else if (viewType == OTHER_MESSAGE) {
+                vw = LayoutInflater.from(getContext()).inflate(R.layout.item_other_message, parent, false);
+                holder.textViewother = (TextView) vw.findViewById(R.id.text);
+                holder.textviewduration = (TextView) vw.findViewById(R.id.text1);
+                TextView textView3 = (TextView) vw.findViewById(R.id.textheader);
+
+             }
+            vw.setTag(holder);
+        } else {
+            holder = (ViewHolder) vw.getTag();
+        }
+        if(chat.isMine()) {
+            holder.textView.setText(chat.getMsg());
+            holder.textviewdurationmine.setText(getformatteddate(chat.getCtime()));
             if (chat.getStatus() == 0) {
-                textView2.setBackgroundResource(R.drawable.schedule);
+                holder.imagetick.setBackgroundResource(R.drawable.schedule);
             }
             if (chat.getStatus() == 1) {
-                textView2.setBackgroundResource(R.drawable.done);
+                holder.imagetick.setBackgroundResource(R.drawable.done);
             } else if (chat.getStatus() == 2) {
-                textView2.setBackgroundResource(R.drawable.done_all);
+                holder.imagetick.setBackgroundResource(R.drawable.done_all);
             } else if (chat.getStatus() == 3) {
-                textView2.setBackgroundResource(R.drawable.done_all_colo);
+                holder.imagetick.setBackgroundResource(R.drawable.done_all_colo);
             }
-
-        }
-        else if (viewType == OTHER_MESSAGE) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_message, parent, false);
-            TextView textView = (TextView) convertView.findViewById(R.id.text);
-            textView.setText(getItem(position).getMsg());
-            TextView textView1 = (TextView) convertView.findViewById(R.id.text1);
-            textView1.setText(getformatteddate(chat.getCtime()));
-            TextView textView3 = (TextView) convertView.findViewById(R.id.textheader);
-
+        }else{
+            holder.textViewother.setText(chat.getMsg());
+            holder.textviewduration.setText(getformatteddate(chat.getCtime()));
         }
 
-        return convertView;
+        return vw;
     }
-
 
 
     // @Override
     public View getView2(int position, View convertView, ViewGroup parent) {
         int viewType = getItemViewType(position);
-        ConvMessage chat=getItem(position);
+
+        ConvMessage chat = getItem(position);
 
         String groupName = getGroupHeaderName(position);
 
@@ -172,17 +186,14 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             TextView textView3 = (TextView) convertView.findViewById(R.id.textheader);
             ImageView textView2 = (ImageView) convertView.findViewById(R.id.imageView2);
 
-            textView.setText( getItem(position).getMsg());
+            textView.setText(getItem(position).getMsg());
 
             if (!groupName.isEmpty()) {
                 textView3.setText(groupName);
                 textView3.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 textView3.setVisibility(View.INVISIBLE);
             }
-
-
             textView1.setText(getformatteddate(chat.getCtime()));
             if (chat.getStatus() == 0) {
                 textView2.setBackgroundResource(R.drawable.schedule);
@@ -195,8 +206,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
                 textView2.setBackgroundResource(R.drawable.done_all_colo);
             }
 
-        }
-        else if (viewType == OTHER_MESSAGE) {
+        } else if (viewType == OTHER_MESSAGE) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_other_message, parent, false);
             TextView textView = (TextView) convertView.findViewById(R.id.text);
             textView.setText(getItem(position).getMsg());
@@ -206,8 +216,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
             if (!groupName.isEmpty()) {
                 textView3.setText(groupName);
                 textView3.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 textView3.setVisibility(View.INVISIBLE);
             }
         }
@@ -216,67 +225,6 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
     }
 
 
-
-/*    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View vw = convertView;
-        ViewHolder holder;
-        ConvMessage chat = getItem(position);
-        if (convertView == null) {
-            LayoutInflater inf = LayoutInflater.from(getContext());
-            vw = inf.inflate(R.layout.fragment_chat, parent, false);
-            holder = new ViewHolder();
-            holder.msgview = (TextView) vw.findViewById(R.id.textchatmsg);
-            holder.txt = (TextView) vw.findViewById(R.id.duration);
-            holder.statusview= (ImageView)vw.findViewById(R.id.list_image) ;
-            holder.rLayout = (RelativeLayout) vw.findViewById(R.id.textchat);
-            vw.setTag(holder);
-        } else {
-            holder = (ViewHolder) vw.getTag();
-        }
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        if (chat.isMine() == true) {
-            holder.statusview.setVisibility(View.VISIBLE);
-            Resources res = mContext.getResources();
-            Drawable drawable = res.getDrawable(R.drawable.msg_out);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            holder.rLayout.setBackgroundDrawable(drawable);
-            holder.msgview.setLayoutParams(layoutParams);
-            //msgview.setBackgroundResource(R.drawable.bubble2);
-            holder.msgview.setText(chat.getMsg());
-            // msgview.setText(s.getMsg());
-            holder.txt.setText(getformatteddate(chat.getCtime()));
-            if (chat.getStatus() == 0) {
-                holder.statusview.setBackgroundResource(R.drawable.schedule);
-            }
-            if (chat.getStatus() == 1) {
-                holder.statusview.setBackgroundResource(R.drawable.done);
-            } else if (chat.getStatus() == 2) {
-                holder.statusview.setBackgroundResource(R.drawable.done_all);
-            } else if (chat.getStatus() == 3) {
-                holder.statusview.setBackgroundResource(R.drawable.done_all_colo);
-            }
-           // holder.statusview.setBackgroundResource(R.drawable.done);
-
-        } else {
-            holder.statusview.setVisibility(View.INVISIBLE);
-            Resources res = mContext.getResources();
-            Drawable drawable = res.getDrawable(R.drawable.msg_in);
-
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            holder.msgview.setLayoutParams(layoutParams);
-            holder.rLayout.setBackgroundDrawable(drawable);
-            // msgview.setBackgroundResource(R.drawable.bubble1);
-            holder.msgview.setText(chat.getMsg());
-            holder.txt.setText(getformatteddate(chat.getCtime()));
-
-        }
-        return vw;
-
-    }*/
 
     public String getformatteddate(Date dateTime) {
         Calendar calendar = Calendar.getInstance();
