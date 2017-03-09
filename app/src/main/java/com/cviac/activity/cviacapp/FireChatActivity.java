@@ -491,7 +491,7 @@ public class FireChatActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onClick(View v) {
                     //Log.w("MainActivity", "ActionBar's title clicked.");
-                    Intent i = new Intent(FireChatActivity.this, MyProfileActivity.class);
+                    Intent i = new Intent(FireChatActivity.this, MyProfile.class);
                     i.putExtra("empcode", conv.getEmpid());
                     startActivity(i);
                     finish();

@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,7 +23,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -70,7 +73,9 @@ public class MyProfile extends AppCompatActivity {
 
     ProgressDialog progressDialog;
     private String empcode, empcoded;
-
+    private static final int MY_PERMISSION_CALL_PHONE = 10;
+    private Employee emp;
+    private  Employee emplogged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,14 +87,14 @@ public class MyProfile extends AppCompatActivity {
         //data from collegue
         Intent i = getIntent();
         empcode = i.getStringExtra("empcode");
-        Employee emp = Employee.getemployee(empcode);
+        emp = Employee.getemployee(empcode);
         //title set
         setTitle(emp.getEmp_name());
         btnSelect = (ImageView) findViewById(R.id.imgcamera);
         final String MyPREFERENCES = "MyPrefs";
         SharedPreferences prefs = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String mobile = prefs.getString("mobile", "");
-        Employee emplogged = Employee.getemployeeByMobile(mobile);
+       emplogged = Employee.getemployeeByMobile(mobile);
         empcoded = emplogged.getEmp_code();
         if (!empcode.equals(empcoded)) {
 
@@ -231,6 +236,18 @@ public class MyProfile extends AppCompatActivity {
                 // Start the Intent
                 startActivityForResult(galleryIntent, SELECT_FILE);
             }
+            switch (requestCode) {
+                case MY_PERMISSION_CALL_PHONE: {
+                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:" + emp.getMobile()));
+                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
+                        startActivity(callIntent);
+                    }
+                }
+            }
         }
     }
 
@@ -356,12 +373,36 @@ public class MyProfile extends AppCompatActivity {
         return new File(mediaStorageDir.getPath() + File.separator +
                 "IMG_" + timeStamp + ".jpg");
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(!empcode.equalsIgnoreCase(empcoded)) {
+            getMenuInflater().inflate(R.menu.maincall, menu);
+        }
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.progresscall:
+                if (emp != null && emp.getMobile() != null) {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + emp.getMobile()));
+                    if (ContextCompat.checkSelfPermission(this, (android.Manifest.permission.CALL_PHONE))
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MyProfile.this, new String[]{android.Manifest.permission.CALL_PHONE}, MY_PERMISSION_CALL_PHONE);
+
+                    }
+                    startActivity(callIntent);
+                }
+                break;
+        }
         onBackPressed();
-        return true;
+        return super.onOptionsItemSelected(item);
     }
+
+
 
 
 }
