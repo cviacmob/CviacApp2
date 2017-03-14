@@ -232,7 +232,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                                         }
 
                                         SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm");//this format changeable
-                                        dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT+13:30"));
+                                        dateFormatter.setTimeZone(TimeZone.getTimeZone("GMT+12:30"));
                                        String OurDate = dateFormatter.format(value);
 
                                         customduration.setText(getDate(dateStr)+" "+OurDate);
