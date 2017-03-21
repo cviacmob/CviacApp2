@@ -16,6 +16,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.annotation.Nullable;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +39,15 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
     String url1;
     String receiverempcode;
     Employee emp;
-
+    private SparseBooleanArray mSelectedItemsIds;
     Context mContext;
+
 
     public ColleguesAdapter(List<Employee> objects, Context context) {
         super(context, R.layout.collegues_item, objects);
         emps = objects;
         mContext = context;
+        mSelectedItemsIds = new  SparseBooleanArray();
     }
 
     public static class ViewHolder {
@@ -105,7 +110,36 @@ public class ColleguesAdapter extends ArrayAdapter<Employee> {
 
     }
 
+    @Override
+    public void remove(@Nullable Employee object) {
 
+        notifyDataSetChanged();
+        emps.remove(object);
+    }
+    public  List<Employee> getMyList() {
+        return emps;
+    }
+    public void  toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+    public void selectView(int position, boolean value) {
+        if (value)
+            mSelectedItemsIds.put(position,  value);
+        else
+            mSelectedItemsIds.delete(position);
+        notifyDataSetChanged();
+    }
+    public void  removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
+        notifyDataSetChanged();
+    }
+    public int  getSelectedCount() {
+        return mSelectedItemsIds.size();
+    }
+
+    public  SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
+    }
 
 
 

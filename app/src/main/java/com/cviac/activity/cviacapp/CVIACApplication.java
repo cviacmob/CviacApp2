@@ -12,6 +12,8 @@ import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
+
+import com.cviac.com.cviac.app.datamodels.Groupmembers;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 
 
@@ -40,6 +42,8 @@ public class CVIACApplication extends MultiDexApplication {
         configurationBuilder.addModelClasses(Employee.class);
         configurationBuilder.addModelClasses(EventInfo.class);
         configurationBuilder.addModelClasses(Conversation.class);
+        configurationBuilder.addModelClasses(Groupmembers.class);
+
 
         ActiveAndroid.initialize(configurationBuilder.create());
     }

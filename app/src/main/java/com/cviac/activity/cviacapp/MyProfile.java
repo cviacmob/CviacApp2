@@ -319,7 +319,7 @@ public class MyProfile extends AppCompatActivity {
         }
     }
 
-    private void uploadProfileImage(String targetPath) {
+    public void uploadProfileImage(String targetPath) {
         progressDialog = new ProgressDialog(MyProfile.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("image uploading.....");

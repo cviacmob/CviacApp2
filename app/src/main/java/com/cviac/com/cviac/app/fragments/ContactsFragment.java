@@ -35,6 +35,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -70,6 +71,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         View vw = inflater.inflate(R.layout.collegues_frgs, container, false);
         lv = (ListView) vw.findViewById(R.id.collegueslist);
         lv.setDivider(null);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) vw.findViewById(R.id.activity_main_swipe_refresh_layoutcollegue);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         emps = getCollegues();
@@ -118,6 +120,12 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
     private List<Employee> getCollegues() {
         List<Employee> emplist = Employee.getemployees();
         return emplist;
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
     }
 
     public void reloadFilterByName(String searchName) {
@@ -356,5 +364,14 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         progressDialog.setMessage("Inviting.....");
         progressDialog.setCancelable(false);
         progressDialog.show();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        menu.findItem(R.id.refresh_action).setVisible(true);
+        menu.findItem(R.id.action_newgroup).setVisible(false);
+        menu.findItem(R.id.action_profile).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
     }
 }

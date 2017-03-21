@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="1000dp"
+    android:layout_width="wrap_content"
     android:layout_height="100dp"
-
     android:orientation="horizontal"
     >
 
@@ -12,10 +11,10 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/backarrow"
         android:id="@+id/imageViewback"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true" />
 
 
 
@@ -24,31 +23,32 @@
         android:layout_height="wrap_content"
         app:srcCompat="@mipmap/ic_launcher"
         android:id="@+id/imageViewcustom"
-        android:layout_alignBottom="@+id/imageViewback"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/imageViewback"
         android:layout_toEndOf="@+id/imageViewback" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="11dp"
-        android:layout_marginStart="11dp"
         android:layout_alignBottom="@+id/imageViewcustom"
-        android:layout_toRightOf="@+id/imageViewcustom"
         android:layout_alignParentTop="true"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/relativeLayout"
+        android:layout_toRightOf="@+id/imageViewcustom"
+        android:layout_toEndOf="@+id/imageViewcustom">
 
         <TextView
-            android:text=""
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/duration"
             android:textColor="#FFFFFF"
-            android:textSize="12dp"
+            android:textSize="12sp"
             android:paddingRight="30dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignLeft="@+id/actionbarTitle"
+            android:layout_alignStart="@+id/actionbarTitle"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:text="TextView"
@@ -57,9 +57,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/actionbarTitle"
             android:textColor="#FFFFFF"
-            android:layout_centerVertical="true"
+            android:layout_above="@+id/duration"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

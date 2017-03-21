@@ -43,5 +43,7 @@
     <string name="mtm_notification">Certificate Verification</string>
     <string name="client_name">XMPPClient</string>
     <string name="account_resource_default">@string/client_name</string>
+    <string name="newgrp">New Group</string>
+    <string name="title_activity_group_contact">GroupContactActivity</string>
 
 </resources>

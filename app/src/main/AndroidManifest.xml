@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".CVIACApplication"
@@ -67,7 +67,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name="com.cviac.com.cviac.app.services.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -86,14 +85,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-
         <receiver android:name="com.cviac.com.cviac.app.receivers.NetworkStateReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-
-
 
         <service
             android:name="com.cviac.com.cviac.app.xmpp.XMPPService"
@@ -102,11 +98,11 @@
         <activity
             android:name=".XMPPChatActivity"
             android:theme="@android:style/Theme.Holo.Light.DarkActionBar" />
+        <activity android:name=".MyProfile" />
         <activity
-            android:name=".MyProfile"
-          />
-
-
+            android:name=".GroupContactActivity"
+         />
+        <activity android:name=".GroupNameActivity"></activity>
     </application>
 
 </manifest>

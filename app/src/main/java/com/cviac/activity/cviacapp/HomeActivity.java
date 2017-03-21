@@ -221,22 +221,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
                 AlarmManager.INTERVAL_DAY, alarmIntent);
 
     }
-    private void Alarmformsg() {
-        //List<Employee> emplist = Employee.eventsbydate();
 
-        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent intent = new Intent(this, AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 22);
-//        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-//                AlarmManager.INTERVAL_DAY, alarmIntent);
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 * 10, alarmIntent);
-    }
 
 
     @Override

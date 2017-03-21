@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.cviac.activity.cviacapp.GroupContactActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ConversationAdapter;
@@ -39,6 +42,7 @@ public class ChatsFragment extends Fragment {
 
         lv = (ListView) chatsfrgs.findViewById(R.id.chatlist);
         lv.setDivider(null);
+
         emps = getConversation();
         if (emps == null) {
             emps = new ArrayList<>();
@@ -78,5 +82,32 @@ public class ChatsFragment extends Fragment {
         emps.addAll(chatlist);
         adapter.notifyDataSetChanged();
     }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id=item.getItemId();
+        switch (id){
+            case R.id.action_newgroup:
+                Intent i=new Intent(getActivity(),GroupContactActivity.class);
+                startActivity(i);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+
+        menu.findItem(R.id.refresh_action).setVisible(false);
+        menu.findItem(R.id.action_newgroup).setVisible(true);
+        menu.findItem(R.id.action_profile).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
+    }
 }

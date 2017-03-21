@@ -174,6 +174,23 @@ public class Employee extends Model implements Serializable {
 
     }
 
+
+//To do obtimize
+    public static List<Employee> getSelectedemployees(ArrayList<String> empCodes) {
+        List<Employee>  finalresult = new ArrayList<>();
+        List<Employee>  result =  new Select().from(Employee.class).execute();
+        for (Employee ee : result) {
+            for (String id : empCodes) {
+                if (ee.getEmp_code().equals(id)) {
+                    finalresult.add(ee);
+                }
+            }
+        }
+        return finalresult;
+    }
+
+
+
     public static Employee getemployee(String code) {
         return new Select()
                 .from(Employee.class)
