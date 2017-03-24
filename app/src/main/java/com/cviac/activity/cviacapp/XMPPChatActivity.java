@@ -56,6 +56,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
+import org.jivesoftware.smackx.muc.MultiUserChat;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,6 +109,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     Context mcontext;
     private XMPPService mService;
     private boolean mBounded;
+    private MultiUserChat mMultiUserChat;
 
     static Date date = null;
     private final ServiceConnection mConnection = new ServiceConnection() {
@@ -617,6 +620,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
         };
         bindService(new Intent(this, XMPPService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
+
         registerReceiver(xmppConnReciver, new IntentFilter("XMPPConnection"));
     }
 

@@ -52,6 +52,7 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smack.util.TLSUtils;
+import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager.AutoReceiptMode;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
@@ -203,6 +204,7 @@ public class XMPPClient implements StanzaListener {
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             e.printStackTrace();
         }
+
 
         setUpSASL();
 

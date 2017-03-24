@@ -180,8 +180,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         years = year2 - year1;
         return years;
     }
-    public void deletemessage(){
 
-    }
 
 }
