@@ -838,15 +838,23 @@ public class XMPPClient implements StanzaListener {
             submitForm.setAnswer("muc#roomconfig_publicroom", true);
             muc.sendConfigurationForm(submitForm);
             muc.join(group);
+
+            GroupMemberInfo gmi=new GroupMemberInfo();
+            gmi.setMember_id(loginUser);
+            gmi.setInvitedate(new Date());
+            gmi.setGroup_id(roomname);
+            gmi.save();
+
+            String invts = getGroupMembersListCommaSepartate(members);
             for (String mem : members) {
-                GroupMemberInfo gmi=new GroupMemberInfo();
+                gmi=new GroupMemberInfo();
                 gmi.setMember_id(mem);
                 gmi.setInvitedate(new Date());
                 gmi.setGroup_id(roomname);
                 gmi.save();
 
                 String id = "GROUPNEW:"+ System.currentTimeMillis();
-                ChatMessage msg = new ChatMessage(roomname, roomname, mem, loginUser+":"+roomname+":"+group,id, true  );
+                ChatMessage msg = new ChatMessage(roomname, roomname, mem, loginUser+":"+roomname+":"+group+":"+invts,id, true  );
                 msg.setSenderName(group);
                 sendMessage(msg);
             }
@@ -879,6 +887,16 @@ public class XMPPClient implements StanzaListener {
         }
     }
 
+    private String getGroupMembersListCommaSepartate(List<String> members){
+        StringBuffer bf = new StringBuffer();
+        for (String mem : members) {
+            bf.append(mem);
+            bf.append(",");
+        }
+        bf.append(loginUser);
+        return  bf.toString();
+    }
+
     public void joinGroup(ChatMessage chatMessage) {
         String params[] = chatMessage.msg.split(":");
         if (params.length < 3) {
@@ -887,6 +905,8 @@ public class XMPPClient implements StanzaListener {
         String adminame = params[0];
         String roomname = params[1];
         final String nickname = params[2];
+
+
 
         try {
             MultiUserChatManager mngr = MultiUserChatManager.getInstanceFor(connection);
@@ -908,6 +928,11 @@ public class XMPPClient implements StanzaListener {
             info.setCreatedDate(new Date());
             info.setOwner(adminame);
             info.save();
+
+            if (params.length  == 4) {
+                String  invts = params[3];
+                saveGroupMembers(roomname,invts);
+            }
 
             Conversation cnv = new Conversation();
             cnv.setReadcount(0);
@@ -937,6 +962,18 @@ public class XMPPClient implements StanzaListener {
         }
         toastMessage("Join failed:"+nickname);
     }
+
+    private void saveGroupMembers(String groupId, String invts) {
+        String [] mems = invts.split(",");
+        for (String mem : mems) {
+            GroupMemberInfo gmi=new GroupMemberInfo();
+            gmi.setMember_id(mem);
+            gmi.setInvitedate(new Date());
+            gmi.setGroup_id(groupId);
+            gmi.save();
+        }
+    }
+
 
     public void sendGroupMessage(String roomname, String msg) {
         Message message = new Message(roomname, Message.Type.groupchat);
