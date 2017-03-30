@@ -307,7 +307,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private  void converseORinvite() {
+    public  void converseORinvite() {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
@@ -340,7 +340,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    private void OpenConversation(GetStatus status) {
+    public void OpenConversation(GetStatus status) {
         Conversation cov = new Conversation();
         cov.setEmpid(emp.getEmp_code());
         cov.setName(emp.getEmp_name());

@@ -67,8 +67,8 @@ public class EventsFragment extends Fragment {
                 if (!emp_namelogged.equalsIgnoreCase(receiverempname)) {
                     // Toast.makeText(lv.getContext(), "clicked:" + receiverempname, Toast.LENGTH_SHORT).show();
                     // InviteorLanchByPresence(emp.getEmp_code());
-
-                    //converseORinvite();
+                    ContactsFragment confrgs= new ContactsFragment();
+                    confrgs.converseORinvite();
                 }
             }
         });
