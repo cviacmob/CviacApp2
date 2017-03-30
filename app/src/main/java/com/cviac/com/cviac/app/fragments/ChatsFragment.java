@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.cviac.activity.cviacapp.GroupContactActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
+import com.cviac.activity.cviacapp.XMPPGroupChatActivity;
 import com.cviac.com.cviac.app.adapaters.ConversationAdapter;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
@@ -55,12 +56,21 @@ public class ChatsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int pos1, long pos2) {
                 Conversation emp = emps.get(pos1);
-                //Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
-                Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
-                i.putExtra("conversewith", emp);
-                startActivity(i);
-                Conversation.resetReadCount(emp.getEmpid());
-                reloadConversation();
+                if (emp.getImageurl() != null && emp.getImageurl().startsWith("http://groupicon")) {
+                    Intent i = new Intent(getActivity().getApplicationContext(), XMPPGroupChatActivity.class);
+                    i.putExtra("conversewith", emp);
+                    startActivity(i);
+                    Conversation.resetReadCount(emp.getEmpid());
+                    reloadConversation();
+                }
+                else {
+                    //Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
+                    Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
+                    i.putExtra("conversewith", emp);
+                    startActivity(i);
+                    Conversation.resetReadCount(emp.getEmpid());
+                    reloadConversation();
+                }
             }
         });
         return chatsfrgs;

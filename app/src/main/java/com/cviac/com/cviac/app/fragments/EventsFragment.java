@@ -5,8 +5,10 @@ import java.util.List;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.com.cviac.app.adapaters.EventsAdapter;
 import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,10 +19,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class EventsFragment extends Fragment {
 
     private ListView lv1;
+    List<Employee> emps;
+    String receiverempname, receiverempcode,mobile,emp_namelogged;
 
+    Employee emp;
     private List<EventInfo> empss;
 
     private EventsAdapter adapter;
@@ -35,9 +42,36 @@ public class EventsFragment extends Fragment {
         lv1 = (ListView) events.findViewById(R.id.eventslist);
         lv1.setDivider(null);
         empss = getEvents();
-
         adapter = new EventsAdapter(empss, getActivity().getApplicationContext());
         lv1.setAdapter(adapter);
+        final String MyPREFERENCES = "MyPrefs";
+        SharedPreferences prefs = getActivity().getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        mobile = prefs.getString("mobile", "");
+        Employee emplogged = Employee.getemployeeByMobile(mobile);
+
+        emp_namelogged = emplogged.getEmp_name();
+
+        lv1.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int pos1,
+                                    long pos2) {
+
+
+                emp = emps.get(pos1);
+
+                for (int i = 0; i <= emp.getEmp_name().length() && i <= emp.getEmp_code().length(); i++) {
+                    receiverempname = emp.getEmp_name();
+                    receiverempcode = emp.getEmp_code();
+                }
+                if (!emp_namelogged.equalsIgnoreCase(receiverempname)) {
+                    // Toast.makeText(lv.getContext(), "clicked:" + receiverempname, Toast.LENGTH_SHORT).show();
+                    // InviteorLanchByPresence(emp.getEmp_code());
+
+                    //converseORinvite();
+                }
+            }
+        });
         return events;
 
     }
@@ -46,6 +80,10 @@ public class EventsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+    }
+    private List<Employee> getCollegues() {
+        List<Employee> emplist = Employee.getemployees();
+        return emplist;
     }
 
     private List<EventInfo> getEvents() {

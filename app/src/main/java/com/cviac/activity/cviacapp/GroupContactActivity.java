@@ -1,8 +1,10 @@
 package com.cviac.activity.cviacapp;
 
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
@@ -37,6 +39,8 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
     String emp_namelogged;
     Context mcontext;
     TextView mSearchText;
+    String activityfinish;
+    private BroadcastReceiver activityfinishReciver;
 
 
     @Override
@@ -65,15 +69,10 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SparseBooleanArray selected = adapter.getSelectedIds();
-
+                List<Employee> mems = adapter.getEmpsSelectedEmps();
                 ArrayList<String> selectedEmps = new ArrayList<String>();
-                for (int i = 0; i < selected.size(); i++) {
-                    if (selected.valueAt(i)) {
-                        int indx = selected.keyAt(i);
-                        Employee ee = emps.get(indx);
-                        selectedEmps.add(ee.getEmp_code());
-                    }
+                for (int i = 0; i < mems.size(); i++) {
+                    selectedEmps.add(mems.get(i).getEmp_code());
                 }
                 if(!selectedEmps.isEmpty()) {
                     final int checkedCount = emps.size();
@@ -88,6 +87,17 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
             }
         });
         setuserSelectLisiner();
+        activityfinishReciver =new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                activityfinish = intent.getStringExtra("activityclosed");
+                if(activityfinish!=null && activityfinish.equalsIgnoreCase("finish")){
+                    finish();
+                }
+
+            }
+        };
+        registerReceiver(activityfinishReciver,new IntentFilter("Activityfinish"));
 
     }
 
@@ -220,4 +230,9 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    protected void onDestroy() {
+    unregisterReceiver(activityfinishReciver);
+        super.onDestroy();
+    }
 }

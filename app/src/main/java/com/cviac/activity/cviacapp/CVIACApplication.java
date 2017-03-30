@@ -13,6 +13,8 @@ import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
 
+import com.cviac.com.cviac.app.datamodels.GroupInfo;
+import com.cviac.com.cviac.app.datamodels.GroupMemberInfo;
 import com.cviac.com.cviac.app.datamodels.Groupmembers;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 
@@ -28,6 +30,8 @@ public class CVIACApplication extends MultiDexApplication {
 
     private XMPPChatActivity xmppChatActivity;
 
+    private XMPPGroupChatActivity xmppGroupChatActivity;
+
     @Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(context);
@@ -42,7 +46,8 @@ public class CVIACApplication extends MultiDexApplication {
         configurationBuilder.addModelClasses(Employee.class);
         configurationBuilder.addModelClasses(EventInfo.class);
         configurationBuilder.addModelClasses(Conversation.class);
-        configurationBuilder.addModelClasses(Groupmembers.class);
+        configurationBuilder.addModelClasses(GroupInfo.class);
+        configurationBuilder.addModelClasses(GroupMemberInfo.class);
 
 
         ActiveAndroid.initialize(configurationBuilder.create());
@@ -72,6 +77,14 @@ public class CVIACApplication extends MultiDexApplication {
 
     public XMPPChatActivity getChatActivty() {
        return xmppChatActivity;
+    }
+
+    public XMPPGroupChatActivity getGroupChatActivity() {
+        return xmppGroupChatActivity;
+    }
+
+    public void setGroupChatActivity(XMPPGroupChatActivity act) {
+        xmppGroupChatActivity = act;
     }
 
     /*public void sendMobile(String mobile, String msgBody) {

@@ -31,6 +31,8 @@ import android.widget.Toast;
 import com.cviac.com.cviac.app.adapaters.CircleTransform;
 import com.cviac.com.cviac.app.adapaters.GroupAdapter;
 import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.xmpp.XMPPClient;
+import com.cviac.com.cviac.app.xmpp.XMPPService;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -51,7 +53,7 @@ public class GroupNameActivity extends AppCompatActivity {
     GroupAdapter adapter;
     private ImageView grpphoto;
     private TextView participants;
-
+    ArrayList<String> selectedlist;
     private Button nextbutton;
 
     @Override
@@ -64,7 +66,7 @@ public class GroupNameActivity extends AppCompatActivity {
         ab.setSubtitle("Add subjects");
 
         Intent i = getIntent();
-        ArrayList<String> selectedlist = (ArrayList<String>) i.getStringArrayListExtra("selected");
+        selectedlist = (ArrayList<String>) i.getStringArrayListExtra("selected");
         int totalContacts=i.getIntExtra("totalcontacts",0);
 
         selectedEmps = Employee.getSelectedemployees(selectedlist);
@@ -93,9 +95,19 @@ public class GroupNameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 grpname = groupname.getText().toString();
                 if(!grpname.isEmpty()&& grpname!=null) {
-                    Intent i = new Intent(GroupNameActivity.this, HomeActivity.class);
-                    startActivity(i);
-                    finish();
+//                    Intent i = new Intent(GroupNameActivity.this, HomeActivity.class);
+//                    startActivity(i);
+//                    finish();
+
+                    if (XMPPService.xmpp != null ) {
+                        XMPPService.xmpp.createGroup(grpname,selectedlist);
+                        Intent intent = new Intent();
+                        intent.setAction("Activityfinish");
+                        intent.putExtra("activityclosed", "finish");
+                        getApplicationContext().sendBroadcast(intent);
+                        finish();
+                    }
+
                 }else{
                     Toast.makeText(GroupNameActivity.this,"Enter Group Name",Toast.LENGTH_SHORT).show();
                 }
@@ -104,7 +116,6 @@ public class GroupNameActivity extends AppCompatActivity {
         });
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
