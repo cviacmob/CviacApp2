@@ -1,13 +1,21 @@
 package com.cviac.com.cviac.app.fragments;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.cviac.activity.cviacapp.R;
+import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.EventsAdapter;
+import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.EmployeeInfo;
 import com.cviac.com.cviac.app.datamodels.EventInfo;
+import com.cviac.com.cviac.app.restapis.CVIACApi;
+import com.cviac.com.cviac.app.restapis.GetStatus;
+import com.squareup.okhttp.OkHttpClient;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +26,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
+
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.GsonConverterFactory;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -27,7 +42,7 @@ public class EventsFragment extends Fragment {
     List<Employee> emps;
     String receiverempname, receiverempcode,mobile,emp_namelogged;
 
-    Employee emp;
+    EventInfo emp;
     private List<EventInfo> empss;
 
     private EventsAdapter adapter;
@@ -42,6 +57,7 @@ public class EventsFragment extends Fragment {
         lv1 = (ListView) events.findViewById(R.id.eventslist);
         lv1.setDivider(null);
         empss = getEvents();
+
         adapter = new EventsAdapter(empss, getActivity().getApplicationContext());
         lv1.setAdapter(adapter);
         final String MyPREFERENCES = "MyPrefs";
@@ -58,17 +74,17 @@ public class EventsFragment extends Fragment {
                                     long pos2) {
 
 
-                emp = emps.get(pos1);
+                emp = empss.get(pos1);
 
-                for (int i = 0; i <= emp.getEmp_name().length() && i <= emp.getEmp_code().length(); i++) {
-                    receiverempname = emp.getEmp_name();
-                    receiverempcode = emp.getEmp_code();
+                for (int i = 0; i <= emp.getEvent_title().length() && i <= emp.getEvent_id().length(); i++) {
+                    receiverempname = emp.getEvent_title();
+                    receiverempcode = emp.getEvent_id();
                 }
                 if (!emp_namelogged.equalsIgnoreCase(receiverempname)) {
                     // Toast.makeText(lv.getContext(), "clicked:" + receiverempname, Toast.LENGTH_SHORT).show();
                     // InviteorLanchByPresence(emp.getEmp_code());
-                    ContactsFragment confrgs= new ContactsFragment();
-                    confrgs.converseORinvite();
+
+                  converseORinvite();
                 }
             }
         });
@@ -97,5 +113,53 @@ public class EventsFragment extends Fragment {
         menu.findItem(R.id.action_profile).setVisible(true);
         super.onPrepareOptionsMenu(menu);
     }
+    private  void converseORinvite() {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
+        okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
+        Retrofit ret = new Retrofit.Builder()
+                .baseUrl("http://apps.cviac.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build();
 
+        CVIACApi api = ret.create(CVIACApi.class);
+        final Call<GetStatus> call = api.getstatus(receiverempcode);
+        call.enqueue(new Callback<GetStatus>() {
+            @Override
+            public void onResponse(Response<GetStatus> response, Retrofit retrofit) {
+                GetStatus status = response.body();
+
+                    OpenConversation(status);
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+
+                Toast.makeText(getActivity().getApplicationContext(), throwable.getMessage() + "Network Error", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+    }
+
+    private void OpenConversation(GetStatus status) {
+        Conversation cov = new Conversation();
+        Employee emplogged = Employee.getemployee(emp.getEvent_id());
+        cov.setEmpid(emp.getEvent_id());
+        cov.setName(emp.getEvent_title());
+        cov.setImageurl(emplogged.getImage_url());
+        Context ctx = getActivity().getApplicationContext();
+        if (ctx != null) {
+//                                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
+//                                i.putExtra("conversewith", cov);
+//                                startActivity(i);
+
+            Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
+            i.putExtra("conversewith", cov);
+            i.putExtra("status", status);
+            startActivity(i);
+        }
+    }
 }

@@ -162,7 +162,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             public void onClick(View view) {
 
                 geteditmgs = edittxt.getText().toString();
-                if (XMPPService.isNetworkConnected() && XMPPService.xmpp.isConnected()) {
+                if (XMPPService.isNetworkConnected() && XMPPService.xmpp.isConnected() && XMPPService.xmpp.isAuthenticated()) {
                     if (!geteditmgs.equals("")) {
                         String converseId = getNormalizedConverseId(myempId, conv.getEmpid());
                         msgid = getMsgID();

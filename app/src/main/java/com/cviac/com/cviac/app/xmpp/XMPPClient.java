@@ -144,7 +144,9 @@ public class XMPPClient implements StanzaListener {
     public boolean isConnected() {
         return connected;
     }
-
+    public boolean isAuthenticated() {
+        return connected;
+    }
 
 
     public org.jivesoftware.smack.chat.Chat Mychat;

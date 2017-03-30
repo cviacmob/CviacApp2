@@ -88,15 +88,9 @@ public class XMPPGroupChatActivity extends Activity  {
     private ConvMessageAdapter chatAdapter;
     TextView txt, msgview, presenceText;
     int fromNotify = 0;
-    String converseId;
-    Date lastseen;
     TextView customTitle, customduration;
-    GetStatus empstatus;
     CVIACApplication app;
-    Timer timer;
-    XMPPChatActivity.MyTimerTask myTimerTask;
     private BroadcastReceiver xmppConnReciver;
-    Context mcontext;
     private XMPPService mService;
     private boolean mBounded;
     private MultiUserChat mMultiUserChat;

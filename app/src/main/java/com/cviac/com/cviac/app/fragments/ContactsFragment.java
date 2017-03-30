@@ -307,7 +307,7 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    public  void converseORinvite() {
+    private  void converseORinvite() {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(120000, TimeUnit.MILLISECONDS);
         okHttpClient.setReadTimeout(120000, TimeUnit.MILLISECONDS);
@@ -340,17 +340,13 @@ public class ContactsFragment extends Fragment implements SwipeRefreshLayout.OnR
         });
     }
 
-    public void OpenConversation(GetStatus status) {
+    private void OpenConversation(GetStatus status) {
         Conversation cov = new Conversation();
         cov.setEmpid(emp.getEmp_code());
         cov.setName(emp.getEmp_name());
         cov.setImageurl(emp.getImage_url());
         Context ctx = getActivity().getApplicationContext();
         if (ctx != null) {
-//                                Intent i = new Intent(getActivity().getApplicationContext(), FireChatActivity.class);
-//                                i.putExtra("conversewith", cov);
-//                                startActivity(i);
-
             Intent i = new Intent(getActivity().getApplicationContext(), XMPPChatActivity.class);
             i.putExtra("conversewith", cov);
             i.putExtra("status", status);
