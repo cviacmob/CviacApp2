@@ -74,6 +74,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 evt.setEvent_title(e.getEmp_name());
                 evt.setEvent_description("Birthday");
                 evt.setEvent_date(new Date());
+                evt.setEvent_id(e.getEmp_code());
                 evt.save();
 
                 srt = e.getEmp_name();
@@ -125,6 +126,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             evt.setEvent_title(ee.getEmp_name());
             evt.setEvent_description(yrs + " year Completed in CVIAC");
             evt.setEvent_date(new Date());
+            evt.setEvent_id(ee.getEmp_code());
             evt.save();
             srt1 = ee.getEmp_name();
             Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

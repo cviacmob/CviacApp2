@@ -6,9 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.cviac.com.cviac.app.adapaters.ColleguesAdapter;
 import com.cviac.com.cviac.app.adapaters.GroupInfoAdapter;
-import com.cviac.com.cviac.app.datamodels.Employee;
 import com.cviac.com.cviac.app.datamodels.GroupMemberInfo;
 
 import java.util.List;
