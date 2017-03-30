@@ -102,10 +102,16 @@
         <activity android:name=".MyProfile" />
         <activity
             android:name=".GroupContactActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".GroupNameActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".XMPPGroupChatActivity"
             android:launchMode="singleTop"
-         />
-        <activity android:name=".GroupNameActivity"
-            android:launchMode="singleTop"></activity>
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"></activity>
+        <activity
+            android:name=".GroupInfoActivity"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

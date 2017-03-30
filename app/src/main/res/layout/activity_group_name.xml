@@ -27,6 +27,7 @@
         android:inputType="textPersonName"
         android:hint="Type group subject here...."
         android:layout_alignTop="@+id/grpicon"
+        android:layout_toRightOf="@+id/grpicon"
         android:layout_centerHorizontal="true" />
 
 

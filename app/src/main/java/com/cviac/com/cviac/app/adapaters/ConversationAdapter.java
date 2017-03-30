@@ -62,8 +62,13 @@ public class ConversationAdapter extends ArrayAdapter<Conversation> {
 
         String url1 = conv.getImageurl();
         if (url1 != null && url1.length() > 0) {
-            Picasso.with(mContext).load(conv.getImageurl()).resize(80, 80).transform(new CircleTransform())
-                    .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE).into(holder.imgview);
+            if (url1.startsWith("http://groupicon")) {
+                Picasso.with(mContext).load(R.drawable.groupicon).resize(80, 80).transform(new CircleTransform())
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.imgview);
+            }else {
+                Picasso.with(mContext).load(conv.getImageurl()).resize(80, 80).transform(new CircleTransform())
+                        .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(holder.imgview);
+            }
         } else {
             Employee emp = Employee.getemployee(conv.getEmpid());
             if (emp != null) {

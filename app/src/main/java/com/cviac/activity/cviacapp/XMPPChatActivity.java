@@ -484,13 +484,16 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
                         .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
             } else {
                 Employee emp = Employee.getemployee(conv.getEmpid());
-                conv.setImageurl(emp.getImage_url());
-                if (emp.getGender().equalsIgnoreCase("female")) {
-                    Picasso.with(this).load(R.drawable.female).resize(100, 100).transform(new CircleTransform())
-                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
-                } else {
-                    Picasso.with(this).load(R.drawable.ic_boy).resize(100, 100).transform(new CircleTransform())
-                            .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
+                if (emp != null) {
+                    conv.setImageurl(emp.getImage_url());
+
+                    if (emp.getGender().equalsIgnoreCase("female")) {
+                        Picasso.with(this).load(R.drawable.female).resize(100, 100).transform(new CircleTransform())
+                                .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
+                    } else {
+                        Picasso.with(this).load(R.drawable.ic_boy).resize(100, 100).transform(new CircleTransform())
+                                .centerCrop().memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE).into(customimage);
+                    }
                 }
 
             }

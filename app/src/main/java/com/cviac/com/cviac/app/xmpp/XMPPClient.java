@@ -22,9 +22,12 @@ import com.cviac.activity.cviacapp.FireChatActivity;
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.Verification;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
+import com.cviac.activity.cviacapp.XMPPGroupChatActivity;
 import com.cviac.com.cviac.app.datamodels.ConvMessage;
 import com.cviac.com.cviac.app.datamodels.Conversation;
 import com.cviac.com.cviac.app.datamodels.Employee;
+import com.cviac.com.cviac.app.datamodels.GroupInfo;
+import com.cviac.com.cviac.app.datamodels.GroupMemberInfo;
 import com.cviac.com.cviac.app.fragments.ChatsFragment;
 import com.cviac.com.cviac.app.restapis.CVIACApi;
 import com.cviac.com.cviac.app.restapis.GeneralResponse;
@@ -33,7 +36,11 @@ import com.google.gson.Gson;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SASLAuthentication;
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.StanzaListener;
@@ -42,8 +49,13 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.chat.ChatManager;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
+import org.jivesoftware.smack.filter.AndFilter;
+import org.jivesoftware.smack.filter.FromMatchesFilter;
+import org.jivesoftware.smack.filter.MessageTypeFilter;
+import org.jivesoftware.smack.filter.PacketFilter;
 import org.jivesoftware.smack.filter.StanzaFilter;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Stanza;
 import org.jivesoftware.smack.parsing.ExceptionLoggingCallback;
 import org.jivesoftware.smack.roster.Roster;
@@ -52,16 +64,23 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smack.util.TLSUtils;
+import org.jivesoftware.smackx.muc.Affiliate;
+import org.jivesoftware.smackx.muc.DiscussionHistory;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager;
 import org.jivesoftware.smackx.receipts.DeliveryReceiptManager.AutoReceiptMode;
 import org.jivesoftware.smackx.receipts.ReceiptReceivedListener;
+import org.jivesoftware.smackx.xdata.Form;
+import org.jivesoftware.smackx.xdata.FormField;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -71,6 +90,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
 import static android.R.attr.resource;
+import static android.R.attr.toScene;
 import static android.content.Context.MODE_PRIVATE;
 
 public class XMPPClient implements StanzaListener {
@@ -127,6 +147,7 @@ public class XMPPClient implements StanzaListener {
     public boolean isAuthenticated() {
         return connected;
     }
+
 
     public org.jivesoftware.smack.chat.Chat Mychat;
 
@@ -211,6 +232,7 @@ public class XMPPClient implements StanzaListener {
         setUpSASL();
 
         connection = new XMPPTCPConnection(builder.build());
+        //ReconnectionManager.getInstanceFor(connection).enableAutomaticReconnection();
         connection.addAsyncStanzaListener(this, new AcceptAll());
         XMPPConnectionListener connectionListener = new XMPPConnectionListener();
         connection.addConnectionListener(connectionListener);
@@ -373,7 +395,7 @@ public class XMPPClient implements StanzaListener {
                     });
         } catch (Exception e) {
         }
-
+        listenForGroupMessages();
     }
 
     private class ChatManagerListenerImpl implements ChatManagerListener {
@@ -622,44 +644,19 @@ public class XMPPClient implements StanzaListener {
                     ConvMessage.updateStatus(msgId, 2);
                     updateMessageStatusInUI(msgId, 2);
                 } else {
-                    processMessage(chatMessage);
-                    sendAckMessage(chatMessage);
-                }
-            }
-        }
 
-        private void saveLastConversationMessage(ChatMessage msg) {
-            CVIACApplication app = (CVIACApplication) context.getApplication();
-            ChatsFragment chatFrag = app.getChatsFragment();
-            Conversation cnv = Conversation.getConversation(msg.sender);
-            boolean newconv = false;
-            if (cnv == null) {
-                cnv = new Conversation();
-                cnv.setReadcount(1);
-                newconv = true;
-            }else {
-               // CVIACApplication app = (CVIACApplication) context.getApplication();
-                XMPPChatActivity actv = app.getChatActivty();
-                if (actv != null) {
-                    String convId = actv.getConverseId();
-                    if (convId.equalsIgnoreCase(msg.converseid)) {
-                        cnv.setReadcount(0);
+                    if (chatMessage.msgid.startsWith("GROUPNEW:") ) {
+                        joinGroup(chatMessage);
+                    }
+                    else if (chatMessage.msgid.startsWith("BotMsg:")) {
+                        XMPPClient.this.processMessage(chatMessage);
                     }
                     else {
-                        cnv.setReadcount(cnv.getReadcount()+1);
+                        XMPPClient.this.processMessage(chatMessage);
+                        sendAckMessage(chatMessage);
                     }
                 }
-                else {
-                    cnv.setReadcount(cnv.getReadcount()+1);
-                }
             }
-            cnv.setEmpid(msg.sender);
-            // cnv.setImageurl(conv.getImageurl());
-            cnv.setName(msg.senderName);
-            cnv.setDatetime(new Date());
-            cnv.setLastmsg(msg.msg);
-            cnv.save();
-
         }
 
         private void updateMessageStatusInUI(final String msgId, final int status) {
@@ -677,50 +674,82 @@ public class XMPPClient implements StanzaListener {
             });
         }
 
-        private void processMessage(final ChatMessage msg) {
-            final ConvMessage cmsg = new ConvMessage();
-            cmsg.setMsg(msg.msg);
-            cmsg.setCtime(new Date());
-            //  cmsg.setCtime(msg.ctime);
-            cmsg.setMine(false);
-            cmsg.setSender(msg.sender);
-            cmsg.setSenderName(msg.senderName);
-            cmsg.setConverseid(msg.converseid);
-            cmsg.setReceiver(msg.receiver);
-            cmsg.setMsgid(msg.msgid);
-            cmsg.setStatus(-1);
+    }
 
-            try {
-                cmsg.save();
-                saveLastConversationMessage(msg);
-            } catch (Exception e) {
-            }
-            // Chats.chatlist.add(chatMessage);
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
+    public void processMessage(final ChatMessage msg) {
+        final ConvMessage cmsg = new ConvMessage();
+        cmsg.setMsg(msg.msg);
+        cmsg.setCtime(new Date());
+        //  cmsg.setCtime(msg.ctime);
+        cmsg.setMine(false);
+        cmsg.setSender(msg.sender);
+        cmsg.setSenderName(msg.senderName);
+        cmsg.setConverseid(msg.converseid);
+        cmsg.setReceiver(msg.receiver);
+        cmsg.setMsgid(msg.msgid);
+        cmsg.setStatus(-1);
 
-                @Override
-                public void run() {
-                    CVIACApplication app = (CVIACApplication) context.getApplication();
-                    ChatsFragment chatFrag = app.getChatsFragment();
-                    if (chatFrag != null && chatFrag.adapter != null) {
-                        chatFrag.reloadConversation();
-                    }
+        try {
+            cmsg.save();
+            saveLastConversationMessage(msg);
+        } catch (Exception e) {
+        }
+        // Chats.chatlist.add(chatMessage);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
 
-                    if (app != null) {
-                        XMPPChatActivity actv = app.getChatActivty();
-                        if (actv != null) {
-                            String convId = actv.getConverseId();
-                            if (convId.equalsIgnoreCase(msg.converseid)) {
-                                actv.addInMessage(cmsg);
-                                return;
-                            }
+            @Override
+            public void run() {
+                CVIACApplication app = (CVIACApplication) context.getApplication();
+                ChatsFragment chatFrag = app.getChatsFragment();
+                if (chatFrag != null && chatFrag.adapter != null) {
+                    chatFrag.reloadConversation();
+                }
+
+                if (app != null) {
+                    XMPPChatActivity actv = app.getChatActivty();
+                    if (actv != null) {
+                        String convId = actv.getConverseId();
+                        if (convId.equalsIgnoreCase(msg.converseid)) {
+                            actv.addInMessage(cmsg);
+                            return;
                         }
                     }
-                    showMsgNotification(cmsg);
-
                 }
-            });
+                showMsgNotification(cmsg);
+            }
+        });
+    }
+
+    private void saveLastConversationMessage(ChatMessage msg) {
+        CVIACApplication app = (CVIACApplication) context.getApplication();
+        ChatsFragment chatFrag = app.getChatsFragment();
+        Conversation cnv = Conversation.getConversation(msg.sender);
+        boolean newconv = false;
+        if (cnv == null) {
+            cnv = new Conversation();
+            cnv.setReadcount(1);
+        }else {
+            // CVIACApplication app = (CVIACApplication) context.getApplication();
+            XMPPChatActivity actv = app.getChatActivty();
+            if (actv != null) {
+                String convId = actv.getConverseId();
+                if (convId.equalsIgnoreCase(msg.converseid)) {
+                    cnv.setReadcount(0);
+                }
+                else {
+                    cnv.setReadcount(cnv.getReadcount()+1);
+                }
+            }
+            else {
+                cnv.setReadcount(cnv.getReadcount()+1);
+            }
         }
+        cnv.setEmpid(msg.sender);
+        // cnv.setImageurl(conv.getImageurl());
+        cnv.setName(msg.senderName);
+        cnv.setDatetime(new Date());
+        cnv.setLastmsg(msg.msg);
+        cnv.save();
 
     }
 
@@ -743,7 +772,9 @@ public class XMPPClient implements StanzaListener {
         cnv.setEmpid(cmsg.getSender());
         cnv.setName(cmsg.getSenderName());
         Employee code= Employee.getemployee(cmsg.getSender());
-         cnv.setImageurl(code.getImage_url());
+        if (code != null) {
+            cnv.setImageurl(code.getImage_url());
+        }
         resultIntent.putExtra("conversewith",cnv);
         resultIntent.putExtra("fromnotify",1);
 
@@ -755,8 +786,7 @@ public class XMPPClient implements StanzaListener {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.setContentIntent(resultPendingIntent);
-        mNotificationManager.notify(msgcounter, mBuilder.build());
-        msgcounter++;
+        mNotificationManager.notify(cnv.getEmpid(), 0, mBuilder.build());
     }
 
     public void updateStatus(String status) {
@@ -790,4 +820,314 @@ public class XMPPClient implements StanzaListener {
         });
 
     }
+
+    public void createGroup(String group,List<String> members) {
+        List<String> joinedRooms = null;
+        MultiUserChatManager mngr = MultiUserChatManager.getInstanceFor(connection);
+        String roomname = this.loginUser + "_" + group;
+        MultiUserChat muc = mngr.getMultiUserChat(roomname+"@conference." + serverAddress);
+        try {
+            muc.createOrJoin(group);
+            Form form = muc.getConfigurationForm();
+            Form submitForm = form.createAnswerForm();
+            List<FormField> formFieldList = submitForm.getFields();
+            for (FormField formField : formFieldList) {
+                if(!FormField.Type.hidden.equals(formField.getType()) && formField.getVariable() != null) {
+                    submitForm.setDefaultAnswer(formField.getVariable());
+                }
+            }
+            submitForm.setAnswer("muc#roomconfig_persistentroom", true);
+            submitForm.setAnswer("muc#roomconfig_publicroom", true);
+            muc.sendConfigurationForm(submitForm);
+            muc.join(group);
+            for (String mem : members) {
+                GroupMemberInfo gmi=new GroupMemberInfo();
+                gmi.setMember_id(mem);
+                gmi.setInvitedate(new Date());
+                gmi.setGroup_id(roomname);
+                gmi.save();
+
+                String id = "GROUPNEW:"+ System.currentTimeMillis();
+                ChatMessage msg = new ChatMessage(roomname, roomname, mem, loginUser+":"+roomname+":"+group,id, true  );
+                msg.setSenderName(group);
+                sendMessage(msg);
+            }
+            Conversation cnv = new Conversation();
+            cnv.setImageurl("http://groupicon");
+            cnv.setReadcount(0);
+            cnv.setEmpid(roomname);
+            cnv.setName(group);
+            cnv.setDatetime(new Date());
+            cnv.setLastmsg("group created");
+            cnv.save();
+            CVIACApplication app = (CVIACApplication) context.getApplication();
+            ChatsFragment chatFrag = app.getChatsFragment();
+            if (chatFrag != null && chatFrag.adapter != null) {
+                chatFrag.reloadConversation();
+            }
+            GroupInfo info = new GroupInfo();
+            info.setName(group);
+            info.setGrpID(roomname);
+            info.setCreatedDate(new Date());
+            info.setOwner(loginUser);
+            info.save();
+
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (SmackException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void joinGroup(ChatMessage chatMessage) {
+        String params[] = chatMessage.msg.split(":");
+        if (params.length < 3) {
+            return;
+        }
+        String adminame = params[0];
+        String roomname = params[1];
+        final String nickname = params[2];
+
+        try {
+            MultiUserChatManager mngr = MultiUserChatManager.getInstanceFor(connection);
+            MultiUserChat muc = mngr.getMultiUserChat(roomname+"@conference." + serverAddress);
+            //if (!muc.isJoined())
+            {
+                muc.join(nickname + "_" + loginUser);
+            }
+            muc.addMessageListener(new MessageListener() {
+                @Override
+                public void processMessage(Message message) {
+                    saveGroupMessage(nickname,message);
+                }
+            });
+
+            GroupInfo info = new GroupInfo();
+            info.setName(nickname);
+            info.setGrpID(roomname);
+            info.setCreatedDate(new Date());
+            info.setOwner(adminame);
+            info.save();
+
+            Conversation cnv = new Conversation();
+            cnv.setReadcount(0);
+            cnv.setEmpid(roomname);
+            cnv.setImageurl("http://groupicon");
+            cnv.setName(nickname);
+            cnv.setDatetime(new Date());
+            cnv.setLastmsg("New Group");
+            cnv.save();
+
+            CVIACApplication app = (CVIACApplication) context.getApplication();
+            ChatsFragment chatFrag = app.getChatsFragment();
+            if (chatFrag != null && chatFrag.adapter != null) {
+                chatFrag.reloadConversation();
+            }
+
+            toastMessage("Joined:"+nickname);
+            return;
+        } catch (SmackException.NoResponseException e) {
+            e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (NotConnectedException e) {
+            e.printStackTrace();
+        } catch (SmackException e) {
+            e.printStackTrace();
+        }
+        toastMessage("Join failed:"+nickname);
+    }
+
+    public void sendGroupMessage(String roomname, String msg) {
+        Message message = new Message(roomname, Message.Type.groupchat);
+        String msgId = "GROUPMSG:" + System.currentTimeMillis();
+        ChatMessage cmsg = new ChatMessage(roomname,loginUser,roomname,msg,msgId,true);
+        cmsg.setSenderName(emplogged.getEmp_name());
+        String body = gson.toJson(cmsg);
+        message.setBody(body);
+        message.setType(Message.Type.groupchat);
+        message.setTo(roomname);
+        MultiUserChatManager mngr = MultiUserChatManager.getInstanceFor(connection);
+        MultiUserChat muc = mngr.getMultiUserChat(roomname+"@conference." + serverAddress);
+        try {
+            muc.sendMessage(message);
+        } catch (NotConnectedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void listenForGroupMessages() {
+        MultiUserChatManager mngr = MultiUserChatManager.getInstanceFor(connection);
+        List<GroupInfo> groups = GroupInfo.getGroups();
+        if (groups != null) {
+            for (final GroupInfo grpInfo : groups) {
+                MultiUserChat muc = mngr.getMultiUserChat(grpInfo.getGrpID() + "@conference." + serverAddress);
+                try {
+                   // if (!muc.isJoined())
+                    {
+                        DiscussionHistory history = new DiscussionHistory();
+                        history.setMaxStanzas(0);
+                        muc.join(grpInfo.getName() + "_" + loginUser,
+                                null,
+                                history,
+                                SmackConfiguration.getDefaultPacketReplyTimeout());
+                    }
+                } catch (Exception e) {
+                    toastMessage("group listen failed:"+ grpInfo.getName());
+                }
+                muc.addMessageListener(new MessageListener() {
+                    @Override
+                    public void processMessage(Message message) {
+                        saveGroupMessage(grpInfo.getName(),message);
+                    }
+                });
+            }
+        }
+    }
+
+    private void saveLastGroupConversationMessage(ChatMessage msg) {
+        CVIACApplication app = (CVIACApplication) context.getApplication();
+        ChatsFragment chatFrag = app.getChatsFragment();
+        Conversation cnv = Conversation.getConversation(msg.converseid);
+        boolean newconv = false;
+        if (cnv == null) {
+            cnv = new Conversation();
+            cnv.setImageurl("http://groupicon");
+            cnv.setReadcount(1);
+            newconv = true;
+        }
+        else {
+            XMPPGroupChatActivity actv = app.getGroupChatActivity();
+            if (actv != null) {
+                String convId = actv.getConverseId();
+                if (convId.equalsIgnoreCase(msg.converseid)) {
+                    cnv.setReadcount(0);
+                }
+                else {
+                    cnv.setReadcount(cnv.getReadcount()+1);
+                }
+            }
+            else {
+                cnv.setReadcount(cnv.getReadcount()+1);
+            }
+        }
+        cnv.setEmpid(msg.converseid);
+        cnv.setDatetime(new Date());
+        cnv.setLastmsg(msg.msg);
+        cnv.save();
+
+    }
+
+
+    public void processGroupMessage(final String groupName,final ChatMessage msg) {
+        final ConvMessage cmsg = new ConvMessage();
+        cmsg.setMsg(msg.msg);
+        cmsg.setCtime(new Date());
+        cmsg.setMine(false);
+        cmsg.setSender(msg.sender);
+        cmsg.setSenderName(msg.senderName);
+        cmsg.setConverseid(msg.converseid);
+        cmsg.setReceiver(msg.receiver);
+        cmsg.setMsgid(msg.msgid);
+        cmsg.setStatus(-1);
+        try {
+            cmsg.save();
+            saveLastGroupConversationMessage(msg);
+        } catch (Exception e) {
+        }
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+            @Override
+            public void run() {
+                CVIACApplication app = (CVIACApplication) context.getApplication();
+                ChatsFragment chatFrag = app.getChatsFragment();
+                if (chatFrag != null && chatFrag.adapter != null) {
+                    chatFrag.reloadConversation();
+                }
+                if (app != null) {
+                    XMPPGroupChatActivity actv = app.getGroupChatActivity();
+                    if (actv != null) {
+                        String convId = actv.getConverseId();
+                        if (convId.equalsIgnoreCase(msg.converseid)) {
+                            actv.addInMessage(cmsg);
+                            return;
+                        }
+                    }
+                }
+                showGroupMsgNotification(groupName, cmsg);
+            }
+        });
+    }
+
+    private void showGroupMsgNotification(String groupName,ConvMessage cmsg) {
+        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.cviac_logo)
+                        .setContentTitle(groupName)
+                        .setAutoCancel(true)
+                        .setSound(soundUri)
+                        .setContentText(cmsg.getMsg());
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+
+        Intent resultIntent = new Intent(context, XMPPGroupChatActivity.class);
+
+        Conversation cnv = new Conversation();
+        cnv.setEmpid(cmsg.getConverseid());
+        cnv.setName(groupName);
+        cnv.setImageurl("http://groupicon");
+        resultIntent.putExtra("conversewith",cnv);
+        resultIntent.putExtra("fromnotify",1);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(FireChatActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        mNotificationManager.notify(cnv.getEmpid(), 0, mBuilder.build());
+    }
+
+    public void saveGroupMessage(String groupName,Message msg) {
+        //toastMessage("GRPMSG:"+,msg.getFrom()+":"+msg.getBody());
+        ChatMessage cmsg = gson.fromJson(
+                msg.getBody(), ChatMessage.class);
+        if (cmsg != null) {
+            if (!cmsg.sender.equalsIgnoreCase(loginUser)) {
+                processGroupMessage(groupName,cmsg);
+            }
+        }
+    }
+
+    public void toastMessage(final String msg) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, msg,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+//    public List<String> getJoinedGroupByUserName(String userName) {
+//        // Get the MultiUserChatManager
+//        MultiUserChatManager manager = MultiUserChatManager.getInstanceFor(connection);
+//
+//        List<String> joinedRooms = null;
+//        try {
+//            // Get the rooms where user3@host.org has joined
+//            joinedRooms = manager.getJoinedRooms(userName+"@conference." + serverAddress);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return joinedRooms;
+//    }
+
 }
