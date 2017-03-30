@@ -145,11 +145,9 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
                   public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
                       switch (item.getItemId()) {
-                          case R.id.selectAll:
-                              //
+
+                          case R.id.action_search:
                               final int checkedCount = emps.size();
-                              // If item  is already selected or checked then remove or
-                              // unchecked  and again select all
                               adapter.removeSelection();
                               for (int i = 0; i < checkedCount; i++) {
                                   lv.setItemChecked(i, true);
@@ -157,11 +155,6 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
                               }
                               mode.setTitle(checkedCount + "  Selected");
 
-
-                              return true;
-
-
-                          case R.id.action_search:
                               MenuItem searchItem = mode.getMenu().findItem(R.id.action_search);
                               SearchManager searchManager = (SearchManager) GroupContactActivity.this.getSystemService(Context.SEARCH_SERVICE);
                               SearchView searchView = null;

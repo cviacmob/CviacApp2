@@ -98,7 +98,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
 
 
     public static class ViewHolder {
-        public TextView textView;
+        public TextView textView,texthead;
         public TextView textViewother, textviewduration, textviewdurationmine;
         public  ImageView imagetick;
 
@@ -142,7 +142,7 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
                 vw = LayoutInflater.from(getContext()).inflate(R.layout.item_other_message, parent, false);
                 holder.textViewother = (TextView) vw.findViewById(R.id.text);
                 holder.textviewduration = (TextView) vw.findViewById(R.id.text1);
-                TextView textView3 = (TextView) vw.findViewById(R.id.textheader);
+                holder.texthead = (TextView) vw.findViewById(R.id.textheader);
 
              }
             vw.setTag(holder);
@@ -165,6 +165,10 @@ public class ConvMessageAdapter extends ArrayAdapter<ConvMessage> {
         }else{
             holder.textViewother.setText(chat.getMsg());
             holder.textviewduration.setText(getformatteddate(chat.getCtime()));
+            if(chat.getMsgid().startsWith("GROUPNEW:")){
+                holder.texthead.setText(chat.getSenderName());
+            }
+
         }
 
         return vw;

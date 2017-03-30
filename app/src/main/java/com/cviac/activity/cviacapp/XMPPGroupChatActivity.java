@@ -268,6 +268,7 @@ public class XMPPGroupChatActivity extends Activity  {
             Picasso.with(this).load(R.drawable.backarrow).resize(90, 90)
                     .into(customimageback);
             customTitle.setText(conv.getName());
+            customduration.setText(getformatteddate());
 
             // Set the on click listener for the title
             customTitle.setOnClickListener(new View.OnClickListener() {
@@ -320,6 +321,27 @@ public class XMPPGroupChatActivity extends Activity  {
             unbindService(mConnection);
             unregisterReceiver(xmppConnReciver);
         }
+    }
+    public String getformatteddate() {
+        if (conv.getDatetime() == null) {
+            return "";
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(conv.getDatetime());
+        Calendar today = Calendar.getInstance();
+        Calendar yesterday = Calendar.getInstance();
+        yesterday.add(Calendar.DATE, -1);
+        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+            return "last seen today at "+timeFormatter.format(conv.getDatetime());
+        } else if (calendar.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) && calendar.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR)) {
+            return "last seen yesterday at "+timeFormatter.format(conv.getDatetime());
+        } else {
+            DateFormat dateform = new SimpleDateFormat("dd/MM/yy");
+            return dateform.format(conv.getDatetime());
+        }
+
     }
 }
 

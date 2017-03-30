@@ -309,26 +309,6 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
     private void loadConvMessages() {
         converseId = getNormalizedConverseId(myempId, conv.getEmpid());
         chats = ConvMessage.getAll(converseId);
-
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(new Date());
-//        Calendar yesterday = Calendar.getInstance();
-//        yesterday.add(Calendar.DATE, -1);
-//
-//        ConvMessage msg1 = new ConvMessage();
-//        msg1.setMine(true);
-//        msg1.setMsg("Test Message");
-//        msg1.setCtime(yesterday.getTime());
-//
-//        chats.add(msg1);
-//
-//        ConvMessage msg2 = new ConvMessage();
-//        msg2.setMine(true);
-//        msg2.setMsg("Test Message2");
-//        msg2.setCtime(yesterday.getTime());
-//
-//        chats.add(msg2);
-
         chatAdapter = new ConvMessageAdapter(chats, this);
         lv.setAdapter(chatAdapter);
     }
@@ -506,22 +486,7 @@ public class XMPPChatActivity extends Activity implements View.OnClickListener {
             ;
 
             customTitle.setText(conv.getName());
-//            if (empstatus != null && empstatus.getStatus() != null) {
-//                if (empstatus.getStatus().equalsIgnoreCase("offline")) {
-//                    Date date = null;
-//                    String dt = empstatus.getLast_activity();
-//                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-//                    try {
-//                        date = dateFormat.parse(dt);
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                    customduration.setText(chatAdapter.getformatteddate(date));
-//                }
-//            }
-            // Change the font family (optional)
 
-            // Set the on click listener for the title
             customTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

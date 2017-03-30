@@ -44,7 +44,7 @@ public class GroupInfoAdapter extends ArrayAdapter<GroupMemberInfo> {
 
     public static class ViewHolder {
         public TextView nameView;
-        public TextView mobile;
+        public TextView email;
         public ImageView empimage;
     }
 
@@ -59,7 +59,7 @@ public class GroupInfoAdapter extends ArrayAdapter<GroupMemberInfo> {
             vw = inf.inflate(R.layout.collegues_item, parent, false);
             holder = new ViewHolder();
             holder.nameView = (TextView) vw.findViewById(R.id.colleguesname);
-            holder.mobile = (TextView) vw.findViewById(R.id.textemail);
+            holder.email = (TextView) vw.findViewById(R.id.textemail);
             holder.empimage = (ImageView) vw.findViewById(empimage);
             vw.setTag(holder);
 
@@ -84,12 +84,13 @@ public class GroupInfoAdapter extends ArrayAdapter<GroupMemberInfo> {
 
         }
         holder.nameView.setText(empobject.getEmp_name());
-        holder.mobile.setText(empobject.getEmail());
+        holder.email.setText(empobject.getEmail());
         holder.empimage.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
             emp = emps.get(position);
+            empobject = Employee.getemployee(emp.getMember_id());
             receiverempcode= empobject.getEmp_code();
             Intent i = new Intent(getContext(), MyProfile.class);
             i.putExtra("empcode", receiverempcode);

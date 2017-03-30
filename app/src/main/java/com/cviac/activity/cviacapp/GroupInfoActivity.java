@@ -33,9 +33,6 @@ public class GroupInfoActivity extends AppCompatActivity {
         grpinfo = getmembers();
         adapter = new GroupInfoAdapter(grpinfo, this);
         lv.setAdapter(adapter);
-        lv.setAdapter(adapter);
-
-
     }
 
     private List<GroupMemberInfo> getmembers() {
