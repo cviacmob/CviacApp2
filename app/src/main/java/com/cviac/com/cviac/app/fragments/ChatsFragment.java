@@ -13,7 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.cviac.activity.cviacapp.GroupContactActivity;
+
 import com.cviac.activity.cviacapp.R;
 import com.cviac.activity.cviacapp.XMPPChatActivity;
 import com.cviac.com.cviac.app.adapaters.ConversationAdapter;
@@ -93,10 +93,7 @@ public class ChatsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
         switch (id){
-            case R.id.action_newgroup:
-                Intent i=new Intent(getActivity(),GroupContactActivity.class);
-                startActivity(i);
-                break;
+
         }
         return super.onOptionsItemSelected(item);
 
