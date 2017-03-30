@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class GroupContactActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class GroupContactActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private ListView lv;
     List<Employee> emps;
     ColleguesAdapter adapter;
@@ -75,14 +75,14 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
                         selectedEmps.add(ee.getEmp_code());
                     }
                 }
-                if(!selectedEmps.isEmpty()) {
+                if (!selectedEmps.isEmpty()) {
                     final int checkedCount = emps.size();
                     Intent i = new Intent(GroupContactActivity.this, GroupNameActivity.class);
                     i.putStringArrayListExtra("selected", selectedEmps);
-                    i.putExtra("totalcontacts",checkedCount);
+                    i.putExtra("totalcontacts", checkedCount);
                     startActivity(i);
-                }else{
-                    Toast.makeText(GroupContactActivity.this,"select contacts",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(GroupContactActivity.this, "select contacts", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -91,101 +91,98 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
 
     }
 
-    private void setuserSelectLisiner(){
-      lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-          @Override
-          public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    private void setuserSelectLisiner() {
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-              lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-              lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                  @Override
-                  public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                        mode.setTitle(lv.getCheckedItemCount()+" Selected");
-                      adapter.toggleSelection(position);
-                  }
+                lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                lv.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                    @Override
+                    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                        mode.setTitle(lv.getCheckedItemCount() + " Selected");
+                        adapter.toggleSelection(position);
+                    }
 
-                  @Override
-                  public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                      mode.getMenuInflater().inflate(R.menu.menu_select, menu);
-                      SearchManager searchManager =
-                              (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-                      SearchView searchView =
-                              (SearchView) menu.findItem(R.id.action_search).getActionView();
-                      searchView.setSearchableInfo(
-                              searchManager.getSearchableInfo(getComponentName()));
-                      searchView.setSubmitButtonEnabled(true);
-                      searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                          @Override
-                          public boolean onQueryTextSubmit(String query) {
-                              return false;
-                          }
+                    @Override
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                        mode.getMenuInflater().inflate(R.menu.menu_select, menu);
+                        SearchManager searchManager =
+                                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+                        SearchView searchView =
+                                (SearchView) menu.findItem(R.id.action_search).getActionView();
+                        searchView.setSearchableInfo(
+                                searchManager.getSearchableInfo(getComponentName()));
+                        searchView.setSubmitButtonEnabled(true);
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                return false;
+                            }
 
-                          @Override
-                          public boolean onQueryTextChange(String newText) {
-                              reloadFilterByChats(newText);
-                              return false;
-                          }
-                      });
-                      return true;
-                  }
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                reloadFilterByChats(newText);
+                                return false;
+                            }
+                        });
+                        return true;
+                    }
 
-                  @Override
-                  public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                      return false;
-                  }
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
 
-                  @Override
-                  public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    @Override
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-                      switch (item.getItemId()) {
-                          case R.id.selectAll:
-                              //
-                              final int checkedCount = emps.size();
-                              // If item  is already selected or checked then remove or
-                              // unchecked  and again select all
-                              adapter.removeSelection();
-                              for (int i = 0; i < checkedCount; i++) {
-                                  lv.setItemChecked(i, true);
+                        switch (item.getItemId()) {
+                            case R.id.selectAll:
+                                //
+                                final int checkedCount = emps.size();
+                                // If item  is already selected or checked then remove or
+                                // unchecked  and again select all
+                                adapter.removeSelection();
+                                for (int i = 0; i < checkedCount; i++) {
+                                    lv.setItemChecked(i, true);
 
-                              }
-                              mode.setTitle(checkedCount + "  Selected");
-
-
-                              return true;
+                                }
+                                mode.setTitle(checkedCount + "  Selected");
 
 
-                          case R.id.action_search:
-                              MenuItem searchItem = mode.getMenu().findItem(R.id.action_search);
-                              SearchManager searchManager = (SearchManager) GroupContactActivity.this.getSystemService(Context.SEARCH_SERVICE);
-                              SearchView searchView = null;
-                              if (searchItem != null) {
-                                  searchView = (SearchView) searchItem.getActionView();
-                              }
-                              if (searchView != null) {
-                                  searchView.setSearchableInfo(searchManager.getSearchableInfo(GroupContactActivity.this.getComponentName()));
-                                  searchView.setSubmitButtonEnabled(true);
-                                  searchView.setOnQueryTextListener(GroupContactActivity.this);
+                                return true;
 
-                              }
-                              return true;
-                          default:
-                              return false;
-                      }
 
-                  }
+                            case R.id.action_search:
+                                MenuItem searchItem = mode.getMenu().findItem(R.id.action_search);
+                                SearchManager searchManager = (SearchManager) GroupContactActivity.this.getSystemService(Context.SEARCH_SERVICE);
+                                SearchView searchView = null;
+                                if (searchItem != null) {
+                                    searchView = (SearchView) searchItem.getActionView();
+                                }
+                                if (searchView != null) {
+                                    searchView.setSearchableInfo(searchManager.getSearchableInfo(GroupContactActivity.this.getComponentName()));
+                                    searchView.setSubmitButtonEnabled(true);
+                                    searchView.setOnQueryTextListener(GroupContactActivity.this);
 
-                  @Override
-                  public void onDestroyActionMode(ActionMode mode) {
+                                }
+                                return true;
+                            default:
+                                return false;
+                        }
 
-                  }
-              });
-              return false;
-          }
-      });
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode mode) {
+
+                    }
+                });
+                return false;
+            }
+        });
     }
-
-
-
 
 
     private List<Employee> getCollegues() {
@@ -194,13 +191,13 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public boolean onQueryTextSubmit(String query) {
 
@@ -213,7 +210,7 @@ public class GroupContactActivity extends AppCompatActivity implements SearchVie
         return false;
     }
 
-    public  void reloadFilterByChats(String searchName) {
+    public void reloadFilterByChats(String searchName) {
         List<Employee> emplist = Employee.getemployees(searchName);
         emps.clear();
         emps.addAll(emplist);
